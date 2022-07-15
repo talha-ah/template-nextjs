@@ -2,9 +2,9 @@ export default function ListItemIcon() {
   return {
     MuiListItemIcon: {
       styleOverrides: {
-        root: {
-          minWidth: 24,
-        },
+        // root: {
+        //   minWidth: 24,
+        // },
       },
     },
   }

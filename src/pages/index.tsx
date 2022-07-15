@@ -61,7 +61,6 @@ function Content() {
             ) : (
               <>
                 <Button
-                  size="small"
                   to="/auth/register"
                   variant="contained"
                   component={NextLinkComposed}
@@ -69,7 +68,6 @@ function Content() {
                   Register
                 </Button>
                 <Button
-                  size="small"
                   to="/auth/login"
                   variant="outlined"
                   component={NextLinkComposed}

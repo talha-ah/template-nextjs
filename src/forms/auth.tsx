@@ -85,7 +85,6 @@ export function LoginForm() {
       )}
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
-          size="small"
           margin="normal"
           required
           fullWidth
@@ -98,7 +97,6 @@ export function LoginForm() {
         <TextField
           margin="normal"
           required
-          size="small"
           fullWidth
           name="password"
           label="Password"
@@ -107,12 +105,11 @@ export function LoginForm() {
           autoComplete="current-password"
         />
         <FormControlLabel
-          control={<Checkbox size="small" value="remember" color="primary" />}
+          control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
         <LoadingButton
           fullWidth
-          size="small"
           type="submit"
           loading={loading}
           variant="contained"
@@ -208,7 +205,6 @@ export function Registerform() {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              size="small"
               autoComplete="given-name"
               name="firstName"
               required
@@ -220,7 +216,6 @@ export function Registerform() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              size="small"
               required
               fullWidth
               id="lastName"
@@ -231,7 +226,6 @@ export function Registerform() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              size="small"
               required
               fullWidth
               id="email"
@@ -242,7 +236,6 @@ export function Registerform() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              size="small"
               required
               fullWidth
               name="password"
@@ -254,20 +247,13 @@ export function Registerform() {
           </Grid>
           <Grid item xs={12}>
             <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  value="allowExtraEmails"
-                  color="primary"
-                />
-              }
+              control={<Checkbox value="allowExtraEmails" color="primary" />}
               label="I want to receive updates"
             />
           </Grid>
         </Grid>
         <LoadingButton
           fullWidth
-          size="small"
           type="submit"
           loading={loading}
           variant="contained"
@@ -337,7 +323,6 @@ export function ForgotPasswordForm() {
       )}
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
-          size="small"
           margin="normal"
           required
           fullWidth
@@ -350,7 +335,6 @@ export function ForgotPasswordForm() {
 
         <LoadingButton
           fullWidth
-          size="small"
           type="submit"
           loading={loading}
           variant="contained"

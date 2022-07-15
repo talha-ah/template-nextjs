@@ -1,7 +1,8 @@
 import React from "react"
 
+import Home from "@mui/icons-material/Home"
 import { Box, Typography } from "@mui/material"
-import InboxIcon from "@mui/icons-material/MoveToInbox"
+import Settings from "@mui/icons-material/Settings"
 
 import NavGroup from "./NavGroup"
 import { NavLink } from "@utils/types"
@@ -15,14 +16,14 @@ const NavLinks: NavLink[] = [
         type: "item",
         label: "Dashboard",
         href: "/app",
-        icon: <InboxIcon fontSize="small" />,
+        icon: <Home fontSize="small" />,
         exact: true,
       },
       {
         type: "item",
         label: "Settings",
         href: "/app/settings",
-        icon: <InboxIcon fontSize="small" />,
+        icon: <Settings fontSize="small" />,
       },
     ],
   },

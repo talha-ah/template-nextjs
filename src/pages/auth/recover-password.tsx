@@ -3,8 +3,10 @@ import { useEffect } from "react"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
 
+import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
+import { Logo } from "@components/Logo"
 import { ForgotPasswordForm } from "@forms/auth"
 
 const Login: NextPage = () => {
@@ -25,6 +27,12 @@ const Login: NextPage = () => {
       </Head>
 
       <Container component="main" maxWidth="xs">
+        <Box
+          sx={{ my: 8, flex: 1, display: "center", justifyContent: "center" }}
+        >
+          <Logo />
+        </Box>
+
         <ForgotPasswordForm />
       </Container>
     </>

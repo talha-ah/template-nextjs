@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 
 import Box from "@mui/material/Box"
@@ -64,30 +64,6 @@ export const UserMenu = ({
     },
   ]
 
-  const menuProps = useMemo(() => {
-    return position === "top"
-      ? {
-          anchorOrigin: {
-            vertical: "top",
-            horizontal: "center",
-          },
-          transformOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-        }
-      : {
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "right",
-          },
-          transformOrigin: {
-            vertical: "top",
-            horizontal: "right",
-          },
-        }
-  }, [position])
-
   return (
     <Box>
       <IconButton onClick={openUserMenu}>
@@ -99,13 +75,27 @@ export const UserMenu = ({
         anchorEl={anchorElUser}
         onClose={closeUserMenu}
         open={Boolean(anchorElUser)}
-        {...menuProps}
+        anchorOrigin={
+          position === "top"
+            ? { vertical: "top", horizontal: "center" }
+            : {
+                vertical: "bottom",
+                horizontal: "right",
+              }
+        }
+        transformOrigin={
+          position === "top"
+            ? { vertical: "bottom", horizontal: "center" }
+            : {
+                vertical: "top",
+                horizontal: "right",
+              }
+        }
         sx={(theme: Theme) => ({
           "& .MuiMenu-paper": {
             py: 0,
             px: 1,
             boxShadow: 3,
-            backgroundColor: "white",
             mt: position === "top" ? -1 : 1,
             width: drawerWidth - +theme.spacing(4).replace("px", ""),
           },

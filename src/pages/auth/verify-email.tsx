@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography"
 import CircularProgress from "@mui/material/CircularProgress"
 
 import { useApi } from "@hooks/useApi"
+import { Logo } from "@components/Logo"
 import { endpoints } from "@utils/constants"
 
 const VerifyEmail: NextPage = () => {
@@ -59,6 +60,12 @@ const VerifyEmail: NextPage = () => {
       </Head>
 
       <Container component="main" maxWidth="xs">
+        <Box
+          sx={{ my: 8, flex: 1, display: "center", justifyContent: "center" }}
+        >
+          <Logo />
+        </Box>
+
         <Box style={{ height: "100%" }}>
           {loading ? (
             <CircularProgress />
