@@ -4,7 +4,7 @@ import Box from "@mui/material/Box"
 import Drawer from "@mui/material/Drawer"
 import { Theme } from "@mui/material/styles"
 
-import { drawerWidth } from "@utils/config"
+import { drawerWidth } from "@utils/constants"
 
 import Header from "./Header"
 import Navigation from "./Navigation"
@@ -52,10 +52,11 @@ export default function DrawerLayout({
 
         <Box
           sx={(theme: Theme) => ({
-            py: 2,
             width: "100%",
+            height: "64px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
             borderTop: `1px solid ${theme.palette.divider}`,
           })}
         >

@@ -30,3 +30,15 @@ export const removeBrowserItem = (key = storageKey) => {
 export const removeBrowserAll = () => {
   window.localStorage.clear()
 }
+
+export const setOrgMetadata = (obj: any) => {
+  window.localStorage.setItem("metadata", JSON.stringify(obj))
+}
+
+export const getOrgMetadata = () => {
+  const temp = window.localStorage.getItem("metadata")
+
+  if (temp) return JSON.parse(temp)
+
+  return null
+}

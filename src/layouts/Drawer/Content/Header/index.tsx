@@ -17,6 +17,7 @@ export default function Header() {
       sx={(theme: Theme) => ({
         py: 2,
         width: "100%",
+        height: "64px",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",

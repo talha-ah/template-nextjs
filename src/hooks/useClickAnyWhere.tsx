@@ -4,10 +4,8 @@ import useEventListener from "@hooks/useEventListener"
 
 type Handler = (event: MouseEvent) => void
 
-function useClickAnyWhere(handler: Handler) {
+export const useClickAnyWhere = (handler: Handler) => {
   useEventListener("click", (event: MouseEvent) => {
     handler(event)
   })
 }
-
-export default useClickAnyWhere

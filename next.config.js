@@ -15,6 +15,9 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  // experimental: {
+  //   esmExternals: "loose",
+  // },
 }
 
 module.exports = nextConfig

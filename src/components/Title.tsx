@@ -8,7 +8,7 @@ export const Title = ({
   children: React.ReactNode
 }) => {
   return (
-    <Typography variant="h2" sx={{ mb: 3, fontWeight: "bold", ...sx }}>
+    <Typography variant="h5" sx={{ fontWeight: "bold", ...sx }}>
       {children}
     </Typography>
   )
@@ -22,7 +22,7 @@ export const Heading = ({
   children: React.ReactNode
 }) => {
   return (
-    <Typography variant="h5" sx={{ mb: 1, ...sx }}>
+    <Typography variant="subtitle2" sx={{ ...sx }}>
       {children}
     </Typography>
   )

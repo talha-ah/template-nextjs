@@ -6,14 +6,14 @@ import Menu from "@mui/material/Menu"
 import { Theme } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
 import Logout from "@mui/icons-material/Logout"
-import HomeIcon from "@mui/icons-material/Home"
 import IconButton from "@mui/material/IconButton"
 import Settings from "@mui/icons-material/Settings"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
 import AccountCircle from "@mui/icons-material/AccountCircle"
+import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined"
 
-import { drawerWidth } from "@utils/config"
+import { drawerWidth } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 type userMenuItem = {
@@ -46,11 +46,12 @@ export const UserMenu = ({
     {
       href: "/app",
       label: "Dashboard",
-      icon: <HomeIcon fontSize="small" />,
+      icon: <AnalyticsOutlinedIcon fontSize="small" />,
     },
     {
-      href: "/app/settings",
+      type: "item",
       label: "Settings",
+      href: "/app/settings",
       icon: <Settings fontSize="small" />,
     },
     {
@@ -67,7 +68,7 @@ export const UserMenu = ({
   return (
     <Box>
       <IconButton onClick={openUserMenu}>
-        <AccountCircle fontSize="large" />
+        <AccountCircle sx={{ fontSize: 32 }} />
       </IconButton>
       <Menu
         keepMounted
@@ -104,10 +105,6 @@ export const UserMenu = ({
         {userMenu.map((item: userMenuItem) => (
           <MenuItem
             key={item.label}
-            sx={(theme: Theme) => ({
-              height: theme.spacing(5.5),
-              borderRadius: theme.shape.borderRadius,
-            })}
             onClick={() => {
               if (item.onClick) {
                 item.onClick()

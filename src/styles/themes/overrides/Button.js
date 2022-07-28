@@ -13,7 +13,8 @@ export default function Button(theme) {
       styleOverrides: {
         root: {
           fontWeight: 400,
-          borderRadius: theme.shape.borderRadius * 2,
+          borderRadius: theme.shape.borderRadius,
+          textTransform: "none",
         },
         contained: {
           // ...disabledStyle,

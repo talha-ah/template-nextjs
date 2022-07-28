@@ -4,9 +4,30 @@ export default function OutlinedInput(theme) {
   return {
     MuiOutlinedInput: {
       styleOverrides: {
-        // input: {
-        //   padding: "10.5px 14px 10.5px 12px",
-        // },
+        input: {
+          /* width */
+          "&::-webkit-scrollbar": {
+            width: 5,
+            backgroundColor: "transparent",
+          },
+          /* Track */
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "transparent",
+          },
+          /* Thumb */
+          "&::-webkit-scrollbar-thumb": {
+            borderRadius: 8,
+            backgroundColor: "#babac0",
+          },
+          /* Thumb:hover */
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#babac0",
+          },
+          /* Button (top and bottom of the scrollbar) */
+          "&::-webkit-scrollbar-button": {
+            display: "none",
+          },
+        },
         // notchedOutline: {
         //   borderColor: theme.palette.grey[300],
         // },

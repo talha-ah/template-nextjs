@@ -1,20 +1,20 @@
-// import { useRouter } from "next/router"
+import { useRouter } from "next/router"
 
 import { useSnackbar } from "notistack"
 import { useLayoutEffect, useEffect, useRef } from "react"
 
 import DateUtility from "@utils/date"
-import { baseURL } from "@utils/config"
+import { baseURL } from "@utils/constants"
 import { Response, T } from "@utils/types"
-// import { useAppContext } from "@contexts/index"
 import { getBrowserItem } from "@utils/browser-utility"
+import { useAppContext, AuthTypes } from "@contexts/index"
 
 const useBrowserLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect
 
 export const useApi = () => {
-  // const router = useRouter()
-  // const { dispatch } = useAppContext()
+  const router = useRouter()
+  const { dispatch } = useAppContext()
   const { enqueueSnackbar } = useSnackbar()
 
   let controller: any = null
@@ -42,7 +42,7 @@ export const useApi = () => {
     headers?: any
     method?: string
     message?: string
-  }): Promise<T | undefined> => {
+  }): Promise<T> => {
     try {
       const myHeaders = new Headers()
       myHeaders.append("Content-Type", "application/json")
@@ -81,21 +81,30 @@ export const useApi = () => {
     } catch (err: any) {
       // need to assign to a variable to prevent error when we do error.json() below
       let error = err
+      let status = error.status
+
+      if (!isErrorWithMessage(err)) {
+        error = await error.json()
+      } else {
+        error = {
+          message: err.message,
+          status: error.status || 500,
+        }
+      }
 
       if (process && process.env.NODE_ENV === "development") {
         console.log(`[Error at ${DateUtility.getLocaleDate()}]:`, error)
         body && console.log(`Error for Body`, JSON.parse(body))
       }
 
-      if (error.status === 401) {
+      if (status === 401) {
         // 401 : Token expired / invalid
-        // TODO: Handle 401 error
-        console.log("token expired")
-        // dispatch({ type: AuthTypes.LOGOUT })
-        // router.push("/")
-      } else if (error.status) {
-        error = await error.json()
+        // Ask to relogin
+        dispatch({ type: AuthTypes.LOGOUT })
+        router.replace("/")
 
+        // TODO: Use refresh token to get new token
+      } else if (status) {
         enqueueSnackbar(error?.message, {
           variant: "error",
           autoHideDuration: 3000,
@@ -103,10 +112,22 @@ export const useApi = () => {
 
         throw error
       }
-    } finally {
-      controller && controller.abort()
     }
   }
 
   return [api]
+}
+
+type ErrorWithMessage = {
+  message: string
+  status?: number
+}
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as Record<string, unknown>).message === "string"
+  )
 }

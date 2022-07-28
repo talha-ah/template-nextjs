@@ -2,12 +2,9 @@ export default function Chip(theme) {
   return {
     MuiChip: {
       styleOverrides: {
-        // root: {
-        //   borderRadius: 4,
-        //   "&:active": {
-        //     boxShadow: "none",
-        //   },
-        // },
+        root: {
+          borderRadius: 4,
+        },
         // sizeLarge: {
         //   fontSize: "1rem",
         //   height: 40,

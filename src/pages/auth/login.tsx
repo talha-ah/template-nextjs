@@ -21,7 +21,7 @@ const Login: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Login - Six Wraps</title>
         <meta name="description" content="Login" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

@@ -15,16 +15,11 @@ export default function ThemeCustomization({
 }) {
   const { state } = useAppContext()
 
-  const palette = useMemo(() => Palette(state.auth.theme), [state.auth.theme])
-  const typography = Typography(
-    "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji"
-  )
-
   const theme = useMemo(
     () => ({
       breakpoints: {
         values: {
-          xs: 0,
+          xs: 400,
           sm: 768,
           md: 1024,
           lg: 1266,
@@ -40,12 +35,12 @@ export default function ThemeCustomization({
         },
       },
       shape: {
-        borderRadius: 2,
+        borderRadius: 4,
       },
-      palette,
-      typography,
+      palette: Palette(state.auth.theme),
+      typography: Typography,
     }),
-    [palette, typography]
+    [state.auth.theme]
   )
 
   const customTheme = createTheme(theme)

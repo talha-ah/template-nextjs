@@ -7,30 +7,38 @@ import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 
-export const Confirm = (props: any) => {
-  const [show, setShow] = useState(false)
+type ConfirmProps = {
+  title: string
+  message: string
+  onClose?: () => void
+  onConfirm: () => void
+  trigger: (args: any) => void
+}
 
-  const toggleShow = () => setShow(!show)
+export const Confirm = (props: ConfirmProps) => {
+  const [open, setOpen] = useState(false)
+
+  const toggleOpen = () => setOpen(!open)
 
   return (
     <>
-      {props.trigger({ toggleShow })}
-      <Dialog open={show} onClose={toggleShow}>
+      {props.trigger({ toggleOpen })}
+      <Dialog open={open} onClose={toggleOpen}>
         <DialogTitle id="confirm-dialog-title">{props.title}</DialogTitle>
 
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id={`confirm-${props.title}`}>
             {props.message}
           </DialogContentText>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={toggleShow}>Cancel</Button>
+          <Button onClick={toggleOpen}>Cancel</Button>
           <Button
             autoFocus
             onClick={() => {
               props.onConfirm()
-              toggleShow()
+              toggleOpen()
             }}
           >
             Confirm

@@ -1,35 +1,14 @@
 import React from "react"
 
-import Home from "@mui/icons-material/Home"
 import { Box, Typography } from "@mui/material"
-import Settings from "@mui/icons-material/Settings"
 
 import NavGroup from "./NavGroup"
 import { NavLink } from "@utils/types"
-
-const NavLinks: NavLink[] = [
-  {
-    type: "group",
-    label: "App",
-    children: [
-      {
-        type: "item",
-        label: "Dashboard",
-        href: "/app",
-        icon: <Home fontSize="small" />,
-        exact: true,
-      },
-      {
-        type: "item",
-        label: "Settings",
-        href: "/app/settings",
-        icon: <Settings fontSize="small" />,
-      },
-    ],
-  },
-]
+import { useRouteLinks } from "@hooks/auth"
 
 const Navigation = () => {
+  const [NavLinks] = useRouteLinks()
+
   const navGroups = NavLinks.map((item: NavLink) => {
     switch (item.type) {
       case "group":

@@ -1,17 +1,17 @@
 import Head from "next/head"
-import Link from "next/link"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 import CircularProgress from "@mui/material/CircularProgress"
 
+import Link from "@components/Link"
 import { useApi } from "@hooks/useApi"
 import { Logo } from "@components/Logo"
+import { Alert } from "@components/Alert"
 import { endpoints } from "@utils/constants"
 
 const VerifyEmail: NextPage = () => {
@@ -20,7 +20,7 @@ const VerifyEmail: NextPage = () => {
   const { query } = router
 
   const [verified, setVerified] = useState(false)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -30,23 +30,24 @@ const VerifyEmail: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    checkToken()
+    if (query.token) {
+      checkToken()
+    }
 
     // eslint-disable-next-line
   }, [query])
 
   const checkToken = async () => {
     try {
-      if (query.token) {
-        await api({
-          method: "PUT",
-          uri: `${endpoints.verifyEmail}/${query.token}`,
-        })
-        setVerified(true)
-      }
+      await api({
+        method: "PUT",
+        uri: `${endpoints.verifyEmail}/${query.token}`,
+      })
+
+      setVerified(true)
+      setLoading(false)
     } catch (error: any) {
       setError(error.message)
-    } finally {
       setLoading(false)
     }
   }
@@ -66,19 +67,28 @@ const VerifyEmail: NextPage = () => {
           <Logo />
         </Box>
 
-        <Box style={{ height: "100%" }}>
+        <Box
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           {loading ? (
             <CircularProgress />
           ) : verified ? (
-            <>
-              <Typography>Email Verified Successfully</Typography>
-              <Link href="/auth/login" passHref>
-                <Button component="a">Login</Button>
-              </Link>
-            </>
+            <Typography>
+              Email Verified Successfully. You can login now
+            </Typography>
           ) : (
-            <Typography color={"red"}>Email not verified {error}</Typography>
+            <Alert type="error" message={error} />
           )}
+        </Box>
+        <Box
+          sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
+        >
+          <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
         </Box>
       </Container>
     </>

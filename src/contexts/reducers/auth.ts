@@ -8,7 +8,7 @@ export const AuthInitialState = {
   loading: true as boolean,
   isAuth: false as boolean,
   refreshToken: "" as string,
-  theme: "light" as ThemeMode,
+  theme: "dark" as ThemeMode,
 }
 
 export const AuthTypes = {

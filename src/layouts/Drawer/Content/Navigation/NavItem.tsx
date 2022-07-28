@@ -37,8 +37,6 @@ const NavItem = ({ item }: { item: NavLink }) => {
       selected={isSelected}
       sx={(theme: Theme) => ({
         mb: 1,
-        height: theme.spacing(5.5),
-        borderRadius: theme.shape.borderRadius,
       })}
     >
       {Icon && (

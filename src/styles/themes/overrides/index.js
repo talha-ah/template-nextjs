@@ -11,29 +11,39 @@ import LinearProgress from "./LinearProgress"
 import Link from "./Link"
 import ListItemIcon from "./ListItemIcon"
 import OutlinedInput from "./OutlinedInput"
+import DialogActions from "./DialogActions"
 import Tab from "./Tab"
 import TableCell from "./TableCell"
 import Tabs from "./Tabs"
 import Typography from "./Typography"
 import Paper from "./Paper"
+import Grid from "./Grid"
+import MenuItem from "./MenuItem"
+import ToggleButton from "./ToggleButton"
+import MuiListItemButton from "./MuiListItemButton"
 
 export default function ComponentsOverrides(theme) {
   return merge(
     Button(theme),
-    Badge(theme),
-    CardContent(),
-    Checkbox(theme),
+    // Badge(theme),
+    // CardContent(),
+    // Checkbox(theme),
     Chip(theme),
-    IconButton(theme),
-    InputLabel(theme),
-    LinearProgress(),
-    Link(),
-    ListItemIcon(),
+    // IconButton(theme),
+    // InputLabel(theme),
+    // LinearProgress(),
+    // Link(),
+    // ListItemIcon(),
     OutlinedInput(theme),
-    Tab(theme),
-    TableCell(theme),
-    Tabs(),
-    Typography(),
-    Paper(theme)
+    DialogActions(theme),
+    // Tab(theme),
+    // TableCell(theme),
+    // Tabs(),
+    // Typography(),
+    // Paper(theme),
+    ToggleButton(theme),
+    Grid(theme),
+    MenuItem(theme),
+    MuiListItemButton(theme)
   )
 }

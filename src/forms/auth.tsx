@@ -3,24 +3,22 @@ import { useRouter } from "next/router"
 
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
-import Alert from "@mui/material/Alert"
-import Avatar from "@mui/material/Avatar"
-import Checkbox from "@mui/material/Checkbox"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
-import LoadingButton from "@mui/lab/LoadingButton"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 
 import Link from "@components/Link"
 import { useApi } from "@hooks/useApi"
+import { Alert } from "@components/Alert"
+import { Button } from "@components/Button"
 import { endpoints } from "@utils/constants"
+import { useFetchMetadata } from "@hooks/auth"
 import { AuthTypes, useAppContext } from "@contexts/index"
 
 export function LoginForm() {
   const [api] = useApi()
   const router = useRouter()
   const { dispatch } = useAppContext()
+  const { fetchMetadata } = useFetchMetadata()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -45,7 +43,9 @@ export function LoginForm() {
         body: JSON.stringify(body),
       })
 
-      console.log("response", response)
+      if (response?.data.user.organization.role !== "admin") {
+        throw new Error("You are not authorized to login")
+      }
 
       dispatch({
         type: AuthTypes.LOGIN,
@@ -53,13 +53,12 @@ export function LoginForm() {
       })
 
       // Fetch Metadata
-      // fetchMetadata()
+      fetchMetadata()
 
       router.replace("/app")
     } catch (error: any) {
-      setError(error.message)
-    } finally {
       setLoading(false)
+      setError(error.message)
     }
   }
 
@@ -72,17 +71,10 @@ export function LoginForm() {
         alignItems: "center",
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <LockOutlinedIcon />
-      </Avatar>
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {error}
-        </Alert>
-      )}
+
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -108,25 +100,17 @@ export function LoginForm() {
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
-        <LoadingButton
-          fullWidth
-          type="submit"
-          loading={loading}
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
+        <Alert type="error" message={error} />
+        <Button type="submit" sx={{ mt: 4 }} fullWidth loading={loading}>
           Sign In
-        </LoadingButton>
-        <Grid container>
-          <Grid item xs>
-            <Link href="/auth/recover-password">Forgot password?</Link>
-          </Grid>
-          <Grid item>
-            <Link href="/auth/register">
-              {"Don't have an account? Sign Up"}
-            </Link>
-          </Grid>
-        </Grid>
+        </Button>
+        <Box
+          sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
+        >
+          <Link href="/auth/register">
+            {"Don't have an account? Registere here"}
+          </Link>
+        </Box>
       </Box>
     </Box>
   )
@@ -136,6 +120,7 @@ export function Registerform() {
   const [api] = useApi()
   const router = useRouter()
   const { dispatch } = useAppContext()
+  const { fetchMetadata } = useFetchMetadata()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -163,15 +148,13 @@ export function Registerform() {
         message: "Registered successfully",
       })
 
-      console.log("response", response)
-
       dispatch({
         type: AuthTypes.LOGIN,
         payload: response?.data,
       })
 
       // Fetch Metadata
-      // fetchMetadata()
+      fetchMetadata()
 
       router.replace("/app")
     } catch (error: any) {
@@ -190,17 +173,10 @@ export function Registerform() {
         alignItems: "center",
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <LockOutlinedIcon />
-      </Avatar>
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {error}
-        </Alert>
-      )}
+
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -252,26 +228,21 @@ export function Registerform() {
             />
           </Grid>
         </Grid>
-        <LoadingButton
-          fullWidth
-          type="submit"
-          loading={loading}
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
+        <Alert type="error" message={error} />
+        <Button type="submit" sx={{ mt: 4 }} fullWidth loading={loading}>
           Sign Up
-        </LoadingButton>
-        <Grid container justifyContent="flex-end">
-          <Grid item>
-            <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
-          </Grid>
-        </Grid>
+        </Button>
+        <Box
+          sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
+        >
+          <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
+        </Box>
       </Box>
     </Box>
   )
 }
 
-export function ForgotPasswordForm() {
+export function RecoverPasswordRequestForm() {
   const [api] = useApi()
   const router = useRouter()
 
@@ -293,7 +264,7 @@ export function ForgotPasswordForm() {
         message: "Password reset link sent",
       })
 
-      router.replace("/login")
+      router.replace("/auth/login")
     } catch (error: any) {
       setError(error.message)
     } finally {
@@ -310,17 +281,10 @@ export function ForgotPasswordForm() {
         alignItems: "center",
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <LockOutlinedIcon />
-      </Avatar>
       <Typography component="h1" variant="h5">
         Recover Password
       </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {error}
-        </Alert>
-      )}
+
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -333,20 +297,187 @@ export function ForgotPasswordForm() {
           autoFocus
         />
 
-        <LoadingButton
-          fullWidth
-          type="submit"
-          loading={loading}
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
+        <Alert type="error" message={error} />
+        <Button type="submit" sx={{ mt: 4 }} fullWidth loading={loading}>
           Recover Password
-        </LoadingButton>
-        <Grid container>
-          <Grid item xs>
-            <Link href="/auth/login">Login?</Link>
-          </Grid>
-        </Grid>
+        </Button>
+        <Box
+          sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
+        >
+          <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
+export function AcceptInviteForm({
+  name,
+  token,
+}: {
+  name: string
+  token: string
+}) {
+  const [api] = useApi()
+  const router = useRouter()
+
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault()
+
+      setError(null)
+      setLoading(true)
+
+      const data = new FormData(event.currentTarget)
+
+      const body = {
+        password: data.get("password"),
+      }
+
+      if (body.password !== data.get("confirmPassword")) {
+        throw new Error("Passwords do not match")
+      }
+
+      await api({
+        method: "POST",
+        uri: `${endpoints.acceptInvite}/${token}`,
+        body: JSON.stringify(body),
+        message: "Registered successfully",
+      })
+
+      router.replace("/auth/login")
+    } catch (error: any) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Box
+      sx={{
+        marginTop: 8,
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
+      <Typography component="h1" variant="h5">
+        {name} - Complete your registration
+      </Typography>
+
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="new-password"
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="confirmPassword"
+          label="Confirm Password"
+          type="confirmPassword"
+          id="confirmPassword"
+          autoComplete="confirm-password"
+        />
+
+        <Alert type="error" message={error} />
+        <Button type="submit" sx={{ mt: 4 }} fullWidth loading={loading}>
+          Accept Invite
+        </Button>
+      </Box>
+    </Box>
+  )
+}
+
+export function RecoverPasswordForm({ token }: { token: string }) {
+  const [api] = useApi()
+  const router = useRouter()
+
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault()
+
+      setError(null)
+      setLoading(true)
+
+      const data = new FormData(event.currentTarget)
+
+      const body = {
+        password: data.get("password"),
+      }
+
+      if (body.password !== data.get("confirmPassword")) {
+        throw new Error("Passwords do not match")
+      }
+
+      await api({
+        method: "PUT",
+        uri: `${endpoints.recoverPassword}/${token}`,
+        body: JSON.stringify(body),
+        message: "Password updated successfully",
+      })
+
+      router.replace("/auth/login")
+    } catch (error: any) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Box
+      sx={{
+        marginTop: 8,
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
+      <Typography component="h1" variant="h5">
+        Enter your new password
+      </Typography>
+
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="New Password"
+          type="password"
+          id="password"
+          autoComplete="new-password"
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="confirmPassword"
+          label="Confirm Password"
+          type="confirmPassword"
+          id="confirmPassword"
+          autoComplete="confirm-password"
+        />
+
+        <Alert type="error" message={error} />
+        <Button type="submit" sx={{ mt: 4 }} fullWidth loading={loading}>
+          Update Password
+        </Button>
       </Box>
     </Box>
   )

@@ -7,9 +7,9 @@ import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
 import { Logo } from "@components/Logo"
-import { ForgotPasswordForm } from "@forms/auth"
+import { RecoverPasswordRequestForm } from "@forms/auth"
 
-const Login: NextPage = () => {
+const RecoverPasswordRequest: NextPage = () => {
   const router = useRouter()
 
   useEffect(() => {
@@ -33,10 +33,10 @@ const Login: NextPage = () => {
           <Logo />
         </Box>
 
-        <ForgotPasswordForm />
+        <RecoverPasswordRequestForm />
       </Container>
     </>
   )
 }
 
-export default Login
+export default RecoverPasswordRequest

@@ -8,7 +8,7 @@ export const Logo = () => {
   return (
     <Typography
       href="/"
-      variant="h3"
+      variant="h5"
       component={Link}
       sx={{
         textDecoration: "none",
@@ -16,7 +16,7 @@ export const Logo = () => {
         "&:hover": { textDecoration: "none" },
       }}
     >
-      Template
+      Six Wraps
     </Typography>
   )
 }
