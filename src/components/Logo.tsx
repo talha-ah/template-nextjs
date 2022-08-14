@@ -3,6 +3,7 @@ import * as React from "react"
 import Typography from "@mui/material/Typography"
 
 import Link from "@components/Link"
+import { APP_NAME } from "@utils/constants"
 
 export const Logo = () => {
   return (
@@ -16,7 +17,7 @@ export const Logo = () => {
         "&:hover": { textDecoration: "none" },
       }}
     >
-      Six Wraps
+      {APP_NAME}
     </Typography>
   )
 }

@@ -3,10 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   publicRuntimeConfig: {
     staticFolder: "/public",
+    appName: process.env.NEXT_PUBLIC_APP_NAME,
     apiPath: process.env.NEXT_PUBLIC_API_PATH,
+    apiLimit: process.env.NEXT_PUBLIC_API_LIMIT,
     apiVersion: process.env.NEXT_PUBLIC_API_VERSION,
     storageKey: process.env.NEXT_PUBLIC_STORAGE_KEY,
-    apiLimit: process.env.NEXT_PUBLIC_API_LIMIT,
   },
   typescript: {
     // !! WARN !!

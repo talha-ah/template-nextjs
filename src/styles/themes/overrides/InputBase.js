@@ -1,6 +1,6 @@
-export default function InputLabel(theme) {
+export default function MuiInputBase(theme) {
   return {
-    MuiInputLabel: {
+    MuiInputBase: {
       defaultProps: {
         // size: "small",
         // disableElevation: true,

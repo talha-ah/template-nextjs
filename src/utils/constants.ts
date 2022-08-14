@@ -2,14 +2,15 @@ import getConfig from "next/config"
 
 const { publicRuntimeConfig } = getConfig()
 
-export const apiLimit = publicRuntimeConfig.apiLimit
+export const API_LIMIT = publicRuntimeConfig.apiLimit
 
-export const baseURL = `${publicRuntimeConfig.apiPath}/api/${publicRuntimeConfig.apiVersion}`
+export const BASE_URL = `${publicRuntimeConfig.apiPath}/api/${publicRuntimeConfig.apiVersion}`
 
-export const drawerWidth = 260
+export const DRAWER_WIDTH = 260
 
-export const days: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-export const months: string[] = [
+export const APP_NAME = publicRuntimeConfig.appName
+
+export const MONTHS: string[] = [
   "Jan",
   "Feb",
   "Mar",
@@ -23,11 +24,12 @@ export const months: string[] = [
   "Nov",
   "Dec",
 ]
-export const years: string[] = Array.from(new Array(10), (_, i) =>
+export const DAYS: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+export const YEARS: string[] = Array.from(new Array(10), (_, i) =>
   String(new Date().getFullYear() - i)
 ).reverse()
 
-export const endpoints = {
+export const ENDPOINTS = {
   login: "/auth/login",
   register: "/auth/register",
   checkToken: "/auth/check/token",

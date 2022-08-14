@@ -5,6 +5,7 @@ import Button from "./Button"
 import CardContent from "./CardContent"
 import Checkbox from "./Checkbox"
 import Chip from "./Chip"
+import InputBase from "./InputBase"
 import IconButton from "./IconButton"
 import InputLabel from "./InputLabel"
 import LinearProgress from "./LinearProgress"
@@ -30,7 +31,8 @@ export default function ComponentsOverrides(theme) {
     // Checkbox(theme),
     Chip(theme),
     // IconButton(theme),
-    // InputLabel(theme),
+    InputBase(theme),
+    InputLabel(theme),
     // LinearProgress(),
     // Link(),
     // ListItemIcon(),

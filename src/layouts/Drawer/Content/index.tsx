@@ -4,7 +4,7 @@ import Box from "@mui/material/Box"
 import Drawer from "@mui/material/Drawer"
 import { Theme } from "@mui/material/styles"
 
-import { drawerWidth } from "@utils/constants"
+import { DRAWER_WIDTH } from "@utils/constants"
 
 import Header from "./Header"
 import Navigation from "./Navigation"
@@ -27,11 +27,11 @@ export default function DrawerLayout({
       variant={isMobile ? "temporary" : "persistent"}
       sx={(theme: Theme) => ({
         flexShrink: 0,
-        width: drawerWidth,
+        width: DRAWER_WIDTH,
         "& .MuiDrawer-paper": {
           px: 2,
           display: "flex",
-          width: drawerWidth,
+          width: DRAWER_WIDTH,
           flexDirection: "column",
           boxSizing: "border-box",
           backgroundColor: theme.palette.background.default,

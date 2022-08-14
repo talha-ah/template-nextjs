@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField"
 import { useApi } from "@hooks/useApi"
 import { Alert } from "@components/Alert"
 import { Button } from "@components/Button"
-import { endpoints } from "@utils/constants"
+import { ENDPOINTS } from "@utils/constants"
 
 export function InviteUser({
   onClose,
@@ -38,7 +38,7 @@ export function InviteUser({
 
       const response = await api({
         method: "POST",
-        uri: endpoints.invites,
+        uri: ENDPOINTS.invites,
         body: JSON.stringify(body),
         message: "Invite sent successfully",
       })
@@ -154,7 +154,7 @@ export function EditUser({
 
       const response = await api({
         method: "PUT",
-        uri: `${endpoints.organizationUsers}/${value._id}`,
+        uri: `${ENDPOINTS.organizationUsers}/${value._id}`,
         body: JSON.stringify(body),
         message: "User updated successfully",
       })

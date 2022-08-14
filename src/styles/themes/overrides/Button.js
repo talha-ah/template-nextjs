@@ -7,14 +7,15 @@ export default function Button(theme) {
 
   return {
     MuiButton: {
-      // defaultProps: {
-      //   disableElevation: true,
-      // },
+      defaultProps: {
+        // size: "small",
+        // disableElevation: true,
+      },
       styleOverrides: {
         root: {
           fontWeight: 400,
-          borderRadius: theme.shape.borderRadius,
           textTransform: "none",
+          // borderRadius: theme.shape.borderRadius,
         },
         contained: {
           // ...disabledStyle,

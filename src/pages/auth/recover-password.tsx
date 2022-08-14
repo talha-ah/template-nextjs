@@ -4,9 +4,8 @@ import type { NextPage } from "next"
 import { useRouter } from "next/router"
 
 import Box from "@mui/material/Box"
-import Container from "@mui/material/Container"
 
-import { Logo } from "@components/Logo"
+import { HeaderLayout } from "@layouts/Header"
 import { RecoverPasswordRequestForm } from "@forms/auth"
 
 const RecoverPasswordRequest: NextPage = () => {
@@ -26,15 +25,18 @@ const RecoverPasswordRequest: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container component="main" maxWidth="xs">
+      <HeaderLayout>
         <Box
-          sx={{ my: 8, flex: 1, display: "center", justifyContent: "center" }}
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Logo />
+          <RecoverPasswordRequestForm />
         </Box>
-
-        <RecoverPasswordRequestForm />
-      </Container>
+      </HeaderLayout>
     </>
   )
 }

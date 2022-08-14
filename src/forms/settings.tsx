@@ -8,7 +8,7 @@ import { useApi } from "@hooks/useApi"
 import { Alert } from "@components/Alert"
 import { Heading } from "@components/Title"
 import { Button } from "@components/Button"
-import { endpoints } from "@utils/constants"
+import { ENDPOINTS } from "@utils/constants"
 import { getOrgMetadata, setOrgMetadata } from "@utils/browser-utility"
 
 export function UpdateMessages({
@@ -45,7 +45,7 @@ export function UpdateMessages({
       const response = await api({
         method: "PUT",
         body: JSON.stringify(body),
-        uri: endpoints.organizationMetadata,
+        uri: ENDPOINTS.organizationMetadata,
         message: "Successfully updated messages",
       })
 

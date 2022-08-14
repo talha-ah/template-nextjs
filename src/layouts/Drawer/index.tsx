@@ -7,8 +7,8 @@ import Menu from "@mui/icons-material/Menu"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { styled, Theme, useTheme } from "@mui/material/styles"
 
-import { drawerWidth } from "@utils/constants"
-import { ActionHeader } from "@components/ActionHeader"
+import { DRAWER_WIDTH } from "@utils/constants"
+import { ActionHeader } from "@layouts/Drawer/Header"
 
 import Drawer from "./Content"
 
@@ -25,7 +25,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${drawerWidth}px`,
+  marginLeft: `-${DRAWER_WIDTH}px`,
   ...(open && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,

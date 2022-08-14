@@ -4,15 +4,14 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 import Box from "@mui/material/Box"
-import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 import CircularProgress from "@mui/material/CircularProgress"
 
 import Link from "@components/Link"
 import { useApi } from "@hooks/useApi"
-import { Logo } from "@components/Logo"
 import { Alert } from "@components/Alert"
-import { endpoints } from "@utils/constants"
+import { ENDPOINTS } from "@utils/constants"
+import { HeaderLayout } from "@layouts/Header"
 
 const VerifyEmail: NextPage = () => {
   const [api] = useApi()
@@ -41,7 +40,7 @@ const VerifyEmail: NextPage = () => {
     try {
       await api({
         method: "PUT",
-        uri: `${endpoints.verifyEmail}/${query.token}`,
+        uri: `${ENDPOINTS.verifyEmail}/${query.token}`,
       })
 
       setVerified(true)
@@ -60,37 +59,40 @@ const VerifyEmail: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container component="main" maxWidth="xs">
+      <HeaderLayout>
         <Box
-          sx={{ my: 8, flex: 1, display: "center", justifyContent: "center" }}
-        >
-          <Logo />
-        </Box>
-
-        <Box
-          style={{
-            flex: 1,
+          sx={{
+            height: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          {loading ? (
-            <CircularProgress />
-          ) : verified ? (
-            <Typography>
-              Email Verified Successfully. You can login now
-            </Typography>
-          ) : (
-            <Alert type="error" message={error} />
-          )}
+          <Box
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {loading ? (
+              <CircularProgress />
+            ) : verified ? (
+              <Typography>
+                Email Verified Successfully. You can login now
+              </Typography>
+            ) : (
+              <Alert type="error" message={error} />
+            )}
+          </Box>
+          <Box
+            sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
+          >
+            <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
+          </Box>
         </Box>
-        <Box
-          sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
-        >
-          <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
-        </Box>
-      </Container>
+      </HeaderLayout>
     </>
   )
 }

@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack"
 import { useLayoutEffect, useEffect, useRef } from "react"
 
 import DateUtility from "@utils/date"
-import { baseURL } from "@utils/constants"
+import { BASE_URL } from "@utils/constants"
 import { Response, T } from "@utils/types"
 import { getBrowserItem } from "@utils/browser-utility"
 import { useAppContext, AuthTypes } from "@contexts/index"
@@ -52,7 +52,7 @@ export const useApi = () => {
         myHeaders.append("Authorization", `Bearer ${token}`)
       }
 
-      const response = await fetch(baseURL + uri, {
+      const response = await fetch(BASE_URL + uri, {
         body,
         method,
         signal: controller?.signal,
@@ -81,7 +81,6 @@ export const useApi = () => {
     } catch (err: any) {
       // need to assign to a variable to prevent error when we do error.json() below
       let error = err
-      let status = error.status
 
       if (!isErrorWithMessage(err)) {
         error = await error.json()
@@ -97,6 +96,8 @@ export const useApi = () => {
         body && console.log(`Error for Body`, JSON.parse(body))
       }
 
+      let status = error.status
+
       if (status === 401) {
         // 401 : Token expired / invalid
         // Ask to relogin
@@ -110,6 +111,8 @@ export const useApi = () => {
           autoHideDuration: 3000,
         })
 
+        throw error
+      } else {
         throw error
       }
     }

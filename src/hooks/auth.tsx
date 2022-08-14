@@ -8,7 +8,7 @@ import FilterCenterFocusOutlinedIcon from "@mui/icons-material/FilterCenterFocus
 import MiscellaneousServicesOutlinedIcon from "@mui/icons-material/MiscellaneousServicesOutlined"
 
 import { useApi } from "@hooks/useApi"
-import { endpoints } from "@utils/constants"
+import { ENDPOINTS } from "@utils/constants"
 import { NavLink, Metadata } from "@utils/types"
 import { getBrowserItem } from "@utils/browser-utility"
 import { setOrgMetadata } from "@utils/browser-utility"
@@ -93,7 +93,7 @@ export const AuthWrapper = ({ children }: { children: any }) => {
       }
 
       const response = await api({
-        uri: endpoints.profile,
+        uri: ENDPOINTS.profile,
       })
 
       dispatch({
@@ -141,7 +141,7 @@ export const useFetchMetadata = () => {
       setLoading(true)
 
       const response = await api({
-        uri: `${endpoints.organizationMetadata}?filter=legalMessages,statuses,statusTexts`,
+        uri: `${ENDPOINTS.organizationMetadata}?filter=legalMessages,statuses,statusTexts`,
       })
 
       setMetadata(response?.data)

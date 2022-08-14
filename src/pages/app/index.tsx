@@ -7,13 +7,14 @@ import Paper from "@mui/material/Paper"
 import { styled, useTheme } from "@mui/material/styles"
 
 import { useApi } from "@hooks/useApi"
-import { apiLimit } from "@utils/constants"
+import { APP_NAME } from "@utils/constants"
+import { API_LIMIT } from "@utils/constants"
 import { Heading } from "@components/Title"
-import { endpoints } from "@utils/constants"
+import { ENDPOINTS } from "@utils/constants"
 import { Interval, Color } from "@utils/types"
 import { DrawerLayout } from "@layouts/Drawer"
 import { DataTable } from "@components/DataTable"
-import { days, months, years } from "@utils/constants"
+import { DAYS, MONTHS, YEARS } from "@utils/constants"
 import { BarChart } from "@components/Graphs/BarChart"
 import { getOrgMetadata } from "@utils/browser-utility"
 import { LineChart } from "@components/Graphs/LineChart"
@@ -35,7 +36,7 @@ export default function Dashboard() {
   return (
     <>
       <Head>
-        <title>Dashboard - Six Wraps</title>
+        <title>Dashboard - {APP_NAME}</title>
       </Head>
 
       <DrawerLayout
@@ -107,7 +108,7 @@ const UsersCard = ({
       setLoading(true)
 
       const response = await api({
-        uri: `${endpoints.analyticsUsers}?interval=${interval}`,
+        uri: `${ENDPOINTS.analyticsUsers}?interval=${interval}`,
       })
 
       let diff = 0
@@ -185,13 +186,13 @@ const UsersChart1 = ({
       setLoading(true)
 
       const response = await api({
-        uri: `${endpoints.analyticsUsersChart}?interval=${localInterval}`,
+        uri: `${ENDPOINTS.analyticsUsersChart}?interval=${localInterval}`,
       })
 
       let res: Props[] = []
 
       if (interval === "week") {
-        res = days.map((elem, index) => {
+        res = DAYS.map((elem, index) => {
           return {
             key: elem,
             value:
@@ -200,7 +201,7 @@ const UsersChart1 = ({
           }
         })
       } else if (interval === "month") {
-        res = months.map((elem, index) => {
+        res = MONTHS.map((elem, index) => {
           return {
             key: elem,
             value:
@@ -209,7 +210,7 @@ const UsersChart1 = ({
           }
         })
       } else {
-        res = years.map((elem) => {
+        res = YEARS.map((elem) => {
           return {
             key: elem,
             value:
@@ -285,13 +286,13 @@ const UsersChart2 = ({
       setLoading(true)
 
       const response = await api({
-        uri: `${endpoints.analyticsUsersChart}?interval=${localInterval}`,
+        uri: `${ENDPOINTS.analyticsUsersChart}?interval=${localInterval}`,
       })
 
       let res: Props[] = []
 
       if (interval === "week") {
-        res = days.map((elem, index) => {
+        res = DAYS.map((elem, index) => {
           return {
             key: elem,
             value:
@@ -300,7 +301,7 @@ const UsersChart2 = ({
           }
         })
       } else if (interval === "month") {
-        res = months.map((elem, index) => {
+        res = MONTHS.map((elem, index) => {
           return {
             key: elem,
             value:
@@ -309,7 +310,7 @@ const UsersChart2 = ({
           }
         })
       } else {
-        res = years.map((elem) => {
+        res = YEARS.map((elem) => {
           return {
             key: elem,
             value:

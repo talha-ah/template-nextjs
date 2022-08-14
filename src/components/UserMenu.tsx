@@ -13,7 +13,7 @@ import ListItemText from "@mui/material/ListItemText"
 import AccountCircle from "@mui/icons-material/AccountCircle"
 import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined"
 
-import { drawerWidth } from "@utils/constants"
+import { DRAWER_WIDTH } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 type userMenuItem = {
@@ -98,7 +98,7 @@ export const UserMenu = ({
             px: 1,
             boxShadow: 3,
             mt: position === "top" ? -1 : 1,
-            width: drawerWidth - +theme.spacing(4).replace("px", ""),
+            width: DRAWER_WIDTH - +theme.spacing(4).replace("px", ""),
           },
         })}
       >

@@ -7,11 +7,12 @@ import { Delete, Edit } from "@mui/icons-material"
 import { Replay as ReplayIcon } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
+import { APP_NAME } from "@utils/constants"
 import { Button } from "@components/Button"
 import { User, Invite } from "@utils/types"
-import { apiLimit } from "@utils/constants"
+import { API_LIMIT } from "@utils/constants"
 import { Dialog } from "@components/Dialog"
-import { endpoints } from "@utils/constants"
+import { ENDPOINTS } from "@utils/constants"
 import { Confirm } from "@components/Confirm"
 import { DrawerLayout } from "@layouts/Drawer"
 import { useAppContext } from "@contexts/index"
@@ -24,7 +25,7 @@ export default function Users() {
   const { state } = useAppContext()
 
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(+apiLimit)
+  const [limit, setLimit] = useState(+API_LIMIT)
   const [totalPages, setTotalPages] = useState(1)
 
   const [tab, setTab] = useState<number>(0)
@@ -53,7 +54,7 @@ export default function Users() {
       setLoading(true)
 
       const response = await api({
-        uri: endpoints.organizationUsers,
+        uri: ENDPOINTS.organizationUsers,
       })
 
       setItems(response?.data)
@@ -68,7 +69,7 @@ export default function Users() {
       setInvitesLoading(true)
 
       const response = await api({
-        uri: `${endpoints.invites}?page=${page}&limit=${limit}`,
+        uri: `${ENDPOINTS.invites}?page=${page}&limit=${limit}`,
       })
 
       setInvites(response?.data)
@@ -85,7 +86,7 @@ export default function Users() {
 
       await api({
         method: "DELETE",
-        uri: `${endpoints.invites}/${_id}`,
+        uri: `${ENDPOINTS.invites}/${_id}`,
         message: "Invite deleted successfully",
       })
 
@@ -102,7 +103,7 @@ export default function Users() {
 
       await api({
         method: "DELETE",
-        uri: `${endpoints.organizationUsers}/${_id}`,
+        uri: `${ENDPOINTS.organizationUsers}/${_id}`,
         message: "User deleted successfully",
       })
 
@@ -119,7 +120,7 @@ export default function Users() {
 
       await api({
         method: "POST",
-        uri: `${endpoints.resendInvite}/${_id}`,
+        uri: `${ENDPOINTS.resendInvite}/${_id}`,
         message: "Invite resent",
       })
     } catch (error: any) {
@@ -264,7 +265,7 @@ export default function Users() {
   return (
     <>
       <Head>
-        <title>Users - Six Wraps</title>
+        <title>Users - {APP_NAME}</title>
       </Head>
 
       <DrawerLayout
