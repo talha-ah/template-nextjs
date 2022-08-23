@@ -1,123 +1,76 @@
 import React from "react"
 
-export type Address = {
-  addressOne: string
-  addressTwo?: string
-  addressThree?: string
-  zip?: String
-  city?: String
-  state?: String
-  country?: String
+export type T = Awaited<Promise<Response>>
+
+export type ThemeMode = "light" | "dark"
+
+export type DateRangeType = [Date | null, Date | null]
+
+export type Interval = "day" | "week" | "month" | "year"
+
+export type Color =
+  | "default"
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning"
+
+export type ActionType = {
+  type: string
+  payload: any
 }
 
-export type Organization = {
-  _id: string
-  name: string
-  email: string
-  phone: string
-  logo?: string
-  address?: Address
-}
-
-export type User = {
-  _id: string
-  name: string
-  firstName: string
-  lastName?: string
-  email: string
-  phone?: string
-  gender?: string
-  dateOfBirth?: string | Date
-  image?: string
-  fcmToken?: string
-  lastLoginAt?: Date
-  role: string
-  status?: string
-  address?: Address
-  organizationId: string
-  organization: Organization
-  organizations: Organization[]
-}
-
-export type Invite = {
-  _id: string
-  name: string
-  firstName: string
-  lastName?: string
-  email: string
-  organizationId: string
-}
-
-export type Customer = {
-  _id: string
-  firstName: string
-  lastName?: string
-  name?: string
-  email: string
-  phone: string
-  gender?: string
-  dateOfBirth?: string | Date
-  image?: string
-  reviewedAt?: Date
-  organizationId: string
-  status: string
-  totalJobs: number
-}
-
-export type Service = {
-  _id: string
-  name: string
-  parentId?: string
-  subServices?: Service[]
-  organizationId: string
-  status: any
-  updateAt: Date
-  createdAt: Date
-}
-
-export type Vehicle = {
-  vinNumber: string
-  licenseNumber: string
-  color: string
-  make: string
-  model: string
-  year: string
-}
-
-export type Job = {
-  _id: string
-  customer: Customer
-  customerSign?: string
-  vehicle: Vehicle
-  services: Service[]
-  estimatedCompletionDate: Date
-  paymentType: "cash" | "credit_cart" | "check" | "finance" | "other"
-  images: string[]
-  videos: string[]
-  description: string
-  reviewed: boolean
-  userId: string
-  organizationId: string
-  status: string
-  createdAt: Date
-  updatedAt: Date
-}
-
-export type MetadataStatus = {
-  label: string
-  value: string
-}
-export type MetadataStatusTexts = {
-  _id: string
-  status: string
-  text: string
+export type Freeze<T> = {
+  readonly [P in keyof T]: T[P]
 }
 
 export type Metadata = {
-  legalAgreement: string
-  statusTexts: MetadataStatusTexts[]
-  statuses: MetadataStatus[]
-  services?: Service[]
+  [key: string]: any
+}
+
+export type AuthStateType = {
+  user: User
+  token: string
+  isAuth: boolean
+  loading: boolean
+  theme: ThemeMode
+  refresh_token: string
+}
+
+export type NavLink = {
+  type: string
+  href?: string
+  label: string
+  color?: string
+  exact?: boolean
+  children?: NavLink[]
+  icon?: React.ReactElement
+}
+
+export type MenuLink = {
+  type: string
+  href?: string
+  label: string
+  icon?: React.ReactElement
+  onClick?: () => void
+}
+
+export type Response =
+  | {
+      data: any
+      message: string
+      success: boolean
+      pagination?: Pagination
+    }
+  | undefined
+
+export type Pagination = {
+  page: number
+  limit: number
+  total_pages: number
+  total_count: number
 }
 
 export type DataTableHeader = {
@@ -134,60 +87,24 @@ export type DataTableHeader = {
   render?: (value: any) => React.ReactNode
 }
 
-export type ThemeMode = "light" | "dark"
-
-export type ActionType = {
-  type: string
-  payload: any
+export type User = {
+  _id: string
+  name: string
+  first_name: string
+  last_name?: string
+  email: string
+  phone?: string
+  role: string
+  status?: "active" | "inactive"
 }
 
-export type AuthStateType = {
-  user: User
-  token: string
-  isAuth: boolean
-  loading: boolean
-  refreshToken: string
-  theme: ThemeMode
+export type QueryType = "author" | "article" | "co-author"
+
+export type Invite = {
+  _id: string
+  name: string
+  first_name: string
+  last_name?: string
+  email: string
+  organization_id: string
 }
-
-export type Pagination = {
-  page: number
-  limit: number
-  pagesCount: number
-  totalCount: number
-}
-
-export type Response =
-  | {
-      data: any
-      headers?: any
-      message: string
-      pagination?: Pagination
-      page?: number
-      limit?: number
-      totalData?: number
-      totalPages?: number
-    }
-  | undefined
-
-export type T = Awaited<Promise<Response>>
-
-export type NavLink = {
-  type: string
-  href?: string
-  label: string
-  color?: string
-  exact?: boolean
-  children?: NavLink[]
-  icon?: React.ReactElement
-}
-
-export type Interval = "week" | "month" | "year"
-export type Color =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "error"
-  | "info"
-  | "success"
-  | "warning"

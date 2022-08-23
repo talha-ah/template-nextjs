@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import Menu from "@mui/icons-material/Menu"
 import Container from "@mui/material/Container"
 import IconButton from "@mui/material/IconButton"
 import useMediaQuery from "@mui/material/useMediaQuery"
@@ -13,6 +12,7 @@ import { styled, useTheme, Theme } from "@mui/material/styles"
 
 import { Logo } from "@components/Logo"
 import { UserMenu } from "@components/UserMenu"
+import { APP_BAR_HEIGHT } from "@utils/constants"
 import { NextLinkComposed } from "@components/Link"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
@@ -90,10 +90,10 @@ const Header = ({ isMobile }: { isMobile: boolean }) => {
       sx={(theme: Theme) => ({
         py: 2,
         width: "100%",
-        height: "64px",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        height: `${APP_BAR_HEIGHT}px`,
         justifyContent: "space-between",
         borderBottom: `1px solid ${theme.palette.divider}`,
       })}

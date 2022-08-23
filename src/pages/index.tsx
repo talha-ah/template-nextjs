@@ -5,14 +5,15 @@ import type { NextPage } from "next"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 
+import { APP_NAME } from "@utils/constants"
 import { HeaderLayout } from "@layouts/Header"
 
 const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Template</title>
-        <meta name="description" content="Template" />
+        <title>{APP_NAME}</title>
+        <meta name="description" content={APP_NAME} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

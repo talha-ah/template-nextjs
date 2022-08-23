@@ -84,6 +84,10 @@ export const useApi = () => {
 
       if (!isErrorWithMessage(err)) {
         error = await error.json()
+        error = {
+          message: error.detail || error.message,
+          status: err.status,
+        }
       } else {
         error = {
           message: err.message,
@@ -98,18 +102,21 @@ export const useApi = () => {
 
       let status = error.status
 
-      if (status === 401) {
-        // 401 : Token expired / invalid
-        // Ask to relogin
-        dispatch({ type: AuthTypes.LOGOUT })
-        router.replace("/")
+      // if (status === 403) {
+      //   // 401 : Token expired / invalid
+      //   // Ask to relogin
+      //   dispatch({ type: AuthTypes.LOGOUT })
+      //   router.replace("/")
 
-        // TODO: Use refresh token to get new token
-      } else if (status) {
-        enqueueSnackbar(error?.message, {
-          variant: "error",
-          autoHideDuration: 3000,
-        })
+      //   // TODO: Use refresh token to get new token
+      // } else
+      if (status) {
+        if (!Array.isArray(error.message)) {
+          enqueueSnackbar(error?.message, {
+            variant: "error",
+            autoHideDuration: 3000,
+          })
+        }
 
         throw error
       } else {

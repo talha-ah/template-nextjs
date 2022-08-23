@@ -7,8 +7,8 @@ import Menu from "@mui/icons-material/Menu"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { styled, Theme, useTheme } from "@mui/material/styles"
 
-import { DRAWER_WIDTH } from "@utils/constants"
 import { ActionHeader } from "@layouts/Drawer/Header"
+import { DRAWER_WIDTH, APP_BAR_HEIGHT } from "@utils/constants"
 
 import Drawer from "./Content"
 
@@ -112,7 +112,14 @@ export const DrawerLayout = ({
             </ActionHeader>
           </Box>
         )}
-        <Children>{children}</Children>
+        <Children
+          sx={{
+            width: "100%",
+            height: `calc(100% - ${APP_BAR_HEIGHT}px)`,
+          }}
+        >
+          {children}
+        </Children>
       </Main>
 
       {isMobile && (

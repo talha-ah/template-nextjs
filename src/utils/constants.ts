@@ -7,6 +7,7 @@ export const API_LIMIT = publicRuntimeConfig.apiLimit
 export const BASE_URL = `${publicRuntimeConfig.apiPath}/api/${publicRuntimeConfig.apiVersion}`
 
 export const DRAWER_WIDTH = 260
+export const APP_BAR_HEIGHT = 65
 
 export const APP_NAME = publicRuntimeConfig.appName
 

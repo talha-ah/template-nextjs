@@ -7,9 +7,9 @@ import { Delete, Edit } from "@mui/icons-material"
 import { Replay as ReplayIcon } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
+import { User, Invite } from "@utils/types"
 import { APP_NAME } from "@utils/constants"
 import { Button } from "@components/Button"
-import { User, Invite } from "@utils/types"
 import { API_LIMIT } from "@utils/constants"
 import { Dialog } from "@components/Dialog"
 import { ENDPOINTS } from "@utils/constants"
@@ -73,7 +73,7 @@ export default function Users() {
       })
 
       setInvites(response?.data)
-      setTotalPages(response?.totalPages || 1)
+      setTotalPages(response?.pagination?.total_pages || 1)
     } catch (error) {
     } finally {
       setInvitesLoading(false)
@@ -135,7 +135,7 @@ export default function Users() {
         id: "name",
         label: "Name",
         minWidth: 170,
-        render: (e: User) => `${e.firstName || ""} ${e.lastName || ""}`,
+        render: (e: User) => `${e.first_name || ""} ${e.last_name || ""}`,
       },
       {
         id: "email",
@@ -174,8 +174,8 @@ export default function Users() {
                   onSubmit={(value) => {
                     let rows = [...items]
                     let index = rows.findIndex((e) => e._id === row._id)
-                    rows[index].firstName = value.firstName
-                    rows[index].lastName = value.lastName
+                    rows[index].first_name = value.first_name
+                    rows[index].last_name = value.last_name
                     rows[index].email = value.email
                     setItems(rows)
                   }}
@@ -216,7 +216,7 @@ export default function Users() {
         id: "name",
         label: "Name",
         minWidth: 170,
-        render: (e: Invite) => `${e.firstName || ""} ${e.lastName || ""}`,
+        render: (e: Invite) => `${e.first_name || ""} ${e.last_name || ""}`,
       },
       {
         id: "email",

@@ -7,6 +7,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode"
 import LightModeIcon from "@mui/icons-material/LightMode"
 
 import { Logo } from "@components/Logo"
+import { APP_BAR_HEIGHT } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 export default function Header() {
@@ -17,10 +18,10 @@ export default function Header() {
       sx={(theme: Theme) => ({
         py: 2,
         width: "100%",
-        height: "64px",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        height: `${APP_BAR_HEIGHT}px`,
         borderBottom: `1px solid ${theme.palette.divider}`,
       })}
     >

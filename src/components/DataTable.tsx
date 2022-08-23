@@ -1,17 +1,20 @@
 import React from "react"
 
-import Box from "@mui/material/Box"
-import Paper from "@mui/material/Paper"
-import Table from "@mui/material/Table"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
+import { Paper } from "@mui/material"
+import { Table } from "@mui/material"
+import { TableRow } from "@mui/material"
+import { TableBody } from "@mui/material"
+import { TableCell } from "@mui/material"
+import { TableHead } from "@mui/material"
+import { Pagination } from "@mui/material"
 import { Select } from "@components/Select"
-import TableRow from "@mui/material/TableRow"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import Pagination from "@mui/material/Pagination"
-import TableContainer from "@mui/material/TableContainer"
-import CircularProgress from "@mui/material/CircularProgress"
+import { useMediaQuery } from "@mui/material"
+import { TableContainer } from "@mui/material"
+import { CircularProgress } from "@mui/material"
 
+import { generateId } from "@utils/common"
 import { DataTableHeader } from "@utils/types"
 
 function getValue(
@@ -42,10 +45,12 @@ export const DataTable = ({
   limit?: number
   loading?: boolean
   totalPages?: number
+  columns?: DataTableHeader[]
   onPageChange?: (page: number) => void
   onLimitChange?: (limit: number) => void
-  columns?: DataTableHeader[]
 }) => {
+  const isMobile = useMediaQuery("(max-width: 600px)")
+
   const handleChangePage = (event: unknown, newPage: number) => {
     onPageChange && onPageChange(newPage)
   }
@@ -75,7 +80,12 @@ export const DataTable = ({
           <TableBody>
             {data.map((row: any) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
+                <TableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row._id || generateId()}
+                >
                   {columns.map((column: DataTableHeader) => {
                     let value
                     if (column.render) {
@@ -108,32 +118,42 @@ export const DataTable = ({
       </TableContainer>
 
       {page && limit && (
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
+        <Grid
+          container
+          spacing={2}
+          sx={{ mt: 0.5 }}
+          direction={isMobile ? "column-reverse" : "row"}
         >
-          <Select
-            size="small"
-            value={String(limit)}
-            onChange={handleLimitChange}
-            options={["10", "25", "100"].map((option: string) => ({
-              value: option,
-              label: `${option} items per page`,
-            }))}
-          />
-          <Pagination
-            page={page}
-            showLastButton
-            showFirstButton
-            shape="rounded"
-            count={totalPages}
-            onChange={handleChangePage}
-          />
-        </Box>
+          <Grid item xs={12} md={6}>
+            <Select
+              size="small"
+              fullWidth={isMobile}
+              value={String(limit)}
+              onChange={handleLimitChange}
+              options={["10", "25", "100"].map((option: string) => ({
+                value: option,
+                label: `${option} items per page`,
+              }))}
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Pagination
+              page={page}
+              // showLastButton
+              // showFirstButton
+              shape="rounded"
+              count={totalPages}
+              onChange={handleChangePage}
+            />
+          </Grid>
+        </Grid>
       )}
     </Box>
   )

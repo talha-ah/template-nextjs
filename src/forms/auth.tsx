@@ -13,14 +13,12 @@ import { useApi } from "@hooks/useApi"
 import { Alert } from "@components/Alert"
 import { Button } from "@components/Button"
 import { ENDPOINTS } from "@utils/constants"
-import { useFetchMetadata } from "@hooks/auth"
 import { AuthTypes, useAppContext } from "@contexts/index"
 
 export function LoginForm() {
   const [api] = useApi()
   const router = useRouter()
   const { dispatch } = useAppContext()
-  const { fetchMetadata } = useFetchMetadata()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -45,22 +43,19 @@ export function LoginForm() {
         body: JSON.stringify(body),
       })
 
-      if (response?.data.user.organization.role !== "admin") {
-        throw new Error("You are not authorized to login")
-      }
-
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: response?.data,
+        payload: {
+          ...response?.data,
+          token: response?.data.access_token,
+        },
       })
-
-      // Fetch Metadata
-      fetchMetadata()
 
       router.replace("/app")
     } catch (error: any) {
-      setLoading(false)
       setError(error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -83,23 +78,25 @@ export function LoginForm() {
         sx={{ mt: 4, maxWidth: "xs" }}
       >
         <TextField
-          margin="normal"
           required
+          autoFocus
           fullWidth
           id="email"
-          label="Email Address"
           name="email"
+          margin="normal"
           autoComplete="email"
-          autoFocus
+          label="Email Address"
+          defaultValue="manohar@pawar.com"
         />
         <TextField
-          margin="normal"
           required
           fullWidth
-          name="password"
-          label="Password"
-          type="password"
           id="password"
+          margin="normal"
+          name="password"
+          type="password"
+          label="Password"
+          defaultValue="password!2"
           autoComplete="current-password"
         />
         <FormControlLabel
@@ -132,7 +129,6 @@ export function Registerform() {
   const [api] = useApi()
   const router = useRouter()
   const { dispatch } = useAppContext()
-  const { fetchMetadata } = useFetchMetadata()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -147,10 +143,11 @@ export function Registerform() {
       const data = new FormData(event.currentTarget)
 
       const body = {
-        email: data.get("email"),
-        password: data.get("password"),
-        firstName: data.get("firstName"),
+        first_name: data.get("firstName"),
         lastName: data.get("lastName"),
+        password: data.get("password"),
+        email: data.get("email"),
+        phone: data.get("phone"),
       }
 
       const response = await api({
@@ -162,11 +159,11 @@ export function Registerform() {
 
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: response?.data,
+        payload: {
+          ...response?.data,
+          token: response?.data.access_token,
+        },
       })
-
-      // Fetch Metadata
-      fetchMetadata()
 
       router.replace("/app")
     } catch (error: any) {
@@ -215,7 +212,7 @@ export function Registerform() {
               autoComplete="family-name"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               required
               fullWidth
@@ -223,6 +220,15 @@ export function Registerform() {
               name="email"
               autoComplete="email"
               label="Email Address"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              id="phone"
+              name="phone"
+              label="Phone"
+              autoComplete="phone"
             />
           </Grid>
           <Grid item xs={12}>
@@ -330,7 +336,14 @@ export function RecoverPasswordRequestForm() {
           Recover Password
         </Button>
         <Box
-          sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
+          sx={{
+            mt: 2,
+            gap: 1,
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
         >
           <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
         </Box>

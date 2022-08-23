@@ -4,6 +4,7 @@ import { Box } from "@mui/material"
 import { Theme } from "@mui/material/styles"
 
 import { Title } from "@components/Title"
+import { APP_BAR_HEIGHT } from "@utils/constants"
 import { BackButton } from "@components/BackButton"
 
 export const ActionHeader = ({
@@ -20,10 +21,10 @@ export const ActionHeader = ({
       sx={(theme: Theme) => ({
         py: 2,
         width: "100%",
-        height: "64px",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        height: `${APP_BAR_HEIGHT}px`,
         justifyContent: "space-between",
         borderBottom: `1px solid ${theme.palette.divider}`,
       })}

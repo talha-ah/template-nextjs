@@ -5,24 +5,14 @@ import Box from "@mui/material/Box"
 import Menu from "@mui/material/Menu"
 import { Theme } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
-import Logout from "@mui/icons-material/Logout"
 import IconButton from "@mui/material/IconButton"
-import Settings from "@mui/icons-material/Settings"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
 import AccountCircle from "@mui/icons-material/AccountCircle"
-import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined"
 
+import { MenuLink } from "@utils/types"
+import { useRouteLinks } from "@hooks/auth"
 import { DRAWER_WIDTH } from "@utils/constants"
-import { useAppContext, AuthTypes } from "@contexts/index"
-
-type userMenuItem = {
-  href?: string
-  label: string
-  color?: string
-  icon?: React.ReactElement
-  onClick?: () => void
-}
 
 export const UserMenu = ({
   position = "bottom",
@@ -30,7 +20,7 @@ export const UserMenu = ({
   position?: "bottom" | "top"
 }) => {
   const router = useRouter()
-  const { dispatch } = useAppContext()
+  const { MenuLinks } = useRouteLinks()
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -41,29 +31,6 @@ export const UserMenu = ({
   }
 
   const closeUserMenu = () => setAnchorElUser(null)
-
-  const userMenu = [
-    {
-      href: "/app",
-      label: "Dashboard",
-      icon: <AnalyticsOutlinedIcon fontSize="small" />,
-    },
-    {
-      type: "item",
-      label: "Settings",
-      href: "/app/settings",
-      icon: <Settings fontSize="small" />,
-    },
-    {
-      color: "red",
-      label: "Logout",
-      icon: <Logout fontSize="small" />,
-      onClick: () => {
-        dispatch({ type: AuthTypes.LOGOUT })
-        router.push("/")
-      },
-    },
-  ]
 
   return (
     <Box>
@@ -96,19 +63,21 @@ export const UserMenu = ({
           "& .MuiMenu-paper": {
             py: 0,
             px: 1,
-            boxShadow: 3,
+            border: 1,
+            boxShadow: 0,
+            borderStyle: "solid",
+            borderColor: "divider",
             mt: position === "top" ? -1 : 1,
             width: DRAWER_WIDTH - +theme.spacing(4).replace("px", ""),
           },
         })}
       >
-        {userMenu.map((item: userMenuItem) => (
+        {MenuLinks.map((item: MenuLink) => (
           <MenuItem
             key={item.label}
             onClick={() => {
-              if (item.onClick) {
-                item.onClick()
-              }
+              if (item.onClick) item.onClick()
+
               if (item.href) {
                 router.push(item.href)
               }

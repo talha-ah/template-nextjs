@@ -1,359 +1,115 @@
 import Head from "next/head"
-import { useState, useEffect, useMemo } from "react"
 
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import Paper from "@mui/material/Paper"
-import { styled, useTheme } from "@mui/material/styles"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
+import { Card } from "@mui/material"
+import { Container } from "@mui/material"
+import { Typography } from "@mui/material"
+import { CardContent } from "@mui/material"
+import { CardActionArea } from "@mui/material"
+import { AnalyticsOutlined } from "@mui/icons-material"
+import { PeopleAltOutlined } from "@mui/icons-material"
 
-import { useApi } from "@hooks/useApi"
 import { APP_NAME } from "@utils/constants"
-import { API_LIMIT } from "@utils/constants"
-import { Heading } from "@components/Title"
-import { ENDPOINTS } from "@utils/constants"
-import { Interval, Color } from "@utils/types"
-import { DrawerLayout } from "@layouts/Drawer"
-import { DataTable } from "@components/DataTable"
-import { DAYS, MONTHS, YEARS } from "@utils/constants"
-import { BarChart } from "@components/Graphs/BarChart"
-import { getOrgMetadata } from "@utils/browser-utility"
-import { LineChart } from "@components/Graphs/LineChart"
-import { AnalyticsCard } from "@components/AnalyticsCard"
-import { ToggleButtons } from "@components/ToggleButtons"
-import { PieChart, Props } from "@components/Graphs/PieChart"
+import { HeaderLayout } from "@layouts/Header"
+import { NextLinkComposed } from "@components/Link"
 
-const Chart = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  color: theme.palette.text.secondary,
-  height: 400,
-  width: "100%",
-}))
+const sections = [
+  {
+    title: "Dashboard",
+    color: "primary.main",
+    href: "/app/dashboard",
+    icon: <AnalyticsOutlined sx={{ fontSize: 60 }} color="action" />,
+  },
+  {
+    title: "Users",
+    href: "/app/users",
+    color: "secondary.main",
+    icon: <PeopleAltOutlined sx={{ fontSize: 60 }} color="action" />,
+  },
+]
 
-export default function Dashboard() {
-  const [interval, setInterval] = useState<Interval>("month")
-
+export default function Main() {
   return (
     <>
       <Head>
-        <title>Dashboard - {APP_NAME}</title>
+        <title>{APP_NAME}</title>
       </Head>
 
-      <DrawerLayout
-        title="Dashboard"
-        actions={
-          <ToggleButtons
-            value={interval}
-            onClick={({ value }: { value: Interval }) => {
-              setInterval(value)
+      <HeaderLayout>
+        <Box
+          sx={{
+            flex: 1,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Container maxWidth="md">
+            <Grid container spacing={2}>
+              {sections.map((section: any, i: number) => (
+                <Grid
+                  item
+                  sm={6}
+                  xs={12}
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Section section={section} />
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Box>
+      </HeaderLayout>
+    </>
+  )
+}
+
+const Section = ({ section }: { section: any }) => {
+  return (
+    <Card sx={{ width: "100%" }} variant="outlined">
+      <CardActionArea {...{ component: NextLinkComposed, to: section.href }}>
+        <Box
+          sx={{
+            height: 100,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {section.icon}
+        </Box>
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            options={[
-              { label: "Year", value: "year" },
-              { label: "Month", value: "month" },
-              { label: "Week", value: "week" },
-            ]}
-          />
-        }
-      >
-        <Heading sx={{ mb: 1 }}>Overview</Heading>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <UsersCard title="Users" interval={interval} />
-          </Grid>
-        </Grid>
-
-        <Box sx={{ my: 2 }} />
-
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6} lg={4}>
-            <UsersChart1 title="Users" interval={interval} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <UsersChart2 title="Users" interval={interval} />
-          </Grid>
-        </Grid>
-      </DrawerLayout>
-    </>
-  )
-}
-
-type CardData = {
-  currentData: string
-  previousData: string
-  percentage: number
-  isLoss: boolean
-  diff: number
-  color?: Color
-}
-
-const UsersCard = ({
-  title,
-  interval,
-}: {
-  title: string
-  interval?: Interval
-}) => {
-  const [api] = useApi()
-
-  const [loading, setLoading] = useState<boolean>(true)
-  const [data, setData] = useState<CardData>({} as CardData)
-
-  useEffect(() => {
-    fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interval])
-
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-
-      const response = await api({
-        uri: `${ENDPOINTS.analyticsUsers}?interval=${interval}`,
-      })
-
-      let diff = 0
-      let isLoss = false
-      let percentage = 0
-      let color: Color = "primary"
-
-      if (response?.data.currentData >= response?.data.previousData) {
-        percentage =
-          ((response?.data.currentData - response?.data.previousData) /
-            response?.data.currentData) *
-          100
-        diff = response?.data.currentData - response?.data.previousData
-      } else {
-        isLoss = true
-        color = "error"
-        diff = response?.data.previousData - response?.data.currentData
-        percentage =
-          ((response?.data.previousData - response?.data.currentData) /
-            response?.data.previousData) *
-          100
-      }
-
-      setData({
-        previousData: response?.data.previousData,
-        currentData: response?.data.currentData,
-        percentage,
-        isLoss,
-        color,
-        diff,
-      })
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <AnalyticsCard
-      title={title}
-      count={data?.currentData}
-      percentage={data?.percentage}
-      isLoss={data?.isLoss}
-      color={data?.color}
-      diff={data?.diff}
-    />
-  )
-}
-
-const UsersChart1 = ({
-  title,
-  interval,
-}: {
-  title: string
-  interval?: Interval
-}) => {
-  const [api] = useApi()
-
-  const [data, setData] = useState<Props[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [localInterval, setLocalInterval] = useState<Interval>("month")
-
-  useEffect(() => {
-    fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localInterval])
-
-  useEffect(() => {
-    if (interval) setLocalInterval(interval)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interval])
-
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-
-      const response = await api({
-        uri: `${ENDPOINTS.analyticsUsersChart}?interval=${localInterval}`,
-      })
-
-      let res: Props[] = []
-
-      if (interval === "week") {
-        res = DAYS.map((elem, index) => {
-          return {
-            key: elem,
-            value:
-              response?.data.find((item: any) => +item.label === index)
-                ?.value ?? 0,
-          }
-        })
-      } else if (interval === "month") {
-        res = MONTHS.map((elem, index) => {
-          return {
-            key: elem,
-            value:
-              response?.data.find((item: any) => +item.label === index)
-                ?.value ?? 0,
-          }
-        })
-      } else {
-        res = YEARS.map((elem) => {
-          return {
-            key: elem,
-            value:
-              response?.data.find((item: any) => +item.label === +elem)
-                ?.value ?? 0,
-          }
-        })
-      }
-
-      setData(res)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <>
-      <Box
-        sx={{
-          mb: 1,
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Heading>{title}</Heading>
-        {/* <ToggleButtons
-          value={localInterval}
-          onClick={({ value }: { value: Interval }) => {
-            setLocalInterval(value)
-          }}
-          options={[
-            { label: "Year", value: "year" },
-            { label: "Month", value: "month" },
-            { label: "Week", value: "week" },
-          ]}
-        /> */}
-      </Box>
-      <Chart variant="outlined">
-        <LineChart data={data} loading={loading} />
-      </Chart>
-    </>
-  )
-}
-
-const UsersChart2 = ({
-  title,
-  interval,
-}: {
-  title: string
-  interval?: Interval
-}) => {
-  const [api] = useApi()
-
-  const [data, setData] = useState<Props[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [localInterval, setLocalInterval] = useState<Interval>("month")
-
-  useEffect(() => {
-    fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localInterval])
-
-  useEffect(() => {
-    if (interval) setLocalInterval(interval)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interval])
-
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-
-      const response = await api({
-        uri: `${ENDPOINTS.analyticsUsersChart}?interval=${localInterval}`,
-      })
-
-      let res: Props[] = []
-
-      if (interval === "week") {
-        res = DAYS.map((elem, index) => {
-          return {
-            key: elem,
-            value:
-              response?.data.find((item: any) => +item.label === index)
-                ?.value ?? 0,
-          }
-        })
-      } else if (interval === "month") {
-        res = MONTHS.map((elem, index) => {
-          return {
-            key: elem,
-            value:
-              response?.data.find((item: any) => +item.label === index)
-                ?.value ?? 0,
-          }
-        })
-      } else {
-        res = YEARS.map((elem) => {
-          return {
-            key: elem,
-            value:
-              response?.data.find((item: any) => +item.label === +elem)
-                ?.value ?? 0,
-          }
-        })
-      }
-
-      setData(res)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <>
-      <Box
-        sx={{
-          mb: 1,
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Heading>{title}</Heading>
-        {/* <ToggleButtons
-          value={localInterval}
-          onClick={({ value }: { value: Interval }) => {
-            setLocalInterval(value)
-          }}
-          options={[
-            { label: "Year", value: "year" },
-            { label: "Month", value: "month" },
-            { label: "Week", value: "week" },
-          ]}
-        /> */}
-      </Box>
-      <Chart variant="outlined">
-        <BarChart data={data} loading={loading} />
-      </Chart>
-    </>
+          >
+            <Typography
+              gutterBottom
+              variant="h5"
+              color="text.primary"
+              sx={{ textDecoration: "none" }}
+            >
+              {section.title}
+            </Typography>
+          </Box>
+          {/* <Typography variant="body2" color="text.secondary">
+            Lizards are a widespread group of squamate reptiles, with over 6,000
+            species, ranging across all continents except Antarctica
+          </Typography> */}
+        </CardContent>
+      </CardActionArea>
+    </Card>
   )
 }

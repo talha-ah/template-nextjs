@@ -1,61 +1,78 @@
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 
+import Logout from "@mui/icons-material/Logout"
+import Settings from "@mui/icons-material/Settings"
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined"
 import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined"
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined"
-import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined"
 import FilterCenterFocusOutlinedIcon from "@mui/icons-material/FilterCenterFocusOutlined"
-import MiscellaneousServicesOutlinedIcon from "@mui/icons-material/MiscellaneousServicesOutlined"
 
 import { useApi } from "@hooks/useApi"
 import { ENDPOINTS } from "@utils/constants"
-import { NavLink, Metadata } from "@utils/types"
-import { getBrowserItem } from "@utils/browser-utility"
 import { setOrgMetadata } from "@utils/browser-utility"
+import { getBrowserItem } from "@utils/browser-utility"
 import { AuthTypes, useAppContext } from "@contexts/index"
-
-export const NavLinks: NavLink[] = [
-  {
-    type: "group",
-    label: "App",
-    children: [
-      {
-        type: "item",
-        label: "Dashboard",
-        href: "/app",
-        icon: <AnalyticsOutlinedIcon fontSize="small" />,
-        exact: true,
-      },
-      {
-        type: "item",
-        label: "Users",
-        href: "/app/users",
-        icon: <PeopleAltOutlinedIcon fontSize="small" />,
-      },
-      {
-        type: "item",
-        label: "Customers",
-        href: "/app/customers",
-        icon: <FilterCenterFocusOutlinedIcon fontSize="small" />,
-      },
-      {
-        type: "item",
-        label: "Services",
-        href: "/app/services",
-        icon: <MiscellaneousServicesOutlinedIcon fontSize="small" />,
-      },
-      {
-        type: "item",
-        label: "Jobs",
-        href: "/app/jobs",
-        icon: <WorkOutlineOutlinedIcon fontSize="small" />,
-      },
-    ],
-  },
-]
+import { NavLink, MenuLink, Metadata } from "@utils/types"
 
 export const useRouteLinks = () => {
   const router = useRouter()
+  const { dispatch } = useAppContext()
+
+  const NavLinks: NavLink[] = useMemo(
+    () => [
+      {
+        type: "group",
+        label: "App",
+        children: [
+          {
+            type: "item",
+            label: "Dashboard",
+            href: "/app/dashboard",
+            icon: <AnalyticsOutlinedIcon fontSize="small" color="primary" />,
+            exact: true,
+          },
+          {
+            type: "item",
+            label: "Users",
+            href: "/app/users",
+            icon: (
+              <FilterCenterFocusOutlinedIcon fontSize="small" color="error" />
+            ),
+          },
+        ],
+      },
+    ],
+    []
+  )
+
+  const MenuLinks: MenuLink[] = useMemo(
+    () => [
+      {
+        type: "item",
+        href: "/app",
+        label: "Home",
+        icon: <HomeOutlinedIcon fontSize="small" />,
+      },
+      {
+        type: "item",
+        label: "Settings",
+        href: "/app/settings",
+        icon: <Settings fontSize="small" />,
+      },
+      {
+        type: "item",
+        color: "error",
+        label: "Logout",
+        icon: <Logout fontSize="small" />,
+        onClick: () => {
+          dispatch({ type: AuthTypes.LOGOUT })
+          router.push("/")
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router, dispatch]
+  )
 
   useEffect(() => {
     let app = router.asPath.split("/app/")[1]
@@ -67,7 +84,7 @@ export const useRouteLinks = () => {
     // eslint-disable-next-line
   }, [router.asPath])
 
-  return [NavLinks]
+  return { NavLinks, MenuLinks }
 }
 
 export const AuthWrapper = ({ children }: { children: any }) => {
@@ -140,13 +157,14 @@ export const useFetchMetadata = () => {
     try {
       setLoading(true)
 
-      const response = await api({
-        uri: `${ENDPOINTS.organizationMetadata}?filter=legalMessages,statuses,statusTexts`,
-      })
+      // const response = await api({
+      //   uri: `${ENDPOINTS.organizationMetadata}?filter=legalMessages,statuses,statusTexts`,
+      // })
 
-      setMetadata(response?.data)
+      // setMetadata(response?.data)
 
-      setOrgMetadata(response?.data)
+      // setOrgMetadata(response?.data )
+      setOrgMetadata({})
     } catch (error) {
     } finally {
       setLoading(true)

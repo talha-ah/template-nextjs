@@ -3,9 +3,10 @@ import * as React from "react"
 
 import { Box } from "@mui/material"
 
+import { Heading } from "@components/Title"
 import { APP_NAME } from "@utils/constants"
 import { DrawerLayout } from "@layouts/Drawer"
-import { UpdateMessages } from "@forms/settings"
+import { UpdateProfile, UpdatePassword } from "@forms/settings"
 
 export default function Settings() {
   return (
@@ -15,8 +16,16 @@ export default function Settings() {
       </Head>
 
       <DrawerLayout title="Settings">
-        <Box sx={{ mt: 1 }}>
-          <UpdateMessages />
+        <Heading>Profile</Heading>
+
+        <Box sx={{ mt: 2 }}>
+          <UpdateProfile />
+        </Box>
+
+        <Heading>Password</Heading>
+
+        <Box sx={{ mt: 2 }}>
+          <UpdatePassword />
         </Box>
       </DrawerLayout>
     </>
