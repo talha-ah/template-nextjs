@@ -1,14 +1,14 @@
 import React from "react"
 import { useRouter } from "next/router"
 
-import Box from "@mui/material/Box"
-import Menu from "@mui/material/Menu"
+import { Box } from "@mui/material"
+import { Menu } from "@mui/material"
 import { Theme } from "@mui/material"
-import MenuItem from "@mui/material/MenuItem"
-import IconButton from "@mui/material/IconButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import AccountCircle from "@mui/icons-material/AccountCircle"
+import { MenuItem } from "@mui/material"
+import { IconButton } from "@mui/material"
+import { ListItemIcon } from "@mui/material"
+import { ListItemText } from "@mui/material"
+import { AccountCircle } from "@mui/icons-material"
 
 import { MenuLink } from "@utils/types"
 import { useRouteLinks } from "@hooks/auth"
@@ -85,7 +85,7 @@ export const UserMenu = ({
             }}
           >
             {item.icon && (
-              <ListItemIcon color={item.color}>{item.icon}</ListItemIcon>
+              <ListItemIcon color={item?.color}>{item.icon}</ListItemIcon>
             )}
 
             <ListItemText primary={item.label} disableTypography />

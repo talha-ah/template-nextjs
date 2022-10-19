@@ -3,20 +3,22 @@ import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-import CircularProgress from "@mui/material/CircularProgress"
+import { Box } from "@mui/material"
+import { CircularProgress } from "@mui/material"
 
 import Link from "@components/Link"
 import { useApi } from "@hooks/useApi"
 import { Alert } from "@components/Alert"
 import { ENDPOINTS } from "@utils/constants"
 import { HeaderLayout } from "@layouts/Header"
+import { useAppContext } from "@contexts/index"
 
+let requested = false
 const VerifyEmail: NextPage = () => {
-  const [api] = useApi()
+  const API = useApi()
   const router = useRouter()
   const { query } = router
+  const { state } = useAppContext()
 
   const [verified, setVerified] = useState(false)
   const [loading, setLoading] = useState<boolean>(true)
@@ -30,7 +32,10 @@ const VerifyEmail: NextPage = () => {
 
   useEffect(() => {
     if (query.token) {
-      checkToken()
+      if (!requested) {
+        checkToken()
+        requested = true
+      }
     }
 
     // eslint-disable-next-line
@@ -38,8 +43,9 @@ const VerifyEmail: NextPage = () => {
 
   const checkToken = async () => {
     try {
-      await api({
+      await API({
         method: "PUT",
+        notifyError: false,
         uri: `${ENDPOINTS.verifyEmail}/${query.token}`,
       })
 
@@ -65,12 +71,12 @@ const VerifyEmail: NextPage = () => {
             height: "100%",
             display: "flex",
             alignItems: "center",
+            flexDirection: "column",
             justifyContent: "center",
           }}
         >
           <Box
             style={{
-              flex: 1,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -79,17 +85,20 @@ const VerifyEmail: NextPage = () => {
             {loading ? (
               <CircularProgress />
             ) : verified ? (
-              <Typography>
-                Email Verified Successfully. You can login now
-              </Typography>
+              <Alert
+                type="success"
+                message={"Email verified successfully. You can sign in now"}
+              />
             ) : (
               <Alert type="error" message={error} />
             )}
           </Box>
-          <Box
-            sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
-          >
-            <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
+          <Box sx={{ mt: 2 }}>
+            {state.auth.isAuth ? (
+              <Link href="/app">Dashboard</Link>
+            ) : (
+              <Link href="/auth/login">Sign in</Link>
+            )}
           </Box>
         </Box>
       </HeaderLayout>

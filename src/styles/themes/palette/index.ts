@@ -2,7 +2,7 @@ import { ThemeMode } from "@utils/types"
 
 import { colors } from "./colors"
 
-const Palette = (mode: ThemeMode) => {
+const Palette = (mode: "light" | "dark") => {
   const white = "#ffffff"
   const black = "#000000"
   const contrastText = "#fff"

@@ -1,8 +1,10 @@
 import React from "react"
 
-export type T = Awaited<Promise<Response>>
+export type Freeze<T> = {
+  readonly [P in keyof T]: T[P]
+}
 
-export type ThemeMode = "light" | "dark"
+export type ThemeMode = "light" | "dark" | "system"
 
 export type DateRangeType = [Date | null, Date | null]
 
@@ -17,29 +19,53 @@ export type Color =
   | "success"
   | "warning"
 
-export type ActionType = {
+export interface ActionType {
   type: string
   payload: any
 }
 
-export type Freeze<T> = {
-  readonly [P in keyof T]: T[P]
+export interface ErrorWithMessage {
+  message: string
+  status?: number
 }
 
-export type Metadata = {
+export interface Params {
+  body?: any
+  uri: string
+  method?: string
+  message?: string
+  contentType?: string
+  notifyError?: boolean
+}
+
+export interface Pagination {
+  page?: number
+  limit?: number
+  total_pages?: number
+  total_count?: number
+}
+
+export interface ApiResponse {
+  data: any
+  message: string
+  success: boolean
+  pagination?: Pagination
+}
+
+export interface Metadata {
   [key: string]: any
 }
 
-export type AuthStateType = {
+export interface AuthStateType {
   user: User
   token: string
   isAuth: boolean
   loading: boolean
   theme: ThemeMode
-  refresh_token: string
+  refreshToken: string
 }
 
-export type NavLink = {
+export interface NavLink {
   type: string
   href?: string
   label: string
@@ -49,62 +75,55 @@ export type NavLink = {
   icon?: React.ReactElement
 }
 
-export type MenuLink = {
+export interface MenuLink {
   type: string
   href?: string
   label: string
-  icon?: React.ReactElement
+  color?: string
   onClick?: () => void
+  icon?: React.ReactElement
 }
 
-export type Response =
-  | {
-      data: any
-      message: string
-      success: boolean
-      pagination?: Pagination
-    }
-  | undefined
-
-export type Pagination = {
-  page: number
-  limit: number
-  total_pages: number
-  total_count: number
-}
-
-export type DataTableHeader = {
+export interface DataTableHeader {
   id: string
   label: string
-  align?: "right" | "inherit" | "left" | "center" | "justify"
+  sort?: string
+  filter?: string
+  sortable?: boolean
+  filterable?: boolean
   width?: string | number
   minWidth?: string | number
-  sortable?: boolean
-  sort?: string
-  filterable?: boolean
-  filter?: string
   format?: (value: any) => string
   render?: (value: any) => React.ReactNode
+  align?: "right" | "inherit" | "left" | "center" | "justify"
 }
 
-export type User = {
+export interface Invite {
   _id: string
   name: string
-  first_name: string
-  last_name?: string
   email: string
+  firstName: string
+  lastName?: string
+  organizationId: string
+}
+
+export interface Organization {
+  _id: string
+  name: string
+  email?: string
   phone?: string
-  role: string
+  logo?: string
+  users?: User[]
   status?: "active" | "inactive"
 }
 
-export type QueryType = "author" | "article" | "co-author"
-
-export type Invite = {
+export interface User {
   _id: string
   name: string
-  first_name: string
-  last_name?: string
+  role: string
   email: string
-  organization_id: string
+  phone?: string
+  firstName: string
+  lastName?: string
+  status?: "active" | "inactive" | "pending" | "blocked"
 }

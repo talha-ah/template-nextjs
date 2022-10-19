@@ -1,11 +1,11 @@
 import { useRouter } from "next/router"
 import { useEffect, useState, useMemo } from "react"
 
-import Logout from "@mui/icons-material/Logout"
-import Settings from "@mui/icons-material/Settings"
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined"
-import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined"
-import FilterCenterFocusOutlinedIcon from "@mui/icons-material/FilterCenterFocusOutlined"
+import { Logout } from "@mui/icons-material"
+import { Settings } from "@mui/icons-material"
+import { HomeOutlined } from "@mui/icons-material"
+import { AnalyticsOutlined } from "@mui/icons-material"
+import { FilterCenterFocusOutlined } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
 import { ENDPOINTS } from "@utils/constants"
@@ -28,16 +28,14 @@ export const useRouteLinks = () => {
             type: "item",
             label: "Dashboard",
             href: "/app/dashboard",
-            icon: <AnalyticsOutlinedIcon fontSize="small" color="primary" />,
+            icon: <AnalyticsOutlined fontSize="small" color="primary" />,
             exact: true,
           },
           {
             type: "item",
             label: "Users",
             href: "/app/users",
-            icon: (
-              <FilterCenterFocusOutlinedIcon fontSize="small" color="error" />
-            ),
+            icon: <FilterCenterFocusOutlined fontSize="small" color="error" />,
           },
         ],
       },
@@ -51,12 +49,12 @@ export const useRouteLinks = () => {
         type: "item",
         href: "/app",
         label: "Home",
-        icon: <HomeOutlinedIcon fontSize="small" />,
+        icon: <HomeOutlined fontSize="small" />,
       },
       {
         type: "item",
         label: "Settings",
-        href: "/app/settings",
+        href: "/settings",
         icon: <Settings fontSize="small" />,
       },
       {
@@ -77,7 +75,7 @@ export const useRouteLinks = () => {
   useEffect(() => {
     let app = router.asPath.split("/app/")[1]
 
-    if (router.asPath.split("/app/")[1]) {
+    if (app) {
       app = app.split("/")[0]
     }
 
@@ -92,12 +90,12 @@ export const AuthWrapper = ({ children }: { children: any }) => {
   const { dispatch } = useAppContext()
   const { fetchMetadata } = useFetchMetadata()
 
-  const [api] = useApi()
+  const API = useApi()
 
   const checkAuth = async () => {
-    try {
-      let route = "/"
+    let route = "/"
 
+    try {
       const token = getBrowserItem()
 
       if (!token) {
@@ -105,11 +103,10 @@ export const AuthWrapper = ({ children }: { children: any }) => {
         else route = router.asPath
 
         dispatch({ type: AuthTypes.LOGOUT })
-        router.replace(route)
         return
       }
 
-      const response = await api({
+      const response = await API({
         uri: ENDPOINTS.profile,
       })
 
@@ -131,12 +128,12 @@ export const AuthWrapper = ({ children }: { children: any }) => {
       } else if (router.asPath.startsWith("/auth")) {
         route = router.asPath
       } else {
-        route = "/"
+        route = router.asPath
       }
-
-      router.prefetch(route)
+    } catch (error: any) {
+    } finally {
       router.replace(route)
-    } catch (error: any) {}
+    }
   }
 
   useEffect(() => {
@@ -148,7 +145,7 @@ export const AuthWrapper = ({ children }: { children: any }) => {
 }
 
 export const useFetchMetadata = () => {
-  const [api] = useApi()
+  const API = useApi()
 
   const [metadata, setMetadata] = useState<Metadata | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
@@ -157,7 +154,7 @@ export const useFetchMetadata = () => {
     try {
       setLoading(true)
 
-      // const response = await api({
+      // const response = await API({
       //   uri: `${ENDPOINTS.organizationMetadata}?filter=legalMessages,statuses,statusTexts`,
       // })
 

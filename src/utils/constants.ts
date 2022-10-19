@@ -36,10 +36,12 @@ export const ENDPOINTS = {
   checkToken: "/auth/check/token",
   checkEmail: "/auth/check/email",
   verifyEmail: "/auth/verify-email",
+  forgotPassword: "/auth/forgot-password",
   recoverPassword: "/auth/recover-password",
 
   // Profile
   profile: "/profile",
+  profileTheme: "/profile/theme",
 
   // Users
   users: "/users",

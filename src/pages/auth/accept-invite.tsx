@@ -12,12 +12,14 @@ import { Alert } from "@components/Alert"
 import { ENDPOINTS } from "@utils/constants"
 import { AcceptInviteForm } from "@forms/auth"
 import { HeaderLayout } from "@layouts/Header"
+import { useAppContext } from "@contexts/index"
 
 let requested = false
 const AcceptInvite: NextPage = () => {
-  const [api] = useApi()
+  const API = useApi()
   const router = useRouter()
   const { query } = router
+  const { state } = useAppContext()
 
   const [user, setUser] = useState<any>()
   const [accepted, setAccepted] = useState(false)
@@ -31,9 +33,11 @@ const AcceptInvite: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    if (query.token && !requested) {
-      checkToken()
-      requested = true
+    if (query.token) {
+      if (!requested) {
+        checkToken()
+        requested = true
+      }
     }
 
     // eslint-disable-next-line
@@ -41,7 +45,7 @@ const AcceptInvite: NextPage = () => {
 
   const checkToken = async () => {
     try {
-      const response = await api({
+      const response = await API({
         uri: `${ENDPOINTS.checkInvite}/${query.token}`,
       })
 
@@ -49,9 +53,9 @@ const AcceptInvite: NextPage = () => {
       if (response?.data.userExists) {
         setAccepted(true)
       }
-      setLoading(false)
     } catch (error: any) {
       setError(error.message)
+    } finally {
       setLoading(false)
     }
   }
@@ -60,7 +64,7 @@ const AcceptInvite: NextPage = () => {
     <>
       <Head>
         <title>Accept Invite</title>
-        <meta name="description" content="Accept Email" />
+        <meta name="description" content="Accept Invite" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -70,12 +74,12 @@ const AcceptInvite: NextPage = () => {
             height: "100%",
             display: "flex",
             alignItems: "center",
+            flexDirection: "column",
             justifyContent: "center",
           }}
         >
           <Box
             style={{
-              flex: 1,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -86,21 +90,23 @@ const AcceptInvite: NextPage = () => {
             ) : accepted ? (
               <Alert
                 type="success"
-                message="Your account has been created. You can now login with your email"
+                message="Invitation accepted successfully. You can sign in now"
               />
             ) : error ? (
               <Alert type="error" message={error} />
             ) : (
               <AcceptInviteForm
-                token={query.token as string}
                 name={user?.firstName}
+                token={query.token as string}
               />
             )}
           </Box>
-          <Box
-            sx={{ mt: 2, flex: 1, display: "flex", justifyContent: "flex-end" }}
-          >
-            <Link href="/auth/login">Sign in</Link>
+          <Box sx={{ mt: 2 }}>
+            {state.auth.isAuth ? (
+              <Link href="/app">Dashboard</Link>
+            ) : (
+              <Link href="/auth/login">Sign in</Link>
+            )}
           </Box>
         </Box>
       </HeaderLayout>

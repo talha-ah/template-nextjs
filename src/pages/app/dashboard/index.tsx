@@ -93,7 +93,7 @@ const UsersCard = ({
   title: string
   interval?: Interval
 }) => {
-  const [api] = useApi()
+  const API = useApi()
 
   const [loading, setLoading] = useState<boolean>(true)
   const [data, setData] = useState<CardData>({} as CardData)
@@ -107,7 +107,7 @@ const UsersCard = ({
     try {
       setLoading(true)
 
-      const response = await api({
+      const response = await API({
         uri: `${ENDPOINTS.analyticsUsers}?interval=${interval}`,
       })
 
@@ -165,7 +165,7 @@ const UsersChart1 = ({
   title: string
   interval?: Interval
 }) => {
-  const [api] = useApi()
+  const API = useApi()
 
   const [data, setData] = useState<Props[]>([])
   const [loading, setLoading] = useState<boolean>(true)
@@ -185,7 +185,7 @@ const UsersChart1 = ({
     try {
       setLoading(true)
 
-      const response = await api({
+      const response = await API({
         uri: `${ENDPOINTS.analyticsUsersChart}?interval=${localInterval}`,
       })
 
@@ -265,7 +265,7 @@ const UsersChart2 = ({
   title: string
   interval?: Interval
 }) => {
-  const [api] = useApi()
+  const API = useApi()
 
   const [data, setData] = useState<Props[]>([])
   const [loading, setLoading] = useState<boolean>(true)
@@ -285,7 +285,7 @@ const UsersChart2 = ({
     try {
       setLoading(true)
 
-      const response = await api({
+      const response = await API({
         uri: `${ENDPOINTS.analyticsUsersChart}?interval=${localInterval}`,
       })
 

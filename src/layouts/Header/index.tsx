@@ -1,20 +1,17 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Container from "@mui/material/Container"
-import IconButton from "@mui/material/IconButton"
-import useMediaQuery from "@mui/material/useMediaQuery"
-import DarkModeIcon from "@mui/icons-material/DarkMode"
-import LightModeIcon from "@mui/icons-material/LightMode"
+import { Box } from "@mui/material"
+import { Button } from "@mui/material"
+import { Container } from "@mui/material"
+import { useMediaQuery } from "@mui/material"
 import { styled, useTheme, Theme } from "@mui/material/styles"
 
 import { Logo } from "@components/Logo"
+import { useAppContext } from "@contexts/index"
 import { UserMenu } from "@components/UserMenu"
 import { APP_BAR_HEIGHT } from "@utils/constants"
 import { NextLinkComposed } from "@components/Link"
-import { useAppContext, AuthTypes } from "@contexts/index"
 
 const Main = styled("main")(({ theme }) => ({
   padding: 0,
@@ -72,7 +69,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
 }
 
 const Header = ({ isMobile }: { isMobile: boolean }) => {
-  const { state, dispatch } = useAppContext()
+  const { state } = useAppContext()
 
   const [open, setOpen] = useState(true)
   const toggleDrawer = () => setOpen((s) => !s)
@@ -117,20 +114,7 @@ const Header = ({ isMobile }: { isMobile: boolean }) => {
               alignItems: "center",
             }}
           >
-            <IconButton
-              color="primary"
-              onClick={() => {
-                dispatch({ type: AuthTypes.TRIGGER_THEME })
-              }}
-            >
-              {state.auth.theme === "light" ? (
-                <DarkModeIcon fontSize="small" />
-              ) : (
-                <LightModeIcon fontSize="small" />
-              )}
-            </IconButton>
-
-            {state.auth.user ? (
+            {state.auth.isAuth ? (
               <UserMenu />
             ) : (
               <Box

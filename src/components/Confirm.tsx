@@ -1,11 +1,12 @@
 import { useState } from "react"
 
-import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
+
+import { Button } from "@components/Button"
 
 type ConfirmProps = {
   title: string
@@ -33,7 +34,9 @@ export const Confirm = (props: ConfirmProps) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={toggleOpen}>Cancel</Button>
+          <Button variant="text" onClick={toggleOpen}>
+            Cancel
+          </Button>
           <Button
             autoFocus
             onClick={() => {

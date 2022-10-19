@@ -5,12 +5,21 @@ import { useLayoutEffect, useEffect, useRef } from "react"
 
 import DateUtility from "@utils/date"
 import { BASE_URL } from "@utils/constants"
-import { Response, T } from "@utils/types"
 import { getBrowserItem } from "@utils/browser-utility"
 import { useAppContext, AuthTypes } from "@contexts/index"
+import { ApiResponse, Params, ErrorWithMessage } from "@utils/types"
 
 const useBrowserLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as Record<string, unknown>).message === "string"
+  )
+}
 
 export const useApi = () => {
   const router = useRouter()
@@ -30,114 +39,90 @@ export const useApi = () => {
     }
   }, [])
 
-  const api = async ({
+  const API = async <T = ApiResponse,>({
     uri,
     body,
-    headers,
     message,
     method = "GET",
-  }: {
-    body?: any
-    uri: string
-    headers?: any
-    method?: string
-    message?: string
-  }): Promise<T> => {
-    try {
-      const myHeaders = new Headers()
-      myHeaders.append("Content-Type", "application/json")
+    notifyError = true,
+    contentType = "application/json",
+  }: Params): Promise<T> => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const headers = new Headers()
+        if (contentType) headers.append("Content-Type", contentType)
 
-      const token = getBrowserItem()
-      if (token) {
-        myHeaders.append("Authorization", `Bearer ${token}`)
-      }
+        const token = getBrowserItem()
+        if (token) headers.append("Authorization", `Bearer ${token}`)
 
-      const response = await fetch(BASE_URL + uri, {
-        body,
-        method,
-        signal: controller?.signal,
-        headers: headers || myHeaders,
-      })
-
-      if (!response.ok) throw response
-
-      const data: Response = await response.json()
-
-      if (process && process.env.NODE_ENV === "development") {
-        console.log(`[Response at ${DateUtility.getLocaleDate()}]:`, data)
-      }
-
-      if (message) {
-        enqueueSnackbar(message, {
-          variant: "success",
-          autoHideDuration: 3000,
+        const response = await fetch(BASE_URL + uri, {
+          body: body,
+          method: method,
+          headers: headers,
+          signal: controller?.signal,
         })
-      }
 
-      if (isMounted.current) {
-        // can be used to set local state if needed
-        return data
-      }
-    } catch (err: any) {
-      // need to assign to a variable to prevent error when we do error.json() below
-      let error = err
-
-      if (!isErrorWithMessage(err)) {
-        error = await error.json()
-        error = {
-          message: error.detail || error.message,
-          status: err.status,
+        if (!response.ok) {
+          throw await response.json()
         }
-      } else {
-        error = {
-          message: err.message,
-          status: error.status || 500,
+
+        const data = await response.json()
+
+        if (process && process.env.NODE_ENV === "development") {
+          console.log(`[Response at ${DateUtility.getLocaleDate()}]:`, data)
         }
-      }
 
-      if (process && process.env.NODE_ENV === "development") {
-        console.log(`[Error at ${DateUtility.getLocaleDate()}]:`, error)
-        body && console.log(`Error for Body`, JSON.parse(body))
-      }
+        if (message) {
+          enqueueSnackbar(message, {
+            variant: "success",
+            autoHideDuration: 3000,
+          })
+        }
 
-      let status = error.status
+        if (isMounted.current) resolve(data)
+      } catch (error: any) {
+        let message = error.message
+        let status = error.status || 500
 
-      // if (status === 403) {
-      //   // 401 : Token expired / invalid
-      //   // Ask to relogin
-      //   dispatch({ type: AuthTypes.LOGOUT })
-      //   router.replace("/")
+        if (!isErrorWithMessage(error)) {
+          error = await error.json()
 
-      //   // TODO: Use refresh token to get new token
-      // } else
-      if (status) {
-        if (!Array.isArray(error.message)) {
+          status = error.status
+          message = error.detail
+        }
+
+        if (process && process.env.NODE_ENV === "development") {
+          console.log(`[Error at ${DateUtility.getLocaleDate()}]:`, error)
+          body && console.log(`Error for Body`, JSON.parse(body))
+        }
+
+        // if (error.status === 403) {
+        //   // 401 : Token expired / invalid
+        //   // Ask to relogin
+        //   dispatch({ type: AuthTypes.LOGOUT })
+        //   router.replace("/")
+
+        //   // TODO: Use refresh token to get new token
+        // } else
+        if (
+          notifyError &&
+          error.status &&
+          error.message !== "The user aborted a request."
+        ) {
+          if (error.message === "Failed to fetch") {
+            error.message = "Network Error"
+          }
+
           enqueueSnackbar(error?.message, {
             variant: "error",
             autoHideDuration: 3000,
           })
         }
 
-        throw error
-      } else {
-        throw error
+        if (isMounted.current) reject(error)
       }
-    }
+    })
   }
 
-  return [api]
-}
-
-type ErrorWithMessage = {
-  message: string
-  status?: number
-}
-
-function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "message" in error &&
-    typeof (error as Record<string, unknown>).message === "string"
-  )
+  return API
 }

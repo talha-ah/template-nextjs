@@ -21,7 +21,7 @@ import { IconButton } from "@components/IconButton"
 import { InviteUser, EditUser } from "@forms/users"
 
 export default function Users() {
-  const [api] = useApi()
+  const API = useApi()
   const { state } = useAppContext()
 
   const [page, setPage] = useState(1)
@@ -53,7 +53,7 @@ export default function Users() {
     try {
       setLoading(true)
 
-      const response = await api({
+      const response = await API({
         uri: ENDPOINTS.organizationUsers,
       })
 
@@ -68,7 +68,7 @@ export default function Users() {
     try {
       setInvitesLoading(true)
 
-      const response = await api({
+      const response = await API({
         uri: `${ENDPOINTS.invites}?page=${page}&limit=${limit}`,
       })
 
@@ -84,7 +84,7 @@ export default function Users() {
     try {
       setInviteDeleteLoading(true)
 
-      await api({
+      await API({
         method: "DELETE",
         uri: `${ENDPOINTS.invites}/${_id}`,
         message: "Invite deleted successfully",
@@ -101,7 +101,7 @@ export default function Users() {
     try {
       setRemoveUserLoading(true)
 
-      await api({
+      await API({
         method: "DELETE",
         uri: `${ENDPOINTS.organizationUsers}/${_id}`,
         message: "User deleted successfully",
@@ -118,7 +118,7 @@ export default function Users() {
     try {
       setInviteResendLoading(true)
 
-      await api({
+      await API({
         method: "POST",
         uri: `${ENDPOINTS.resendInvite}/${_id}`,
         message: "Invite resent",
@@ -135,7 +135,7 @@ export default function Users() {
         id: "name",
         label: "Name",
         minWidth: 170,
-        render: (e: User) => `${e.first_name || ""} ${e.last_name || ""}`,
+        render: (e: User) => `${e.firstName || ""} ${e.lastName || ""}`,
       },
       {
         id: "email",
@@ -146,7 +146,7 @@ export default function Users() {
         label: "Phone",
       },
       {
-        id: "lastLoginAt",
+        id: "lastLogin",
         label: "Last Login",
         format: (e?: Date) => (e ? new Date(e).toLocaleString() : ""),
       },
@@ -174,8 +174,8 @@ export default function Users() {
                   onSubmit={(value) => {
                     let rows = [...items]
                     let index = rows.findIndex((e) => e._id === row._id)
-                    rows[index].first_name = value.first_name
-                    rows[index].last_name = value.last_name
+                    rows[index].firstName = value.firstName
+                    rows[index].lastName = value.lastName
                     rows[index].email = value.email
                     setItems(rows)
                   }}
@@ -216,7 +216,7 @@ export default function Users() {
         id: "name",
         label: "Name",
         minWidth: 170,
-        render: (e: Invite) => `${e.first_name || ""} ${e.last_name || ""}`,
+        render: (e: Invite) => `${e.firstName || ""} ${e.lastName || ""}`,
       },
       {
         id: "email",
@@ -275,7 +275,7 @@ export default function Users() {
             title="Invite User"
             trigger={({ toggleOpen }: { toggleOpen: () => void }) => (
               <Button size="small" onClick={toggleOpen}>
-                Invite User
+                + User
               </Button>
             )}
             content={({ onClose }: { onClose: () => void }) => (

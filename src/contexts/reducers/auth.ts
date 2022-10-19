@@ -15,7 +15,7 @@ export const AuthTypes = {
   LOGIN: "LOGIN",
   LOGOUT: "LOGOUT",
   SET_USER: "SET_USER",
-  TRIGGER_THEME: "TRIGGER_THEME",
+  SET_THEME: "SET_THEME",
 }
 
 export const AuthReducer = (state: AuthStateType, action: ActionType) => {
@@ -28,6 +28,7 @@ export const AuthReducer = (state: AuthStateType, action: ActionType) => {
         ...action.payload,
         isAuth: true,
         loading: false,
+        theme: action.payload.user.theme || "light",
       }
     case AuthTypes.LOGOUT:
       removeBrowserItem()
@@ -43,10 +44,10 @@ export const AuthReducer = (state: AuthStateType, action: ActionType) => {
         ...state,
         user: action.payload.user,
       }
-    case AuthTypes.TRIGGER_THEME:
+    case AuthTypes.SET_THEME:
       return {
         ...state,
-        theme: state.theme === "light" ? "dark" : "light",
+        theme: action.payload.theme || "light",
       }
     default:
       return state

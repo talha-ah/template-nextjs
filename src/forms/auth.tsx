@@ -1,12 +1,14 @@
+import * as React from "react"
 import { useState } from "react"
 import { useRouter } from "next/router"
 
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import Checkbox from "@mui/material/Checkbox"
-import TextField from "@mui/material/TextField"
-import Typography from "@mui/material/Typography"
-import FormControlLabel from "@mui/material/FormControlLabel"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
+import { Checkbox } from "@mui/material"
+import { TextField } from "@mui/material"
+import { Typography } from "@mui/material"
+import { Card as MuiCard } from "@mui/material"
+import { FormControlLabel } from "@mui/material"
 
 import Link from "@components/Link"
 import { useApi } from "@hooks/useApi"
@@ -15,8 +17,43 @@ import { Button } from "@components/Button"
 import { ENDPOINTS } from "@utils/constants"
 import { AuthTypes, useAppContext } from "@contexts/index"
 
+const Card = ({
+  title,
+  children,
+  subtitle = `to continue to ${process.env.NEXT_PUBLIC_APP_NAME}`,
+}: {
+  title: string
+  subtitle?: string
+  children: React.ReactNode
+}) => {
+  return (
+    <MuiCard
+      variant="outlined"
+      sx={{
+        p: 4,
+        maxWidth: "xs",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
+      <Typography variant="h5" gutterBottom>
+        {title}
+      </Typography>
+
+      {subtitle && (
+        <Typography variant="body2" sx={{ mb: 4 }}>
+          {subtitle}
+        </Typography>
+      )}
+
+      {children}
+    </MuiCard>
+  )
+}
+
 export function LoginForm() {
-  const [api] = useApi()
+  const API = useApi()
   const router = useRouter()
   const { dispatch } = useAppContext()
 
@@ -37,8 +74,9 @@ export function LoginForm() {
         password: data.get("password"),
       }
 
-      const response = await api({
+      const response = await API({
         method: "POST",
+        notifyError: false,
         uri: ENDPOINTS.login,
         body: JSON.stringify(body),
       })
@@ -48,6 +86,7 @@ export function LoginForm() {
         payload: {
           ...response?.data,
           token: response?.data.access_token,
+          refreshToken: response?.data.refresh_token,
         },
       })
 
@@ -60,73 +99,67 @@ export function LoginForm() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Typography component="h1" variant="h4">
-        Sign in
-      </Typography>
+    <Card title="Sign in">
+      <Box noValidate component="form" onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              autoFocus
+              fullWidth
+              id="email"
+              name="email"
+              autoComplete="email"
+              label="Email Address"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              autoComplete="current-password"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+          </Grid>
+        </Grid>
 
-      <Box
-        noValidate
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ mt: 4, maxWidth: "xs" }}
-      >
-        <TextField
-          required
-          autoFocus
-          fullWidth
-          id="email"
-          name="email"
-          margin="normal"
-          autoComplete="email"
-          label="Email Address"
-          defaultValue="manohar@pawar.com"
-        />
-        <TextField
-          required
-          fullWidth
-          id="password"
-          margin="normal"
-          name="password"
-          type="password"
-          label="Password"
-          defaultValue="password!2"
-          autoComplete="current-password"
-        />
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
         <Alert type="error" message={error} />
+
         <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
           Sign In
         </Button>
+
         <Box
           sx={{
             mt: 2,
-            gap: 1,
-            flex: 1,
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
           }}
         >
-          Don&apos;t have an account?
-          <Link href="/auth/register">Register here</Link>
+          <Link variant="body2" href="/auth/forgot-password">
+            Forgot password?
+          </Link>
+          <Link variant="body2" href="/auth/register">
+            Register here
+          </Link>
         </Box>
       </Box>
-    </Box>
+    </Card>
   )
 }
 
 export function Registerform() {
-  const [api] = useApi()
+  const API = useApi()
   const router = useRouter()
   const { dispatch } = useAppContext()
 
@@ -143,15 +176,15 @@ export function Registerform() {
       const data = new FormData(event.currentTarget)
 
       const body = {
-        first_name: data.get("firstName"),
-        lastName: data.get("lastName"),
-        password: data.get("password"),
         email: data.get("email"),
-        phone: data.get("phone"),
+        password: data.get("password"),
+        lastName: data.get("lastName"),
+        firstName: data.get("firstName"),
       }
 
-      const response = await api({
+      const response = await API({
         method: "POST",
+        notifyError: false,
         uri: ENDPOINTS.register,
         body: JSON.stringify(body),
         message: "Registered successfully",
@@ -162,6 +195,7 @@ export function Registerform() {
         payload: {
           ...response?.data,
           token: response?.data.access_token,
+          refreshToken: response?.data.refresh_token,
         },
       })
 
@@ -174,23 +208,8 @@ export function Registerform() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Typography component="h1" variant="h4">
-        Sign up
-      </Typography>
-
-      <Box
-        noValidate
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ mt: 4, maxWidth: "xs" }}
-      >
+    <Card title="Sign up">
+      <Box noValidate component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <TextField
@@ -212,7 +231,7 @@ export function Registerform() {
               autoComplete="family-name"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               required
               fullWidth
@@ -220,15 +239,6 @@ export function Registerform() {
               name="email"
               autoComplete="email"
               label="Email Address"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              id="phone"
-              name="phone"
-              label="Phone"
-              autoComplete="phone"
             />
           </Grid>
           <Grid item xs={12}>
@@ -249,7 +259,9 @@ export function Registerform() {
             />
           </Grid>
         </Grid>
+
         <Alert type="error" message={error} />
+
         <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
           Sign Up
         </Button>
@@ -257,23 +269,23 @@ export function Registerform() {
         <Box
           sx={{
             mt: 2,
-            gap: 1,
-            flex: 1,
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
           }}
         >
-          Already have an account?
-          <Link href="/auth/login">Sign in</Link>
+          Already have an account?&nbsp;
+          <Link variant="body2" href="/auth/login">
+            Sign in
+          </Link>
         </Box>
       </Box>
-    </Box>
+    </Card>
   )
 }
 
-export function RecoverPasswordRequestForm() {
-  const [api] = useApi()
+export function ForgotPasswordForm() {
+  const API = useApi()
   const router = useRouter()
 
   const [loading, setLoading] = useState<boolean>(false)
@@ -288,9 +300,15 @@ export function RecoverPasswordRequestForm() {
 
       const data = new FormData(event.currentTarget)
 
-      await api({
+      const body = {
+        email: data.get("email"),
+      }
+
+      await API({
         method: "POST",
-        uri: `${ENDPOINTS.recoverPassword}/${data.get("email")}`,
+        notifyError: false,
+        body: JSON.stringify(body),
+        uri: `${ENDPOINTS.forgotPassword}`,
         message: "Password reset link sent",
       })
 
@@ -303,52 +321,129 @@ export function RecoverPasswordRequestForm() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Typography component="h1" variant="h4">
-        Recover Password
-      </Typography>
-
-      <Box
-        noValidate
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ mt: 4, maxWidth: "xs" }}
-      >
+    <Card title="Forgot Password" subtitle="Enter your recovery email">
+      <Box noValidate component="form" onSubmit={handleSubmit}>
         <TextField
           required
           autoFocus
           fullWidth
           id="email"
           name="email"
-          margin="normal"
           autoComplete="email"
           label="Email Address"
         />
 
         <Alert type="error" message={error} />
+
         <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
           Recover Password
         </Button>
+
         <Box
           sx={{
             mt: 2,
-            gap: 1,
-            flex: 1,
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
           }}
         >
-          <Link href="/auth/login">{"Already have an account? Sign in"}</Link>
+          <Link variant="body2" href="/auth/login">
+            Sign in
+          </Link>
         </Box>
       </Box>
-    </Box>
+    </Card>
+  )
+}
+
+export function RecoverPasswordForm({ token }: { token: string }) {
+  const API = useApi()
+  const router = useRouter()
+
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault()
+
+      setError(null)
+      setLoading(true)
+
+      const data = new FormData(event.currentTarget)
+
+      const body = {
+        password: data.get("password"),
+      }
+
+      if (body.password !== data.get("confirm")) {
+        throw new Error("Passwords do not match")
+      }
+
+      await API({
+        method: "PUT",
+        notifyError: false,
+        body: JSON.stringify(body),
+        message: "Password updated successfully",
+        uri: `${ENDPOINTS.recoverPassword}/${token}`,
+      })
+
+      router.replace("/auth/login")
+    } catch (error: any) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Card title="Enter your new password">
+      <Box noValidate component="form" onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="password"
+              name="password"
+              type="password"
+              label="New Password"
+              autoComplete="new-password"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="confirm"
+              name="confirm"
+              type="password"
+              label="Confirm Password"
+              autoComplete="confirm-password"
+            />
+          </Grid>
+        </Grid>
+
+        <Alert type="error" message={error} />
+
+        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
+          Update Password
+        </Button>
+
+        <Box
+          sx={{
+            mt: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Link variant="body2" href="/auth/login">
+            Sign in
+          </Link>
+        </Box>
+      </Box>
+    </Card>
   )
 }
 
@@ -359,8 +454,9 @@ export function AcceptInviteForm({
   name: string
   token: string
 }) {
-  const [api] = useApi()
+  const API = useApi()
   const router = useRouter()
+  const { dispatch } = useAppContext()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -378,18 +474,28 @@ export function AcceptInviteForm({
         password: data.get("password"),
       }
 
-      if (body.password !== data.get("confirmPassword")) {
+      if (body.password !== data.get("confirm")) {
         throw new Error("Passwords do not match")
       }
 
-      await api({
+      const response = await API({
         method: "POST",
-        uri: `${ENDPOINTS.acceptInvite}/${token}`,
+        notifyError: false,
         body: JSON.stringify(body),
         message: "Registered successfully",
+        uri: `${ENDPOINTS.acceptInvite}/${token}`,
       })
 
-      router.replace("/auth/login")
+      dispatch({
+        type: AuthTypes.LOGIN,
+        payload: {
+          ...response?.data,
+          token: response?.data.access_token,
+          refreshToken: response?.data.refresh_token,
+        },
+      })
+
+      router.replace("/app")
     } catch (error: any) {
       setError(error.message)
     } finally {
@@ -398,136 +504,38 @@ export function AcceptInviteForm({
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Typography component="h1" variant="h4">
-        {name} - Complete your registration
-      </Typography>
-
-      <Box
-        noValidate
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ mt: 4, maxWidth: "xs" }}
-      >
-        <TextField
-          required
-          fullWidth
-          id="password"
-          type="password"
-          margin="normal"
-          name="password"
-          label="Password"
-          autoComplete="new-password"
-        />
-        <TextField
-          required
-          fullWidth
-          margin="normal"
-          id="confirmPassword"
-          name="confirmPassword"
-          type="confirmPassword"
-          label="Confirm Password"
-          autoComplete="confirm-password"
-        />
-
+    <Card title={name} subtitle="complete your registration">
+      <Box noValidate component="form" onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="password"
+              type="password"
+              name="password"
+              label="Password"
+              autoComplete="new-password"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id="confirm"
+              name="confirm"
+              type="password"
+              label="Confirm Password"
+              autoComplete="confirm-password"
+            />
+          </Grid>
+        </Grid>
         <Alert type="error" message={error} />
+
         <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
           Accept Invite
         </Button>
       </Box>
-    </Box>
-  )
-}
-
-export function RecoverPasswordForm({ token }: { token: string }) {
-  const [api] = useApi()
-  const router = useRouter()
-
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    try {
-      event.preventDefault()
-
-      setError(null)
-      setLoading(true)
-
-      const data = new FormData(event.currentTarget)
-
-      const body = {
-        password: data.get("password"),
-      }
-
-      if (body.password !== data.get("confirmPassword")) {
-        throw new Error("Passwords do not match")
-      }
-
-      await api({
-        method: "PUT",
-        uri: `${ENDPOINTS.recoverPassword}/${token}`,
-        body: JSON.stringify(body),
-        message: "Password updated successfully",
-      })
-
-      router.replace("/auth/login")
-    } catch (error: any) {
-      setError(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Typography component="h1" variant="h4">
-        Enter your new password
-      </Typography>
-
-      <Box
-        noValidate
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ mt: 4, maxWidth: "xs" }}
-      >
-        <TextField
-          required
-          fullWidth
-          id="password"
-          margin="normal"
-          name="password"
-          type="password"
-          label="New Password"
-          autoComplete="new-password"
-        />
-        <TextField
-          required
-          fullWidth
-          margin="normal"
-          id="confirmPassword"
-          name="confirmPassword"
-          type="confirmPassword"
-          label="Confirm Password"
-          autoComplete="confirm-password"
-        />
-
-        <Alert type="error" message={error} />
-        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
-          Update Password
-        </Button>
-      </Box>
-    </Box>
+    </Card>
   )
 }

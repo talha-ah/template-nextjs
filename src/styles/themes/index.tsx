@@ -4,9 +4,20 @@ import { CssBaseline, StyledEngineProvider } from "@mui/material"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 
 import Palette from "./palette"
-import Typography from "./typography"
+// import Typography from "./typography"
+import { ThemeMode } from "@utils/types"
 import componentsOverride from "./overrides"
 import { useAppContext } from "@contexts/index"
+
+const getTheme = (theme: ThemeMode): "light" | "dark" => {
+  if (theme === "system") {
+    theme = window.matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark"
+  }
+
+  return theme || "light"
+}
 
 export default function ThemeCustomization({
   children,
@@ -26,7 +37,7 @@ export default function ThemeCustomization({
           xl: 1536,
         },
       },
-      direction: "ltr",
+      direction: "ltr" as "ltr" | "rtl",
       mixins: {
         toolbar: {
           minHeight: 60,
@@ -37,8 +48,8 @@ export default function ThemeCustomization({
       shape: {
         borderRadius: 4,
       },
-      palette: Palette(state.auth.theme),
-      typography: Typography,
+      palette: Palette(getTheme(state.auth.theme)),
+      // typography: Typography,
     }),
     [state.auth.theme]
   )

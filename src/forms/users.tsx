@@ -16,7 +16,7 @@ export function InviteUser({
   onClose?: () => void
   onSubmit?: (args: any) => void
 }) {
-  const [api] = useApi()
+  const API = useApi()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -31,12 +31,12 @@ export function InviteUser({
       const data = new FormData(event.currentTarget)
 
       const body = {
+        email: data.get("email"),
         firstName: data.get("firstName"),
         lastName: data.get("lastName") || "",
-        email: data.get("email"),
       }
 
-      const response = await api({
+      const response = await API({
         method: "POST",
         uri: ENDPOINTS.invites,
         body: JSON.stringify(body),
@@ -69,13 +69,13 @@ export function InviteUser({
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              autoComplete="given-name"
-              name="firstName"
               required
+              autoFocus
               fullWidth
               id="firstName"
+              name="firstName"
               label="First Name"
-              autoFocus
+              autoComplete="given-name"
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -92,9 +92,9 @@ export function InviteUser({
               required
               fullWidth
               id="email"
-              label="Email Address"
               name="email"
               autoComplete="email"
+              label="Email Address"
             />
           </Grid>
         </Grid>
@@ -114,7 +114,7 @@ export function InviteUser({
           <Button onClick={onClose} variant="text">
             Cancel
           </Button>
-          <Button type="submit" loading={loading} variant="text">
+          <Button type="submit" loading={loading}>
             Invite
           </Button>
         </Box>
@@ -132,7 +132,7 @@ export function EditUser({
   onClose?: () => void
   onSubmit?: (args: any) => void
 }) {
-  const [api] = useApi()
+  const API = useApi()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -147,16 +147,16 @@ export function EditUser({
       const data = new FormData(event.currentTarget)
 
       const body = {
+        email: data.get("email"),
         firstName: data.get("firstName"),
         lastName: data.get("lastName") || "",
-        email: data.get("email"),
       }
 
-      const response = await api({
+      const response = await API({
         method: "PUT",
-        uri: `${ENDPOINTS.organizationUsers}/${value._id}`,
         body: JSON.stringify(body),
         message: "User updated successfully",
+        uri: `${ENDPOINTS.organizationUsers}/${value._id}`,
       })
 
       onSubmit && onSubmit(response?.data)
@@ -185,13 +185,13 @@ export function EditUser({
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              autoComplete="given-name"
-              name="firstName"
               required
               fullWidth
-              id="firstName"
-              label="First Name"
               autoFocus
+              id="firstName"
+              name="firstName"
+              label="First Name"
+              autoComplete="given-name"
               defaultValue={value.firstName}
             />
           </Grid>
@@ -199,8 +199,8 @@ export function EditUser({
             <TextField
               fullWidth
               id="lastName"
-              label="Last Name"
               name="lastName"
+              label="Last Name"
               autoComplete="family-name"
               defaultValue={value.lastName}
             />
@@ -210,9 +210,9 @@ export function EditUser({
               required
               fullWidth
               id="email"
-              label="Email Address"
               name="email"
               autoComplete="email"
+              label="Email Address"
               defaultValue={value.email}
             />
           </Grid>
