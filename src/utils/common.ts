@@ -1,10 +1,14 @@
-export const isNotEmpty = (item: any) =>
-  item !== undefined && item !== null && item !== "" && item.length !== 0
+import { Permissions } from "./types"
 
-export const truncateString = (text: any, ellipsisString: string) =>
-  (text || "").length > ellipsisString
+export const isNotEmpty = (item: any) => {
+  return item !== undefined && item !== null && item !== "" && item.length !== 0
+}
+
+export const truncateString = (text: any, ellipsisString: string) => {
+  return (text || "").length > ellipsisString
     ? text.substring(0, ellipsisString) + "..."
     : text
+}
 
 export const truncate = (n: any, digits: any) => {
   if (!n) return 0
@@ -65,8 +69,9 @@ export const timeoutPromise = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export const roundNumber = (num: number) =>
-  Math.round((num + Number.EPSILON) * 100) / 100
+export const roundNumber = (num: number) => {
+  return Math.round((num + Number.EPSILON) * 100) / 100
+}
 
 export const downloadFile = (url: string, fileName: string) => {
   // for non-IE
@@ -126,8 +131,8 @@ export const calculateDiscount = (
   }
 }
 
-// Pad a number with leading zeros
 export const pad = (num: number | string, size = 6) => {
+  // Pad a number with leading zeros
   let s = num + ""
   while (s.length < size) s = "0" + s
   return s
@@ -136,4 +141,15 @@ export const pad = (num: number | string, size = 6) => {
 export const calculateTableTotal = (rows: any, field: string) => {
   const total = rows.reduce((acc: number, row: any) => acc + row[field], 0)
   return numberWithCommas(total)
+}
+
+export const checkPermission = (
+  permissions?: Permissions,
+  module?: string,
+  option?: string
+) => {
+  if (!permissions) return false
+  if (!module || !permissions[module]) return false
+  if (option && !permissions[module].options.includes(option)) return false
+  return true
 }

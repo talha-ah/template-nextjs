@@ -1,14 +1,12 @@
 import Head from "next/head"
 
 import { Box } from "@mui/material"
-import { Grid } from "@mui/material"
 import { Card } from "@mui/material"
 import { Container } from "@mui/material"
 import { Typography } from "@mui/material"
 import { CardContent } from "@mui/material"
 import { CardActionArea } from "@mui/material"
 import { AnalyticsOutlined } from "@mui/icons-material"
-import { PeopleAltOutlined } from "@mui/icons-material"
 
 import { APP_NAME } from "@utils/constants"
 import { HeaderLayout } from "@layouts/Header"
@@ -20,12 +18,6 @@ const sections = [
     color: "primary.main",
     href: "/app/dashboard",
     icon: <AnalyticsOutlined sx={{ fontSize: 60 }} color="action" />,
-  },
-  {
-    title: "Users",
-    href: "/app/users",
-    color: "secondary.main",
-    icon: <PeopleAltOutlined sx={{ fontSize: 60 }} color="action" />,
   },
 ]
 
@@ -47,24 +39,21 @@ export default function Main() {
             justifyContent: "center",
           }}
         >
-          <Container maxWidth="md">
-            <Grid container spacing={2}>
-              {sections.map((section: any, i: number) => (
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                  key={i}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Section section={section} />
-                </Grid>
-              ))}
-            </Grid>
+          <Container
+            maxWidth="md"
+            sx={{
+              gap: 6,
+              display: "flex",
+              flexFlow: "row nowrap",
+              justifyContent: "space-around",
+              "> div": {
+                flexBasis: "50%",
+              },
+            }}
+          >
+            {sections.map((section: any, i: number) => (
+              <Section key={i} section={section} />
+            ))}
           </Container>
         </Box>
       </HeaderLayout>

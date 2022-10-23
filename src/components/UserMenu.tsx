@@ -20,7 +20,7 @@ export const UserMenu = ({
   position?: "bottom" | "top"
 }) => {
   const router = useRouter()
-  const { MenuLinks } = useRouteLinks()
+  const { menuLinks } = useRouteLinks()
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -72,7 +72,7 @@ export const UserMenu = ({
           },
         })}
       >
-        {MenuLinks.map((item: MenuLink) => (
+        {menuLinks.map((item: MenuLink) => (
           <MenuItem
             key={item.label}
             onClick={() => {

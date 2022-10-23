@@ -117,6 +117,13 @@ export interface Organization {
   status?: "active" | "inactive"
 }
 
+export interface Permissions {
+  [key: string]: {
+    description: string
+    options: string[]
+    settings: string[]
+  }
+}
 export interface User {
   _id: string
   name: string
@@ -125,5 +132,8 @@ export interface User {
   phone?: string
   firstName: string
   lastName?: string
+  permissions?: Permissions
+  organization?: Organization
+  organizations?: Organization[]
   status?: "active" | "inactive" | "pending" | "blocked"
 }

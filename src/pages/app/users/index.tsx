@@ -3,10 +3,11 @@ import * as React from "react"
 import { useState, useEffect, useMemo } from "react"
 
 import { Tabs, Tab } from "@mui/material"
-import { Delete, Edit } from "@mui/icons-material"
+import { Delete } from "@mui/icons-material"
 import { Replay as ReplayIcon } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
+import { InviteUser } from "@forms/users"
 import { User, Invite } from "@utils/types"
 import { APP_NAME } from "@utils/constants"
 import { Button } from "@components/Button"
@@ -18,7 +19,6 @@ import { DrawerLayout } from "@layouts/Drawer"
 import { useAppContext } from "@contexts/index"
 import { DataTable } from "@components/DataTable"
 import { IconButton } from "@components/IconButton"
-import { InviteUser, EditUser } from "@forms/users"
 
 export default function Users() {
   const API = useApi()
@@ -153,57 +153,28 @@ export default function Users() {
       {
         id: "actions",
         label: "Actions",
-        render: (row: Invite) => (
-          <>
-            <Dialog
-              title="Edit User"
+        render: (row: Invite) =>
+          state.auth.user.email !== row.email ? (
+            <Confirm
+              title="Delete User"
+              onConfirm={() => removeUser(row._id)}
+              message="Are you sure you want to delete this user?"
               trigger={({ toggleOpen }: { toggleOpen: () => void }) => (
                 <IconButton
                   size="small"
-                  tooltip="Edit"
-                  aria-label="edit"
+                  color="error"
+                  aria-label="remove"
+                  tooltip="Remove user"
                   onClick={toggleOpen}
+                  loading={removeUserLoading}
                 >
-                  <Edit fontSize="inherit" />
+                  <Delete fontSize="inherit" />
                 </IconButton>
               )}
-              content={({ onClose }: { onClose: () => void }) => (
-                <EditUser
-                  value={row}
-                  onClose={onClose}
-                  onSubmit={(value) => {
-                    let rows = [...items]
-                    let index = rows.findIndex((e) => e._id === row._id)
-                    rows[index].firstName = value.firstName
-                    rows[index].lastName = value.lastName
-                    rows[index].email = value.email
-                    setItems(rows)
-                  }}
-                />
-              )}
             />
-
-            {state.auth.user.email !== row.email && (
-              <Confirm
-                title="Delete User"
-                onConfirm={() => removeUser(row._id)}
-                message="Are you sure you want to delete this user?"
-                trigger={({ toggleOpen }: { toggleOpen: () => void }) => (
-                  <IconButton
-                    size="small"
-                    color="error"
-                    aria-label="remove"
-                    tooltip="Remove user"
-                    onClick={toggleOpen}
-                    loading={removeUserLoading}
-                  >
-                    <Delete fontSize="inherit" />
-                  </IconButton>
-                )}
-              />
-            )}
-          </>
-        ),
+          ) : (
+            "-"
+          ),
       },
     ],
     // eslint-disable-next-line

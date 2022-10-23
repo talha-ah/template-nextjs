@@ -7,9 +7,9 @@ import { NavLink } from "@utils/types"
 import { useRouteLinks } from "@hooks/auth"
 
 const Navigation = () => {
-  const { NavLinks } = useRouteLinks()
+  const { navLinks } = useRouteLinks()
 
-  const navGroups = NavLinks.map((item: NavLink) => {
+  const navGroups = navLinks.map((item: NavLink) => {
     switch (item.type) {
       case "group":
         return <NavGroup key={item.label} item={item} />

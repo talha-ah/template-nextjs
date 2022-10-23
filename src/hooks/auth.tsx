@@ -9,6 +9,7 @@ import { FilterCenterFocusOutlined } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
 import { ENDPOINTS } from "@utils/constants"
+import { checkPermission } from "@utils/common"
 import { setOrgMetadata } from "@utils/browser-utility"
 import { getBrowserItem } from "@utils/browser-utility"
 import { AuthTypes, useAppContext } from "@contexts/index"
@@ -16,7 +17,10 @@ import { NavLink, MenuLink, Metadata } from "@utils/types"
 
 export const useRouteLinks = () => {
   const router = useRouter()
-  const { dispatch } = useAppContext()
+  const { state, dispatch } = useAppContext()
+
+  const [navLinks, setNavLinks] = useState<NavLink[]>([])
+  const [menuLinks, setMenuLinks] = useState<MenuLink[]>([])
 
   const NavLinks: NavLink[] = useMemo(
     () => [
@@ -73,16 +77,37 @@ export const useRouteLinks = () => {
   )
 
   useEffect(() => {
-    let app = router.asPath.split("/app/")[1]
+    if (state.auth.user?.permissions) {
+      const permissions = state.auth.user.permissions
 
-    if (app) {
-      app = app.split("/")[0]
+      const links: NavLink[] = []
+
+      NavLinks.map((link) => {
+        if (link.type === "group") {
+          const children = (link.children || []).filter((child) =>
+            checkPermission(permissions, child.label)
+          )
+
+          if (children.length > 0) {
+            links.push({ ...link, children })
+          }
+        } else if (link.type === "item") {
+          if (checkPermission(permissions, link.label)) {
+            links.push(link)
+          }
+        }
+
+        return link
+      })
+
+      setNavLinks(links)
     }
 
+    setMenuLinks(MenuLinks)
     // eslint-disable-next-line
-  }, [router.asPath])
+  }, [router.asPath, state.auth.token])
 
-  return { NavLinks, MenuLinks }
+  return { navLinks, menuLinks }
 }
 
 export const AuthWrapper = ({ children }: { children: any }) => {
@@ -107,12 +132,12 @@ export const AuthWrapper = ({ children }: { children: any }) => {
       }
 
       const response = await API({
-        uri: ENDPOINTS.profile,
+        uri: ENDPOINTS.authProfile,
       })
 
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: { token, user: response?.data },
+        payload: { token, user: response?.data?.user },
       })
 
       // Fetch Metadata
@@ -132,7 +157,7 @@ export const AuthWrapper = ({ children }: { children: any }) => {
       }
     } catch (error: any) {
     } finally {
-      router.replace(route)
+      if (route !== router.asPath) router.push(route)
     }
   }
 
@@ -154,14 +179,13 @@ export const useFetchMetadata = () => {
     try {
       setLoading(true)
 
-      // const response = await API({
-      //   uri: `${ENDPOINTS.organizationMetadata}?filter=legalMessages,statuses,statusTexts`,
-      // })
+      const response = await API({
+        uri: `${ENDPOINTS.organizationMetadata}?filter=`,
+      })
 
-      // setMetadata(response?.data)
+      setMetadata(response?.data)
 
-      // setOrgMetadata(response?.data )
-      setOrgMetadata({})
+      setOrgMetadata(response?.data)
     } catch (error) {
     } finally {
       setLoading(true)

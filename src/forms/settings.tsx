@@ -33,10 +33,10 @@ export function UpdateProfile() {
   const [lastName, setLastName] = useState<string | undefined>("")
 
   useEffect(() => {
-    setEmail(state.auth.user.email)
-    setPhone(state.auth.user.phone)
-    setLastName(state.auth.user.lastName)
-    setFirstName(state.auth.user.firstName)
+    setEmail(state.auth.user.email || "")
+    setPhone(state.auth.user.phone || "")
+    setLastName(state.auth.user.lastName || "")
+    setFirstName(state.auth.user.firstName || "")
   }, [state.auth.user])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

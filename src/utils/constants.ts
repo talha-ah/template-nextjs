@@ -33,6 +33,7 @@ export const YEARS: string[] = Array.from(new Array(10), (_, i) =>
 export const ENDPOINTS = {
   login: "/auth/login",
   register: "/auth/register",
+  authProfile: "/auth/profile",
   checkToken: "/auth/check/token",
   checkEmail: "/auth/check/email",
   verifyEmail: "/auth/verify-email",

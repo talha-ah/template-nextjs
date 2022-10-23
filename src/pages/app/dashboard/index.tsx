@@ -1,26 +1,25 @@
 import Head from "next/head"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import Paper from "@mui/material/Paper"
-import { styled, useTheme } from "@mui/material/styles"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
+import { Paper } from "@mui/material"
+import { styled } from "@mui/material/styles"
 
 import { useApi } from "@hooks/useApi"
 import { APP_NAME } from "@utils/constants"
 import { Heading } from "@components/Title"
-import { API_LIMIT } from "@utils/constants"
 import { ENDPOINTS } from "@utils/constants"
 import { Interval, Color } from "@utils/types"
 import { DrawerLayout } from "@layouts/Drawer"
-import { DataTable } from "@components/DataTable"
+import { useAppContext } from "@contexts/index"
+import { checkPermission } from "@utils/common"
+import { Props } from "@components/Graphs/PieChart"
 import { DAYS, MONTHS, YEARS } from "@utils/constants"
 import { BarChart } from "@components/Graphs/BarChart"
-import { getOrgMetadata } from "@utils/browser-utility"
 import { LineChart } from "@components/Graphs/LineChart"
 import { AnalyticsCard } from "@components/AnalyticsCard"
 import { ToggleButtons } from "@components/ToggleButtons"
-import { PieChart, Props } from "@components/Graphs/PieChart"
 
 const Chart = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -31,6 +30,7 @@ const Chart = styled(Paper)(({ theme }) => ({
 }))
 
 export default function Dashboard() {
+  const { state } = useAppContext()
   const [interval, setInterval] = useState<Interval>("month")
 
   return (
@@ -56,22 +56,26 @@ export default function Dashboard() {
         }
       >
         <Heading sx={{ mb: 1 }}>Overview</Heading>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <UsersCard title="Users" interval={interval} />
-          </Grid>
-        </Grid>
+        {checkPermission(state.auth.user.permissions, "users") && (
+          <>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <UsersCard title="Users" interval={interval} />
+              </Grid>
+            </Grid>
 
-        <Box sx={{ my: 2 }} />
+            <Box sx={{ my: 2 }} />
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6} lg={4}>
-            <UsersChart1 title="Users" interval={interval} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <UsersChart2 title="Users" interval={interval} />
-          </Grid>
-        </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6} lg={4}>
+                <UsersChart1 title="Users" interval={interval} />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <UsersChart2 title="Users" interval={interval} />
+              </Grid>
+            </Grid>
+          </>
+        )}
       </DrawerLayout>
     </>
   )
