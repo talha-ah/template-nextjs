@@ -1,7 +1,7 @@
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 
-import DateUtility from "@utils/date"
+import { dateUtility } from "@utils/date"
 import { calculateDiscount, pad, numberWithCommas } from "@utils/common"
 
 export const generateReceipt = ({ data, type = "order", settings }) => {
@@ -81,21 +81,21 @@ export const generateReceipt = ({ data, type = "order", settings }) => {
   doc.text(settings?.name || "", 105, 20, null, null, "center")
   doc.setFontSize(12)
   doc.text(
-    `Address: ${settings?.address?.addressOne || '' }`,
+    `Address: ${settings?.address?.addressOne || ""}`,
     105,
     28,
     null,
     null,
     "center"
   )
-  doc.text(`Mobile #: ${settings?.phone||""}`, 105, 35, null, null, "center")
+  doc.text(`Mobile #: ${settings?.phone || ""}`, 105, 35, null, null, "center")
   doc.text(
     `${type === "quotation" ? "Quotation" : "Receipt"} #: ${pad(data.sr)}`,
     14,
     44
   )
   doc.text(
-    `Date: ${DateUtility.formatDate(data.createdAt)}`,
+    `Date: ${dateUtility.formatDate(data.createdAt)}`,
     196,
     44,
     null,

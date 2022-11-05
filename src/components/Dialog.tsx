@@ -1,10 +1,10 @@
 import * as React from "react"
 import { useState } from "react"
 
+import { DialogTitle } from "@mui/material"
+import { DialogContent } from "@mui/material"
 import { Dialog as MuiDialog } from "@mui/material"
-import DialogTitle from "@mui/material/DialogTitle"
 import { SxProps, Theme } from "@mui/material/styles"
-import DialogContent from "@mui/material/DialogContent"
 
 import { useWindowResize } from "@hooks/useWindowResize"
 
@@ -52,7 +52,7 @@ export const Dialog = ({
             width:
               theme.breakpoints.values.xs > width
                 ? width - +theme.spacing(8).replace("px", "")
-                : theme.breakpoints.values.xs,
+                : "auto",
           })}
         >
           {typeof content === "function"

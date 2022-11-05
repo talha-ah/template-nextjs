@@ -1,11 +1,11 @@
 import dayjs from "dayjs"
 
-export default class DateUtility {
+class DateUtility {
   static getLocaleDate = () => {
     return new Date().toLocaleString()
   }
 
-  static strToDate = (date: Date, format = "YYYY-MM-DD") => {
+  static strToDate = (date: Date, format = "DD-MM-YYYY") => {
     if (!date) {
       return ""
     }
@@ -60,3 +60,5 @@ export default class DateUtility {
   //   )
   // }
 }
+
+export const dateUtility = DateUtility

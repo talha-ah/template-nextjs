@@ -157,7 +157,7 @@ export const AuthWrapper = ({ children }: { children: any }) => {
       }
     } catch (error: any) {
     } finally {
-      if (route !== router.asPath) router.push(route)
+      if (route !== router.asPath) router.replace(route)
     }
   }
 
