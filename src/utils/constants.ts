@@ -34,6 +34,7 @@ export const ENDPOINTS = {
   login: "/auth/login",
   register: "/auth/register",
   authProfile: "/auth/profile",
+  refreshToken: "/auth/refresh",
   checkToken: "/auth/check/token",
   checkEmail: "/auth/check/email",
   verifyEmail: "/auth/verify-email",

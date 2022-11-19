@@ -4,8 +4,8 @@ import { useSnackbar } from "notistack"
 import { useLayoutEffect, useEffect, useRef } from "react"
 
 import { dateUtility } from "@utils/date"
-import { BASE_URL } from "@utils/constants"
 import { getBrowserItem } from "@utils/browser-utility"
+import { BASE_URL, ENDPOINTS } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
 import { ApiResponse, Params, ErrorWithMessage } from "@utils/types"
 
@@ -81,14 +81,14 @@ export const useApi = () => {
 
         if (isMounted.current) resolve(data)
       } catch (error: any) {
-        let message = error.message
-        let status = error.status || 500
+        let errorMessage = error.message
+        let errorStatus = error.status || 500
 
         if (!isErrorWithMessage(error)) {
           error = await error.json()
 
-          status = error.status
-          message = error.detail
+          errorStatus = error.status
+          errorMessage = error.detail
         }
 
         if (process && process.env.NODE_ENV === "development") {
@@ -96,24 +96,46 @@ export const useApi = () => {
           body && console.log(`Error for Body`, JSON.parse(body))
         }
 
-        // if (error.status === 403) {
-        //   // 401 : Token expired / invalid
-        //   // Ask to relogin
-        //   dispatch({ type: AuthTypes.LOGOUT })
-        //   router.replace("/")
-
-        //   // TODO: Use refresh token to get new token
-        // } else
-        if (
+        if (errorStatus === 401) {
+          API({
+            method: "POST",
+            uri: ENDPOINTS.refreshToken,
+            body: JSON.stringify({
+              refresh_token: getBrowserItem("refreshToken"),
+            }),
+          })
+            .then((response) => {
+              dispatch({
+                type: AuthTypes.LOGIN,
+                payload: {
+                  ...response?.data,
+                  token: response?.data.access_token,
+                  refreshToken: response?.data.refresh_token,
+                },
+              })
+              return API({
+                uri,
+                body,
+                method,
+                message,
+                notifyError,
+                contentType,
+              })
+            })
+            .catch(() => {
+              dispatch({ type: AuthTypes.LOGOUT })
+              router.push("/login")
+            })
+        } else if (
           notifyError &&
-          error.status &&
-          error.message !== "The user aborted a request."
+          errorStatus &&
+          errorMessage !== "The user aborted a request."
         ) {
-          if (error.message === "Failed to fetch") {
-            error.message = "Network Error"
+          if (errorMessage === "Failed to fetch") {
+            errorMessage = "Network Error"
           }
 
-          enqueueSnackbar(error?.message, {
+          enqueueSnackbar(errorMessage, {
             variant: "error",
             autoHideDuration: 3000,
           })

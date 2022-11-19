@@ -125,6 +125,13 @@ const Header = ({ isMobile }: { isMobile: boolean }) => {
                   flexDirection: "row",
                 }}
               >
+                <Button
+                  to="/auth/login"
+                  variant="outlined"
+                  component={NextLinkComposed}
+                >
+                  Login
+                </Button>
                 {!isMobile && (
                   <Button
                     to="/auth/register"
@@ -134,13 +141,6 @@ const Header = ({ isMobile }: { isMobile: boolean }) => {
                     Register
                   </Button>
                 )}
-                <Button
-                  to="/auth/login"
-                  variant="outlined"
-                  component={NextLinkComposed}
-                >
-                  Login
-                </Button>
               </Box>
             )}
           </Box>

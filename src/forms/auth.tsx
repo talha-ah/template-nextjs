@@ -125,34 +125,24 @@ export function LoginForm() {
             />
           </Grid>
           <Grid item xs={12}>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            <Button type="submit" fullWidth loading={loading}>
+              Sign In
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Link variant="body2" href="/auth/forgot-password">
+                Forgot password?
+              </Link>
+
+              <Link variant="body2" href="/auth/register">
+                Create Account
+              </Link>
+            </Box>
           </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
-          Sign In
-        </Button>
-
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Link variant="body2" href="/auth/forgot-password">
-            Forgot password?
-          </Link>
-          <Link variant="body2" href="/auth/register">
-            Register here
-          </Link>
-        </Box>
       </Box>
     </Card>
   )
@@ -253,32 +243,20 @@ export function Registerform() {
             />
           </Grid>
           <Grid item xs={12}>
-            <FormControlLabel
-              label="I want to receive updates"
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-            />
+            <Button type="submit" fullWidth loading={loading}>
+              Sign Up
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Link variant="body2" href="/auth/login">
+                Sign in
+              </Link>
+            </Box>
           </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
-          Sign Up
-        </Button>
-
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          Already have an account?&nbsp;
-          <Link variant="body2" href="/auth/login">
-            Sign in
-          </Link>
-        </Box>
       </Box>
     </Card>
   )
@@ -323,34 +301,33 @@ export function ForgotPasswordForm() {
   return (
     <Card title="Forgot Password" subtitle="Enter your recovery email">
       <Box noValidate component="form" onSubmit={handleSubmit}>
-        <TextField
-          required
-          autoFocus
-          fullWidth
-          id="email"
-          name="email"
-          autoComplete="email"
-          label="Email Address"
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              autoFocus
+              fullWidth
+              id="email"
+              name="email"
+              autoComplete="email"
+              label="Email Address"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" fullWidth loading={loading}>
+              Recover Password
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Link variant="body2" href="/auth/login">
+                Sign in
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
 
         <Alert type="error" message={error} />
-
-        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
-          Recover Password
-        </Button>
-
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Link variant="body2" href="/auth/login">
-            Sign in
-          </Link>
-        </Box>
       </Box>
     </Card>
   )
@@ -422,26 +399,21 @@ export function RecoverPasswordForm({ token }: { token: string }) {
               autoComplete="confirm-password"
             />
           </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" fullWidth loading={loading}>
+              Update Password
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Link variant="body2" href="/auth/login">
+                Sign in
+              </Link>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
-          Update Password
-        </Button>
-
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Link variant="body2" href="/auth/login">
-            Sign in
-          </Link>
-        </Box>
       </Box>
     </Card>
   )
@@ -529,12 +501,21 @@ export function AcceptInviteForm({
               autoComplete="confirm-password"
             />
           </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
+              Accept Invite
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Link variant="body2" href="/auth/login">
+                Sign in
+              </Link>
+            </Box>
+          </Grid>
         </Grid>
-        <Alert type="error" message={error} />
 
-        <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
-          Accept Invite
-        </Button>
+        <Alert type="error" message={error} />
       </Box>
     </Card>
   )
