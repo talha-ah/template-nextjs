@@ -78,14 +78,14 @@ export const useRouteLinks = () => {
       NavLinks.map((link) => {
         if (link.type === "group") {
           const children = (link.children || []).filter((child) =>
-            checkPermission(permissions, child.label.toLowerCase())
+            checkPermission(permissions, child.label)
           )
 
           if (children.length > 0) {
             links.push({ ...link, children })
           }
         } else if (link.type === "item") {
-          if (checkPermission(permissions, link.label.toLowerCase())) {
+          if (checkPermission(permissions, link.label)) {
             links.push(link)
           }
         }

@@ -1,14 +1,15 @@
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import Chip from "@mui/material/Chip"
-import Stack from "@mui/material/Stack"
-import Paper from "@mui/material/Paper"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
+import { Chip } from "@mui/material"
+import { Stack } from "@mui/material"
+import { Paper } from "@mui/material"
+import { Typography } from "@mui/material"
 import { styled } from "@mui/material/styles"
-import Typography from "@mui/material/Typography"
-import TrendingUpIcon from "@mui/icons-material/TrendingUp"
-import TrendingDownIcon from "@mui/icons-material/TrendingDown"
+import { TrendingUp } from "@mui/icons-material"
+import { TrendingDown } from "@mui/icons-material"
 
 import { Color } from "@utils/types"
+import { Heading } from "@components/Title"
 import { numberWithCommas } from "@utils/common"
 
 const Card = styled(Paper)(({ theme }) => ({
@@ -20,19 +21,19 @@ const Card = styled(Paper)(({ theme }) => ({
 }))
 
 export const AnalyticsCard = ({
+  diff,
   color,
   title,
   count,
-  percentage,
   isLoss,
-  diff,
+  percentage,
 }: {
-  title?: string
-  count?: string
-  percentage?: number
-  isLoss?: boolean
   diff?: number
   color?: Color
+  title?: string
+  count?: string
+  isLoss?: boolean
+  percentage?: number
 }) => (
   <Card variant="outlined">
     <Stack spacing={0.5}>
@@ -53,7 +54,7 @@ export const AnalyticsCard = ({
                 icon={
                   <>
                     {!isLoss && (
-                      <TrendingUpIcon
+                      <TrendingUp
                         sx={{
                           pl: 0.5,
                           color: "inherit",
@@ -61,7 +62,7 @@ export const AnalyticsCard = ({
                       />
                     )}
                     {isLoss && (
-                      <TrendingDownIcon
+                      <TrendingDown
                         sx={{
                           pl: 0.5,
                           color: "inherit",
@@ -93,3 +94,51 @@ export const AnalyticsCard = ({
     </Stack>
   </Card>
 )
+
+export const AnalyticsCardSimple = ({
+  title,
+  count,
+}: {
+  title: string
+  count: number
+}) => (
+  <Card variant="outlined">
+    <Stack spacing={0.5}>
+      <Typography variant="subtitle2">{title}</Typography>
+      <Grid container alignItems="center">
+        <Grid item>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h4" color="inherit">
+              {numberWithCommas(count)}
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
+    </Stack>
+  </Card>
+)
+
+export const Analytics = ({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) => {
+  return (
+    <Box sx={{ my: 2 }}>
+      <Heading>{title}</Heading>
+      <Box
+        sx={{
+          mt: 1,
+          gap: 2,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        {children}
+      </Box>
+    </Box>
+  )
+}

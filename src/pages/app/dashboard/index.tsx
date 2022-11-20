@@ -10,8 +10,8 @@ import { useApi } from "@hooks/useApi"
 import { APP_NAME } from "@utils/constants"
 import { Heading } from "@components/Title"
 import { ENDPOINTS } from "@utils/constants"
-import { Interval, Color } from "@utils/types"
 import { DrawerLayout } from "@layouts/Drawer"
+import { Interval, Color } from "@utils/types"
 import { useAppContext } from "@contexts/index"
 import { checkPermission } from "@utils/common"
 import { Props } from "@components/Graphs/PieChart"
@@ -31,7 +31,15 @@ const Chart = styled(Paper)(({ theme }) => ({
 
 export default function Dashboard() {
   const { state } = useAppContext()
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
   const [interval, setInterval] = useState<Interval>("month")
+
+  useEffect(() => {
+    setIsAdmin(
+      checkPermission(state.auth.user.permissions, "Dashboard", "users")
+    )
+  }, [state])
 
   return (
     <>
@@ -56,7 +64,7 @@ export default function Dashboard() {
         }
       >
         <Heading sx={{ mb: 1 }}>Overview</Heading>
-        {checkPermission(state.auth.user.permissions, "users") && (
+        {isAdmin && (
           <>
             <Grid container spacing={2}>
               <Grid item xs={12}>

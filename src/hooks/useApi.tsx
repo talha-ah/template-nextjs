@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { useSnackbar } from "notistack"
 import { useLayoutEffect, useEffect, useRef } from "react"
 
-import { dateUtility } from "@utils/date"
+import { getLocaleDate } from "@utils/date"
 import { getBrowserItem } from "@utils/browser-utility"
 import { BASE_URL, ENDPOINTS } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
@@ -69,7 +69,7 @@ export const useApi = () => {
         const data = await response.json()
 
         if (process && process.env.NODE_ENV === "development") {
-          console.log(`[Response at ${dateUtility.getLocaleDate()}]:`, data)
+          console.log(`[Response at ${getLocaleDate()}]:`, data)
         }
 
         if (message) {
@@ -92,7 +92,7 @@ export const useApi = () => {
         }
 
         if (process && process.env.NODE_ENV === "development") {
-          console.log(`[Error at ${dateUtility.getLocaleDate()}]:`, error)
+          console.log(`[Error at ${getLocaleDate()}]:`, error)
           body && console.log(`Error for Body`, JSON.parse(body))
         }
 
