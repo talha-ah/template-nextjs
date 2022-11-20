@@ -110,18 +110,18 @@ export interface Invite {
 export interface Organization {
   _id: string
   name: string
+  logo?: string
   email?: string
   phone?: string
-  logo?: string
   users?: User[]
   status?: "active" | "inactive"
 }
 
 export interface Permissions {
   [key: string]: {
-    description: string
     options: string[]
     settings: string[]
+    description: string
   }
 }
 export interface User {

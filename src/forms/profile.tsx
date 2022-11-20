@@ -9,7 +9,7 @@ import { CardActionArea } from "@mui/material"
 import { MailLock } from "@mui/icons-material"
 import { LightMode } from "@mui/icons-material"
 import { Card as MuiCard } from "@mui/material"
-import { DarkModeOutlined } from "@mui/icons-material"
+import { SettingsBrightnessOutlined } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
 import { ThemeMode } from "@utils/types"
@@ -334,11 +334,11 @@ export function SelectTheme() {
           }}
         >
           {type === "light" ? (
-            <DarkMode />
-          ) : type === "dark" ? (
             <LightMode />
+          ) : type === "dark" ? (
+            <DarkMode />
           ) : (
-            <DarkModeOutlined />
+            <SettingsBrightnessOutlined />
           )}
 
           <Typography

@@ -3,12 +3,14 @@ import Typography from "@mui/material/Typography"
 export const Title = ({
   sx = {},
   children,
+  ...rest
 }: {
   sx?: any
   children: React.ReactNode
+  [key: string]: any
 }) => {
   return (
-    <Typography variant="h5" sx={{ fontWeight: "bold", ...sx }}>
+    <Typography variant="h5" sx={{ fontWeight: "bold", ...sx }} {...rest}>
       {children}
     </Typography>
   )

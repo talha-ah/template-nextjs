@@ -3,8 +3,9 @@ export default function MenuItem(theme) {
     MuiMenuItem: {
       styleOverrides: {
         root: {
-          height: theme.spacing(5.5),
+          margin: `${theme.spacing(0.3)} 0`,
           borderRadius: +theme.shape.borderRadius,
+          padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
         },
       },
     },

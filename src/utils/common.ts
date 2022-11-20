@@ -1,7 +1,36 @@
 import { Permissions } from "./types"
 
+export const generateId = (prefix = "", length = 7) => {
+  let result = prefix
+  for (let i = 0; i < length; i++) {
+    const random = Math.random()
+    result += String.fromCharCode(
+      Math.floor(random * 26) + (random < 0.5 ? 65 : 97)
+    )
+  }
+  return result.toUpperCase()
+}
+
+export const getName = (user: any) => {
+  let name = user.firstName
+  if (user.lastName) name += " " + user.lastName
+  return name
+}
+
 export const isNotEmpty = (item: any) => {
   return item !== undefined && item !== null && item !== "" && item.length !== 0
+}
+
+export const toTitleCase = (str: string) => {
+  if (str) str = str.charAt(0).toUpperCase() + str.slice(1)
+
+  return str
+}
+
+export const convertUnderscoreToWords = (str: string) => {
+  let arr = str.split("_")
+  arr = arr.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+  return arr.join(" ")
 }
 
 export const truncateString = (text: any, ellipsisString: string) => {
@@ -18,12 +47,54 @@ export const truncate = (n: any, digits: any) => {
   return m ? parseFloat(m[1]) : n.valueOf()
 }
 
+export const pad = (num: number | string, size = 6) => {
+  // Pad a number with leading zeros
+  let s = num + ""
+  while (s.length < size) s = "0" + s
+  return s
+}
+
+export const roundNumber = (num: number) => {
+  return Math.round((num + Number.EPSILON) * 100) / 100
+}
+
 export const numberWithCommas = (x: any) => {
   if (!x) return 0
   return Number(String(x).replaceAll(",", "")).toLocaleString(undefined, {
     maximumFractionDigits: 2,
   })
 }
+
+export const calculateTableTotal = (rows: any, field: string) => {
+  const total = rows.reduce((acc: number, row: any) => acc + row[field], 0)
+  return numberWithCommas(total)
+}
+
+export const calcDiscount = (value: number, discount: number) => {
+  value = value
+  discount = discount
+  if (!discount || discount === 0) return discount
+  return (value * discount) / 100
+}
+
+export const calculateDiscount = (
+  value: number,
+  qty: number,
+  discount: number
+) => {
+  value = value * qty
+  discount = calcDiscount(value, discount)
+  return {
+    discount: discount,
+    value: value - discount,
+  }
+}
+
+export const removeDuplicateRow = (array: any, key: string) => [
+  ...array
+    .reduce((map: any, obj: any) => map.set(obj[key], obj), new Map())
+    .values(),
+]
 
 export const objectToParams = (obj: any) => {
   let str = ""
@@ -36,41 +107,6 @@ export const objectToParams = (obj: any) => {
     }
   }
   return str
-}
-
-export const base64ToBlob = (base64: string) => {
-  var byteString = atob(base64.split(",")[1])
-  var ab = new ArrayBuffer(byteString.length)
-  var ia = new Uint8Array(ab)
-
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i)
-  }
-  return new Blob([ab], { type: "image/png" })
-}
-
-export const removeDuplicateRow = (array: any, key: string) => [
-  ...array
-    .reduce((map: any, obj: any) => map.set(obj[key], obj), new Map())
-    .values(),
-]
-
-export const toTitleCase = (phrase: string) => {
-  if (!phrase) return ""
-
-  return phrase
-    .toLowerCase()
-    .split(" ")
-    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
-}
-
-export const timeoutPromise = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-export const roundNumber = (num: number) => {
-  return Math.round((num + Number.EPSILON) * 100) / 100
 }
 
 export const downloadFile = (url: string, fileName: string) => {
@@ -100,47 +136,19 @@ export const downloadFile = (url: string, fileName: string) => {
   req.send()
 }
 
-export const generateId = (prefix = "", length = 7) => {
-  let result = prefix
-  for (let i = 0; i < length; i++) {
-    const random = Math.random()
-    result += String.fromCharCode(
-      Math.floor(random * 26) + (random < 0.5 ? 65 : 97)
-    )
+export const base64ToBlob = (base64: string) => {
+  var byteString = atob(base64.split(",")[1])
+  var ab = new ArrayBuffer(byteString.length)
+  var ia = new Uint8Array(ab)
+
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i)
   }
-  return result.toUpperCase()
+  return new Blob([ab], { type: "image/png" })
 }
 
-export const calcDiscount = (value: number, discount: number) => {
-  value = value
-  discount = discount
-  if (!discount || discount === 0) return discount
-  return (value * discount) / 100
-}
-
-export const calculateDiscount = (
-  value: number,
-  qty: number,
-  discount: number
-) => {
-  value = value * qty
-  discount = calcDiscount(value, discount)
-  return {
-    discount: discount,
-    value: value - discount,
-  }
-}
-
-export const pad = (num: number | string, size = 6) => {
-  // Pad a number with leading zeros
-  let s = num + ""
-  while (s.length < size) s = "0" + s
-  return s
-}
-
-export const calculateTableTotal = (rows: any, field: string) => {
-  const total = rows.reduce((acc: number, row: any) => acc + row[field], 0)
-  return numberWithCommas(total)
+export const timeoutPromise = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export const checkPermission = (

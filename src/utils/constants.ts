@@ -31,6 +31,7 @@ export const YEARS: string[] = Array.from(new Array(10), (_, i) =>
 ).reverse()
 
 export const ENDPOINTS = {
+  // Auth
   login: "/auth/login",
   register: "/auth/register",
   authProfile: "/auth/profile",
@@ -40,6 +41,7 @@ export const ENDPOINTS = {
   verifyEmail: "/auth/verify-email",
   forgotPassword: "/auth/forgot-password",
   recoverPassword: "/auth/recover-password",
+  switchOrganization: "/auth/organization",
 
   // Profile
   profile: "/profile",
@@ -62,10 +64,44 @@ export const ENDPOINTS = {
   rejectInvite: "/invites/reject",
   resendInvite: "/invites/resend",
 
+  // Inventory
+  appInventory: "/app-inventory",
+
   // Customers
   customers: "/customers",
 
+  // Categories
+  categories: "/categories",
+
+  // Items
+  items: "/items",
+
+  // Warehouses
+  warehouses: "/warehouses",
+
+  // Item Inventory
+  itemInventory: "/item-inventory",
+  itemInventoryHistory: "/item-inventory/history",
+
+  // Suppliers
+  suppliers: "/suppliers",
+
+  // Purchase Orders
+  purchaseOrders: "/purchase-orders",
+  purchaseOrdersStatus: "/purchase-orders/status",
+  purchaseOrdersMetadata: "/purchase-orders/metadata",
+
+  // Quotations
+  quotations: "/quotations",
+  quotationsMetadata: "/quotations/metadata",
+
+  // Orders
+  orders: "/orders",
+  ordersMetadata: "/orders/metadata",
+  ordersPayment: "/orders/payment",
+  customerOrders: "/orders/customer",
+
   // Analytics
-  analyticsUsers: "/analytics/users",
-  analyticsUsersChart: "/analytics/users/charts",
+  analyticsSales: "/analytics/sales",
+  analyticsItems: "/analytics/items",
 }

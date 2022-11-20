@@ -61,12 +61,6 @@ export const UserMenu = ({
         }
         sx={(theme: Theme) => ({
           "& .MuiMenu-paper": {
-            py: 0,
-            px: 1,
-            border: 1,
-            boxShadow: 0,
-            borderStyle: "solid",
-            borderColor: "divider",
             mt: position === "top" ? -1 : 1,
             width: DRAWER_WIDTH - +theme.spacing(4).replace("px", ""),
           },

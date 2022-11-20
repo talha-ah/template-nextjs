@@ -1,11 +1,10 @@
 import { useRouter } from "next/router"
 import { useEffect, useState, useMemo } from "react"
 
+import { Person } from "@mui/icons-material"
 import { Logout } from "@mui/icons-material"
-import { Settings } from "@mui/icons-material"
 import { HomeOutlined } from "@mui/icons-material"
 import { AnalyticsOutlined } from "@mui/icons-material"
-import { FilterCenterFocusOutlined } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
 import { ENDPOINTS } from "@utils/constants"
@@ -35,12 +34,6 @@ export const useRouteLinks = () => {
             icon: <AnalyticsOutlined fontSize="small" color="primary" />,
             exact: true,
           },
-          {
-            type: "item",
-            label: "Users",
-            href: "/app/users",
-            icon: <FilterCenterFocusOutlined fontSize="small" color="error" />,
-          },
         ],
       },
     ],
@@ -57,9 +50,9 @@ export const useRouteLinks = () => {
       },
       {
         type: "item",
-        label: "Settings",
-        href: "/settings",
-        icon: <Settings fontSize="small" />,
+        label: "Profile",
+        href: "/profile",
+        icon: <Person fontSize="small" />,
       },
       {
         type: "item",
@@ -85,14 +78,14 @@ export const useRouteLinks = () => {
       NavLinks.map((link) => {
         if (link.type === "group") {
           const children = (link.children || []).filter((child) =>
-            checkPermission(permissions, child.label)
+            checkPermission(permissions, child.label.toLowerCase())
           )
 
           if (children.length > 0) {
             links.push({ ...link, children })
           }
         } else if (link.type === "item") {
-          if (checkPermission(permissions, link.label)) {
+          if (checkPermission(permissions, link.label.toLowerCase())) {
             links.push(link)
           }
         }

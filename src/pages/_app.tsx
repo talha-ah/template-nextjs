@@ -5,8 +5,9 @@ import { AppProps } from "next/app"
 import { SnackbarProvider } from "notistack"
 import { CacheProvider, EmotionCache } from "@emotion/react"
 
-import { AppProvider } from "@contexts/index"
 import { AuthWrapper } from "@hooks/auth"
+import { APP_NAME } from "@utils/constants"
+import { AppProvider } from "@contexts/index"
 
 import emotionCache from "@utils/emotionCache"
 import ThemeCustomization from "@styles/themes/index"
@@ -23,7 +24,7 @@ export default function App(props: LocalAppProps) {
   return (
     <>
       <Head>
-        <title>Template</title>
+        <title>{APP_NAME}</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
