@@ -9,7 +9,7 @@ export const strToDate = (date: Date, format = "DD-MM-YYYY") => {
 
 export const formatDate = (
   date: Date | string | null,
-  format = "MMM DD, YYYY hh:mm A"
+  format = "MMM DD, YYYY"
 ) => {
   if (!date) return ""
   return dayjs(date).format(format)
@@ -27,26 +27,21 @@ export const difference = (date1: Date, date2: Date, unit: any = "days") => {
   return dayjs(date2).diff(date1, unit)
 }
 
-// static getDays = () =>
-//   Array.apply(null, Array(7)).map((_, i) =>
-//     dayjs(i, "e")
-//       .startOf("week")
-//       .isoWeekday(i + 1)
-//       .format("dddd")
-//   )
+// export const getDays = () =>
+//   Array.apply(null, Array(7)).map((_, i) => dayjs(i, "e").startOf("week"))
 
-// static duration = (date1: Date, date2: Date) =>
+// export const duration = (date1: Date, date2: Date) =>
 //   dayjs.duration(dayjs(date2).diff(date1))
 
-// static hourMinuteTime = (date1: Date, date2: any) => {
+// export const hourMinuteTime = (date1: Date, date2: any) => {
 //   if (!date2) {
 //     date2 = dayjs().utc()
-// }
+//   }
 //   const diff = DateUtility.duration(date1, date2)
 //   return `${DateUtility.difference(date1, date2)}d ${diff.get("hours")}h`
 // }
 
-// static hoursList = () => {
+// export const hoursList = () => {
 //   return Array.from({ length: 24 }, (_, i) => i).reduce(
 //     (r: any, hour: number) => {
 //       r.push(dayjs({ hour, minute: 0 }).format("h:mm A"))

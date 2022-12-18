@@ -1,12 +1,12 @@
 import { useState } from "react"
 
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import TextField from "@mui/material/TextField"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
+import { TextField } from "@mui/material"
 
+import { Alert } from "@ui/Alert"
+import { Button } from "@ui/Button"
 import { useApi } from "@hooks/useApi"
-import { Alert } from "@components/Alert"
-import { Button } from "@components/Button"
 import { ENDPOINTS } from "@utils/constants"
 
 export function InviteUser({
@@ -105,9 +105,7 @@ export function InviteUser({
           sx={{
             pt: 2,
             gap: 2,
-            flex: 1,
             display: "flex",
-            alignItems: "center",
             justifyContent: "flex-end",
           }}
         >
@@ -224,9 +222,7 @@ export function EditUser({
           sx={{
             pt: 2,
             gap: 2,
-            flex: 1,
             display: "flex",
-            alignItems: "center",
             justifyContent: "flex-end",
           }}
         >

@@ -68,21 +68,20 @@ export const UserMenu = ({
       >
         {menuLinks.map((item: MenuLink) => (
           <MenuItem
-            key={item.label}
+            key={item.value}
             onClick={() => {
               if (item.onClick) item.onClick()
-
-              if (item.href) {
-                router.push(item.href)
-              }
+              if (item.href) router.push(item.href)
               closeUserMenu()
             }}
           >
-            {item.icon && (
-              <ListItemIcon color={item?.color}>{item.icon}</ListItemIcon>
-            )}
+            {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
 
-            <ListItemText primary={item.label} disableTypography />
+            <ListItemText
+              disableTypography
+              color={item.color}
+              primary={item.value}
+            />
           </MenuItem>
         ))}
       </Menu>

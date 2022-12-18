@@ -1,12 +1,9 @@
 import * as React from "react"
 
-import ToggleButton from "@mui/material/ToggleButton"
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
+import { ToggleButton } from "@mui/material"
+import { ToggleButtonGroup } from "@mui/material"
 
-export type Option = {
-  label: string
-  value: string
-}
+import { Option } from "@utils/types"
 
 export const ToggleButtons = ({
   value,
@@ -15,7 +12,7 @@ export const ToggleButtons = ({
 }: {
   value: string
   options: Option[]
-  onClick: (arg: any) => void
+  onClick: (arg: Option) => void
 }) => {
   return (
     <ToggleButtonGroup
@@ -26,12 +23,12 @@ export const ToggleButtons = ({
     >
       {options.map((option: Option) => (
         <ToggleButton
-          key={option.value}
-          value={option.value}
-          aria-label={option.label}
+          key={option.key}
+          value={option.key}
+          aria-label={option.value}
           onClick={() => onClick(option)}
         >
-          {option.label}
+          {option.value}
         </ToggleButton>
       ))}
     </ToggleButtonGroup>

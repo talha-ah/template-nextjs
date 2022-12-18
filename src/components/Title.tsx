@@ -1,4 +1,6 @@
-import Typography from "@mui/material/Typography"
+import { Typography } from "@mui/material"
+
+import { useIsMobile } from "@hooks/useIsMobile"
 
 export const Title = ({
   sx = {},
@@ -9,8 +11,14 @@ export const Title = ({
   children: React.ReactNode
   [key: string]: any
 }) => {
+  const { isMobile } = useIsMobile()
+
   return (
-    <Typography variant="h5" sx={{ fontWeight: "bold", ...sx }} {...rest}>
+    <Typography
+      sx={{ fontWeight: "bold", ...sx }}
+      variant={isMobile ? "body1" : "h5"}
+      {...rest}
+    >
       {children}
     </Typography>
   )

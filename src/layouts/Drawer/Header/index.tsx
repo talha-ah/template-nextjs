@@ -31,6 +31,7 @@ export const ActionHeader = ({
     >
       <Box
         sx={{
+          mr: 1,
           gap: 1,
           display: "flex",
           flexDirection: "row",

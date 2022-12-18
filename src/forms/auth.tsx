@@ -4,16 +4,14 @@ import { useRouter } from "next/router"
 
 import { Box } from "@mui/material"
 import { Grid } from "@mui/material"
-import { Checkbox } from "@mui/material"
-import { TextField } from "@mui/material"
 import { Typography } from "@mui/material"
 import { Card as MuiCard } from "@mui/material"
-import { FormControlLabel } from "@mui/material"
 
-import Link from "@components/Link"
+import { Input } from "@ui/Input"
+import { Alert } from "@ui/Alert"
+import { Button } from "@ui/Button"
 import { useApi } from "@hooks/useApi"
-import { Alert } from "@components/Alert"
-import { Button } from "@components/Button"
+import { Link } from "@components/Link"
 import { ENDPOINTS } from "@utils/constants"
 import { AuthTypes, useAppContext } from "@contexts/index"
 
@@ -103,18 +101,19 @@ export function LoginForm() {
       <Box noValidate component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               autoFocus
               fullWidth
               id="email"
+              type="email"
               name="email"
               autoComplete="email"
               label="Email Address"
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="password"
@@ -131,11 +130,11 @@ export function LoginForm() {
           </Grid>
           <Grid item xs={12}>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Link variant="body2" href="/auth/forgot-password">
+              <Link variant="body2" to="/auth/forgot-password">
                 Forgot password?
               </Link>
 
-              <Link variant="body2" href="/auth/register">
+              <Link variant="body2" to="/auth/register">
                 Create Account
               </Link>
             </Box>
@@ -202,7 +201,7 @@ export function Registerform() {
       <Box noValidate component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <TextField
+            <Input
               required
               autoFocus
               fullWidth
@@ -213,7 +212,7 @@ export function Registerform() {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
+            <Input
               fullWidth
               id="lastName"
               name="lastName"
@@ -222,17 +221,18 @@ export function Registerform() {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="email"
+              type="email"
               name="email"
               autoComplete="email"
               label="Email Address"
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="password"
@@ -249,7 +249,7 @@ export function Registerform() {
           </Grid>
           <Grid item xs={12}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Link variant="body2" href="/auth/login">
+              <Link variant="body2" to="/auth/login">
                 Sign in
               </Link>
             </Box>
@@ -303,11 +303,12 @@ export function ForgotPasswordForm() {
       <Box noValidate component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               autoFocus
               fullWidth
               id="email"
+              type="email"
               name="email"
               autoComplete="email"
               label="Email Address"
@@ -320,7 +321,7 @@ export function ForgotPasswordForm() {
           </Grid>
           <Grid item xs={12}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Link variant="body2" href="/auth/login">
+              <Link variant="body2" to="/auth/login">
                 Sign in
               </Link>
             </Box>
@@ -378,7 +379,7 @@ export function RecoverPasswordForm({ token }: { token: string }) {
       <Box noValidate component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="password"
@@ -389,7 +390,7 @@ export function RecoverPasswordForm({ token }: { token: string }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="confirm"
@@ -406,7 +407,7 @@ export function RecoverPasswordForm({ token }: { token: string }) {
           </Grid>
           <Grid item xs={12}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Link variant="body2" href="/auth/login">
+              <Link variant="body2" to="/auth/login">
                 Sign in
               </Link>
             </Box>
@@ -480,7 +481,7 @@ export function AcceptInviteForm({
       <Box noValidate component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="password"
@@ -491,7 +492,7 @@ export function AcceptInviteForm({
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <Input
               required
               fullWidth
               id="confirm"
@@ -502,13 +503,13 @@ export function AcceptInviteForm({
             />
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" sx={{ mt: 2 }} fullWidth loading={loading}>
+            <Button type="submit" fullWidth loading={loading}>
               Accept Invite
             </Button>
           </Grid>
           <Grid item xs={12}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Link variant="body2" href="/auth/login">
+              <Link variant="body2" to="/auth/login">
                 Sign in
               </Link>
             </Box>

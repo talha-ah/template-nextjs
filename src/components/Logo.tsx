@@ -1,23 +1,15 @@
 import * as React from "react"
 
-import Typography from "@mui/material/Typography"
+import { Typography } from "@mui/material"
 
-import Link from "@components/Link"
+import { Link } from "@components/Link"
 import { APP_NAME } from "@utils/constants"
+import { GradientText } from "@components/GradientText"
 
 export const Logo = () => {
   return (
-    <Typography
-      href="/"
-      variant="h5"
-      component={Link}
-      sx={{
-        textDecoration: "none",
-        color: "text.primary",
-        "&:hover": { textDecoration: "none" },
-      }}
-    >
-      {APP_NAME}
+    <Typography to="/" variant="h5" component={Link} color="text.primary">
+      <GradientText color="primary">{APP_NAME}</GradientText>
     </Typography>
   )
 }

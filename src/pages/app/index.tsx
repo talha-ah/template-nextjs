@@ -6,18 +6,18 @@ import { Container } from "@mui/material"
 import { Typography } from "@mui/material"
 import { CardContent } from "@mui/material"
 import { CardActionArea } from "@mui/material"
-import { AnalyticsOutlined } from "@mui/icons-material"
+import { Inventory } from "@mui/icons-material"
 
 import { APP_NAME } from "@utils/constants"
 import { HeaderLayout } from "@layouts/Header"
-import { NextLinkComposed } from "@components/Link"
+import { LinkBehaviour } from "@components/Link"
 
 const sections = [
   {
-    title: "Dashboard",
+    title: "Tempate",
     color: "primary.main",
-    href: "/app/dashboard",
-    icon: <AnalyticsOutlined sx={{ fontSize: 60 }} color="action" />,
+    href: "/app/template",
+    icon: <Inventory sx={{ fontSize: 60 }} color="action" />,
   },
 ]
 
@@ -64,7 +64,7 @@ export default function Main() {
 const Section = ({ section }: { section: any }) => {
   return (
     <Card sx={{ width: "100%" }} variant="outlined">
-      <CardActionArea {...{ component: NextLinkComposed, to: section.href }}>
+      <CardActionArea {...{ component: LinkBehaviour, to: section.href }}>
         <Box
           sx={{
             height: 100,

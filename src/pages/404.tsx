@@ -2,18 +2,19 @@ import { Box } from "@mui/material"
 import { Button } from "@mui/material"
 import { Typography } from "@mui/material"
 
-import { NextLinkComposed } from "@components/Link"
+import { LinkBehaviour } from "@components/Link"
 
 export default function NotFoundTitle() {
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         display: "flex",
         minHeight: "100vh",
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "center",
-      }}
+        backgroundColor: theme.palette.mode === "dark" ? "#fff" : "#000",
+      })}
     >
       <Typography
         variant="h1"
@@ -33,7 +34,7 @@ export default function NotFoundTitle() {
         Unfortunately, the page you&apos;re looking for couldn&apos;t be found.
       </Typography>
 
-      <Button to="/" variant="contained" component={NextLinkComposed}>
+      <Button to="/" variant="contained" component={LinkBehaviour}>
         Home
       </Button>
     </Box>

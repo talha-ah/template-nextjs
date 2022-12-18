@@ -1,4 +1,3 @@
-import { Box } from "@mui/material"
 import { Grid } from "@mui/material"
 import { Chip } from "@mui/material"
 import { Stack } from "@mui/material"
@@ -7,6 +6,7 @@ import { Typography } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { TrendingUp } from "@mui/icons-material"
 import { TrendingDown } from "@mui/icons-material"
+import { Box, CircularProgress } from "@mui/material"
 
 import { Color } from "@utils/types"
 import { Heading } from "@components/Title"
@@ -97,19 +97,31 @@ export const AnalyticsCard = ({
 
 export const AnalyticsCardSimple = ({
   title,
-  count,
+  count = 0,
+  postfix = "",
+  currency = "",
 }: {
   title: string
-  count: number
+  count?: number
+  postfix?: string
+  currency?: string
 }) => (
   <Card variant="outlined">
     <Stack spacing={0.5}>
-      <Typography variant="subtitle2">{title}</Typography>
+      <Typography
+        variant="caption"
+        fontWeight="bold"
+        sx={{ textTransform: "uppercase" }}
+      >
+        {title}
+      </Typography>
       <Grid container alignItems="center">
         <Grid item>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="h4" color="inherit">
+            <Typography variant="h6">
+              {currency ? currency + " " : ""}
               {numberWithCommas(count)}
+              {postfix ? " " + postfix : ""}
             </Typography>
           </Box>
         </Grid>
@@ -120,24 +132,25 @@ export const AnalyticsCardSimple = ({
 
 export const Analytics = ({
   title,
+  loading,
   children,
 }: {
   title: string
+  loading: boolean
   children: React.ReactNode
 }) => {
   return (
-    <Box sx={{ my: 2 }}>
+    <Box>
       <Heading>{title}</Heading>
       <Box
         sx={{
           mt: 1,
           gap: 2,
           display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {children}
+        {loading ? <CircularProgress /> : children}
       </Box>
     </Box>
   )

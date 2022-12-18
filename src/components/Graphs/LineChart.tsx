@@ -12,11 +12,7 @@ import { Paper } from "@mui/material"
 import { Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 
-export type Props = {
-  key: string
-  value: string | number
-  [key: string]: any
-}
+import { ChartProps } from "@utils/types"
 
 const CustomTooltip = (props: any) => {
   const { active, payload, label } = props
@@ -33,11 +29,11 @@ const CustomTooltip = (props: any) => {
 }
 
 export const LineChart = ({
-  data = [],
   loading,
+  data = [],
 }: {
-  data: Props[]
   loading?: boolean
+  data: ChartProps[]
 }) => {
   const theme = useTheme()
 

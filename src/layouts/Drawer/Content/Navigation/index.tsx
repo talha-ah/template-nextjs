@@ -12,14 +12,14 @@ const Navigation = () => {
   const navGroups = navLinks.map((item: NavLink) => {
     switch (item.type) {
       case "group":
-        return <NavGroup key={item.label} item={item} />
+        return <NavGroup key={item.value} item={item} />
       default:
         return (
           <Typography
             variant="h6"
             color="error"
             align="center"
-            key={item.label}
+            key={item.value}
           >
             Fix - Navigation Group
           </Typography>

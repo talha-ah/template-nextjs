@@ -5,7 +5,7 @@ import { TextField, Box } from "@mui/material"
 import { LocalizationProvider } from "@mui/lab"
 import AdapterDayjs from "@mui/lab/AdapterDayjs"
 
-import { DateRangeType } from "@utils/types"
+import { DateRange as DateRangeType } from "@utils/types"
 
 export const DateRange = ({
   value,

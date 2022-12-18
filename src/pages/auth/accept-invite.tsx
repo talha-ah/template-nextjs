@@ -6,9 +6,9 @@ import { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import CircularProgress from "@mui/material/CircularProgress"
 
-import Link from "@components/Link"
+import { Alert } from "@ui/Alert"
 import { useApi } from "@hooks/useApi"
-import { Alert } from "@components/Alert"
+import { Link } from "@components/Link"
 import { ENDPOINTS } from "@utils/constants"
 import { AcceptInviteForm } from "@forms/auth"
 import { HeaderLayout } from "@layouts/Header"
@@ -103,9 +103,9 @@ const AcceptInvite: NextPage = () => {
           </Box>
           <Box sx={{ mt: 2 }}>
             {state.auth.isAuth ? (
-              <Link href="/app">Dashboard</Link>
+              <Link to="/app">Dashboard</Link>
             ) : (
-              <Link href="/auth/login">Sign in</Link>
+              <Link to="/auth/login">Sign in</Link>
             )}
           </Box>
         </Box>

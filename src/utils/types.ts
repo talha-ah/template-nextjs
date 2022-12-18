@@ -1,14 +1,13 @@
 import React from "react"
 
-export type Freeze<T> = {
-  readonly [P in keyof T]: T[P]
-}
-
+export type Status = "active" | "inactive"
+export type SettingsTypes = "general" | "inventory"
 export type ThemeMode = "light" | "dark" | "system"
-
-export type DateRangeType = [Date | null, Date | null]
-
+export type Currency = "PKR" | "USD" | "EUR" | "GBP"
+export type Width = "xs" | "sm" | "md" | "lg" | "xl"
+export type DateRange = [Date | null, Date | null]
 export type Interval = "day" | "week" | "month" | "year"
+export type Align = "right" | "inherit" | "left" | "center" | "justify"
 
 export type Color =
   | "default"
@@ -19,9 +18,53 @@ export type Color =
   | "success"
   | "warning"
 
+export type Freeze<T> = {
+  readonly [P in keyof T]: T[P]
+}
+
 export interface ActionType {
   type: string
   payload: any
+}
+
+export interface AuthStateType {
+  user: User
+  token: string
+  isAuth: boolean
+  loading: boolean
+  theme: ThemeMode
+  refreshToken: string
+}
+
+export interface NavLink {
+  type: string
+  href?: string
+  value: string
+  color?: string
+  exact?: boolean
+  children?: NavLink[]
+  icon?: React.ReactElement
+  actions?: React.ReactNode[]
+}
+
+export interface MenuLink {
+  type: string
+  href?: string
+  value: string
+  color?: string
+  onClick?: () => void
+  icon?: React.ReactElement
+}
+
+export interface Option {
+  key: string
+  value: string
+}
+
+export interface ChartProps {
+  key: string
+  value: string | number
+  [key: string]: any
 }
 
 export interface ErrorWithMessage {
@@ -41,8 +84,8 @@ export interface Params {
 export interface Pagination {
   page?: number
   limit?: number
-  total_pages?: number
-  total_count?: number
+  totalData?: number
+  totalPages?: number
 }
 
 export interface ApiResponse {
@@ -56,65 +99,8 @@ export interface Metadata {
   [key: string]: any
 }
 
-export interface AuthStateType {
-  user: User
-  token: string
-  isAuth: boolean
-  loading: boolean
-  theme: ThemeMode
-  refreshToken: string
-}
-
-export interface NavLink {
-  type: string
-  href?: string
-  label: string
-  color?: string
-  exact?: boolean
-  children?: NavLink[]
-  icon?: React.ReactElement
-}
-
-export interface MenuLink {
-  type: string
-  href?: string
-  label: string
-  color?: string
-  onClick?: () => void
-  icon?: React.ReactElement
-}
-
-export interface DataTableHeader {
-  id: string
-  label: string
-  sort?: string
-  filter?: string
-  sortable?: boolean
-  filterable?: boolean
-  width?: string | number
-  minWidth?: string | number
-  format?: (value: any) => string
-  render?: (value: any) => React.ReactNode
-  align?: "right" | "inherit" | "left" | "center" | "justify"
-}
-
-export interface Invite {
-  _id: string
-  name: string
-  email: string
-  firstName: string
-  lastName?: string
-  organizationId: string
-}
-
-export interface Organization {
-  _id: string
-  name: string
-  logo?: string
-  email?: string
-  phone?: string
-  users?: User[]
-  status?: "active" | "inactive"
+export interface Settings {
+  [key: string]: any
 }
 
 export interface Permissions {
@@ -124,6 +110,33 @@ export interface Permissions {
     description: string
   }
 }
+
+export interface DataTableHeader {
+  key: string
+  value: string
+  sort?: string
+  align?: Align
+  filter?: string
+  sortable?: boolean
+  filterable?: boolean
+  width?: string | number
+  minWidth?: string | number
+  format?: (value: any) => string
+  onSort?: () => React.ReactNode[]
+  actions?: () => React.ReactNode[]
+  render?: (value: any, index: number) => React.ReactNode
+}
+
+export interface Address {
+  addressOne: string
+  addressTwo?: string
+  addressThree?: string
+  zip: string
+  city: string
+  state: string
+  country: string
+}
+
 export interface User {
   _id: string
   name: string
@@ -135,5 +148,25 @@ export interface User {
   permissions?: Permissions
   organization?: Organization
   organizations?: Organization[]
-  status?: "active" | "inactive" | "pending" | "blocked"
+  status?: Status | "pending" | "blocked"
+}
+
+export interface Organization {
+  _id: string
+  name: string
+  logo?: string
+  email?: string
+  phone?: string
+  users?: User[]
+  status: Status
+  address?: Address
+}
+
+export interface Invite {
+  _id: string
+  name: string
+  email: string
+  firstName: string
+  lastName?: string
+  organizationId: string
 }

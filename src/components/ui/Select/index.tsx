@@ -7,27 +7,35 @@ import { Select as MuiSelect } from "@mui/material"
 import { SelectChangeEvent } from "@mui/material/Select"
 
 type SelectOption = {
+  key: string
   value: string
-  label: string
 }
 
 export const Select = ({
+  id,
+  name,
+  size,
   value,
   label,
+  required,
   onChange,
   placeholder,
   options = [],
-  size = "small",
   disabled = false,
   fullWidth = false,
+  defaultValue = "",
 }: {
-  value: string
+  id?: string
+  name?: string
+  value?: string
   label?: string
+  required?: boolean
   disabled?: boolean
   fullWidth?: boolean
   placeholder?: string
+  defaultValue?: string
   size?: "medium" | "small"
-  onChange: (event: SelectChangeEvent) => void
+  onChange?: (event: SelectChangeEvent) => void
   options: SelectOption[] | (() => SelectOption[])
 }) => {
   return (
@@ -38,11 +46,19 @@ export const Select = ({
       sx={{ minWidth: 200 }}
     >
       <InputLabel>{label}</InputLabel>
-      <MuiSelect value={value} label={label} onChange={onChange}>
+      <MuiSelect
+        id={id}
+        name={name}
+        value={value}
+        label={label}
+        required={required}
+        onChange={onChange}
+        defaultValue={defaultValue}
+      >
         {placeholder && <MenuItem value={""}>{placeholder}</MenuItem>}
         {(typeof options === "function" ? options() : options).map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
+          <MenuItem key={option.key} value={option.key}>
+            {option.value}
           </MenuItem>
         ))}
       </MuiSelect>

@@ -8,8 +8,6 @@ import { Tooltip, Typography, Box } from "@mui/material"
 import TimelineSeparator from "@mui/lab/TimelineSeparator"
 import TimelineConnector from "@mui/lab/TimelineConnector"
 
- 
-
 export const Timeline = ({
   options,
   action,
@@ -34,7 +32,7 @@ export const Timeline = ({
             >
               <Tooltip title={option.text}>
                 <Typography variant="subtitle1" component="span">
-                  {option.label}
+                  {option.value}
                 </Typography>
               </Tooltip>
               {action && action(option)}

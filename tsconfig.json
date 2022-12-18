@@ -24,6 +24,7 @@
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],
       "@layouts/*": ["./src/layouts/*"],
+      "@ui/*": ["./src/components/ui/*"],
       "@elements/*": ["./src/elements/*"],
       "@contexts/*": ["./src/contexts/*"],
       "@components/*": ["./src/components/*"]

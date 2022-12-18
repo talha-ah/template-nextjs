@@ -1,4 +1,5 @@
-import { Permissions } from "./types"
+import { DAYS, MONTHS, YEARS } from "@utils/constants"
+import { Permissions, ChartProps, Interval } from "@utils/types"
 
 export const generateId = (prefix = "", length = 7) => {
   let result = prefix
@@ -11,7 +12,7 @@ export const generateId = (prefix = "", length = 7) => {
   return result.toUpperCase()
 }
 
-export const getName = (user: any) => {
+export const getFullName = (user: any) => {
   let name = user.firstName
   if (user.lastName) name += " " + user.lastName
   return name
@@ -27,8 +28,8 @@ export const toTitleCase = (str: string) => {
   return str
 }
 
-export const convertUnderscoreToWords = (str: string) => {
-  let arr = str.split("_")
+export const replaceDelimeter = (str: string, delimeter = "_") => {
+  let arr = str.split(delimeter)
   arr = arr.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
   return arr.join(" ")
 }
@@ -58,19 +59,29 @@ export const roundNumber = (num: number) => {
   return Math.round((num + Number.EPSILON) * 100) / 100
 }
 
-export const numberWithCommas = (x: any) => {
-  if (!x) return 0
+export const numberWithCommas = (x: any): string => {
+  if (!x) return "0"
   return Number(String(x).replaceAll(",", "")).toLocaleString(undefined, {
     maximumFractionDigits: 2,
   })
 }
 
-export const calculateTableTotal = (rows: any, field: string) => {
-  const total = rows.reduce((acc: number, row: any) => acc + row[field], 0)
+export const calculateTableTotal = (
+  rows: any,
+  accessor: string | ((row: any) => number)
+) => {
+  const total = rows.reduce(
+    (acc: number, row: any) =>
+      acc + (typeof accessor === "string" ? +row[accessor] : +accessor(row)),
+    0
+  )
   return numberWithCommas(total)
 }
 
-export const calcDiscount = (value: number, discount: number) => {
+export const calculateDiscountPercentage = (
+  value: number,
+  discount: number
+) => {
   value = value
   discount = discount
   if (!discount || discount === 0) return discount
@@ -79,11 +90,11 @@ export const calcDiscount = (value: number, discount: number) => {
 
 export const calculateDiscount = (
   value: number,
-  qty: number,
+  quantity: number,
   discount: number
 ) => {
-  value = value * qty
-  discount = calcDiscount(value, discount)
+  value = value * quantity
+  discount = calculateDiscountPercentage(value, discount)
   return {
     discount: discount,
     value: value - discount,
@@ -95,6 +106,27 @@ export const removeDuplicateRow = (array: any, key: string) => [
     .reduce((map: any, obj: any) => map.set(obj[key], obj), new Map())
     .values(),
 ]
+
+export const populateChart = (data: ChartProps[], interval: Interval) => {
+  if (interval === "week") {
+    return DAYS.map((elem, index) => ({
+      key: elem,
+      value: data?.find((item: any) => +item.key === index + 1)?.value ?? 0,
+    }))
+  }
+
+  if (interval === "month") {
+    return MONTHS.map((elem, index) => ({
+      key: elem,
+      value: data?.find((item: any) => +item.key === index + 1)?.value ?? 0,
+    }))
+  }
+
+  return YEARS.map((elem) => ({
+    key: elem,
+    value: data?.find((item: any) => +item.key === +elem)?.value ?? 0,
+  }))
+}
 
 export const objectToParams = (obj: any) => {
   let str = ""
@@ -160,4 +192,55 @@ export const checkPermission = (
   if (!module || !permissions[module]) return false
   if (option && !permissions[module].options.includes(option)) return false
   return true
+}
+
+/* eslint no-console: ["error", { allow: ["log", "info", "warn"] }] */
+
+/* Prints the app name and version, helpful for debugging */
+export const welcomeMsg = () => {
+  const { APP_NAME } = require("@utils/constants")
+
+  console.log(
+    `\n%c${APP_NAME || ""} 🚀`,
+    "color:#0dd8d8; background:#0b1021; font-size:1.5rem; padding:0.15rem 0.25rem; margin: 1rem auto; font-family: Rockwell; border: 2px solid #0dd8d8; border-radius: 4px;font-weight: bold; text-shadow: 1px 1px 1px #00af87bf;"
+  )
+}
+
+/* Prints warning message, usually when there is a configuration error */
+export const warningMsg = (message: string, stack: string) => {
+  const { APP_NAME } = require("@utils/constants")
+  console.info(
+    `\n%c⚠️ Warning ⚠️%c \n${message} \n\n%cThis is likely not an issue with ${
+      APP_NAME || ""
+    }, but rather your configuration. If you think it is a bug, please open a ticket on GitHub: https://git.io/JukXk`,
+    "color:#ceb73f; background: #ceb73f33; font-size:1.5rem; padding:0.15rem; margin: 1rem auto; font-family: Rockwell, Tahoma, 'Trebuchet MS', Helvetica; border: 2px solid #ceb73f; border-radius: 4px; font-weight: bold; text-shadow: 1px 1px 1px #000000bf;",
+    "font-weight: bold; font-size: 1rem;color: #ceb73f;",
+    "color: #ceb73f; font-size: 0.75rem; font-family: Tahoma, 'Trebuchet MS', Helvetica;"
+  )
+  if (stack) {
+    console.warn(`%cStack Trace%c\n${stack}`, "font-weight: bold;", "")
+  }
+}
+
+/* Prints status message */
+export const statusMsg = (title: string, msg: string) => {
+  console.log(
+    `%c${title || ""}\n%c${msg}`,
+    "font-weight: bold; color: #0dd8d8; text-decoration: underline;",
+    "color: #ceb73f;"
+  )
+}
+
+/* Prints status message, with a stack trace */
+export const statusErrorMsg = (
+  title: string,
+  msg: string,
+  errorLog: string
+) => {
+  console.log(
+    `%c${title || ""}\n%c${msg} \n%c${errorLog || ""}`,
+    "font-weight: bold; color: #0dd8d8; text-decoration: underline;",
+    "color: #ff025a",
+    "color: #ff025a80;"
+  )
 }

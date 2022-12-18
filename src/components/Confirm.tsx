@@ -1,17 +1,20 @@
 import { useState } from "react"
 
-import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogContentText from "@mui/material/DialogContentText"
+import { Dialog } from "@mui/material"
+import { IconButton } from "@mui/material"
+import { DialogTitle } from "@mui/material"
+import { Close } from "@mui/icons-material"
+import { Theme } from "@mui/material/styles"
+import { DialogActions } from "@mui/material"
+import { DialogContent } from "@mui/material"
+import { DialogContentText } from "@mui/material"
 
-import { Button } from "@components/Button"
+import { Button } from "@ui/Button"
 
 type ConfirmProps = {
   title: string
   message: string
-  onClose?: () => void
+  loading?: boolean
   onConfirm: () => void
   trigger: (args: any) => void
 }
@@ -25,7 +28,20 @@ export const Confirm = (props: ConfirmProps) => {
     <>
       {props.trigger({ toggleOpen })}
       <Dialog open={open} onClose={toggleOpen}>
-        <DialogTitle id="confirm-dialog-title">{props.title}</DialogTitle>
+        <DialogTitle id="confirm-dialog-title">
+          {props.title}{" "}
+          <IconButton
+            aria-label="close"
+            onClick={toggleOpen}
+            sx={(theme: Theme) => ({
+              position: "absolute",
+              top: theme.spacing(1.2),
+              right: theme.spacing(2),
+            })}
+          >
+            <Close />
+          </IconButton>
+        </DialogTitle>
 
         <DialogContent>
           <DialogContentText id={`confirm-${props.title}`}>
@@ -39,6 +55,7 @@ export const Confirm = (props: ConfirmProps) => {
           </Button>
           <Button
             autoFocus
+            loading={props.loading}
             onClick={() => {
               props.onConfirm()
               toggleOpen()

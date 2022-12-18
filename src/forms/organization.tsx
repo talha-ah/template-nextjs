@@ -4,9 +4,9 @@ import { Box } from "@mui/material"
 import { Grid } from "@mui/material"
 import { TextField } from "@mui/material"
 
+import { Alert } from "@ui/Alert"
+import { Button } from "@ui/Button"
 import { useApi } from "@hooks/useApi"
-import { Alert } from "@components/Alert"
-import { Button } from "@components/Button"
 import { ENDPOINTS } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
@@ -105,6 +105,7 @@ export function UpdateOrganization() {
               fullWidth
               id="email"
               name="email"
+              type="email"
               value={email}
               autoComplete="email"
               label="Email Address"
@@ -130,9 +131,7 @@ export function UpdateOrganization() {
           sx={{
             pt: 2,
             gap: 2,
-            flex: 1,
             display: "flex",
-            alignItems: "center",
             justifyContent: "flex-end",
           }}
         >

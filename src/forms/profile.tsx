@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 
 import { Box } from "@mui/material"
 import { Grid } from "@mui/material"
-import { TextField } from "@mui/material"
 import { Typography } from "@mui/material"
 import { DarkMode } from "@mui/icons-material"
 import { CardActionArea } from "@mui/material"
@@ -11,12 +10,13 @@ import { LightMode } from "@mui/icons-material"
 import { Card as MuiCard } from "@mui/material"
 import { SettingsBrightnessOutlined } from "@mui/icons-material"
 
+import { Alert } from "@ui/Alert"
+import { Input } from "@ui/Input"
+import { Button } from "@ui/Button"
 import { useApi } from "@hooks/useApi"
 import { ThemeMode } from "@utils/types"
-import { Alert } from "@components/Alert"
-import { Button } from "@components/Button"
 import { ENDPOINTS } from "@utils/constants"
-import { IconButton } from "@components/IconButton"
+import { IconButton } from "@ui/IconButton"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 export function UpdateProfile() {
@@ -115,7 +115,7 @@ export function UpdateProfile() {
       >
         <Grid container spacing={2}>
           <Grid item sm={6}>
-            <TextField
+            <Input
               required
               fullWidth
               id="firstName"
@@ -127,7 +127,7 @@ export function UpdateProfile() {
             />
           </Grid>
           <Grid item sm={6}>
-            <TextField
+            <Input
               fullWidth
               id="lastName"
               name="lastName"
@@ -138,31 +138,32 @@ export function UpdateProfile() {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
+            <Input
               required
               fullWidth
               id="email"
               name="email"
+              type="email"
               value={email}
               autoComplete="email"
               label="Email Address"
+              onChange={(event) => setEmail(event.target.value)}
               InputProps={{
                 endAdornment:
                   state.auth.user.status === "pending" ? (
                     <IconButton
                       onClick={sendVerifyEmail}
-                      tooltip="Send verify email"
                       loading={verifyEmailLoading}
+                      tooltip="Kindly verify your email. Click to resend verification email"
                     >
                       <MailLock color="info" />
                     </IconButton>
                   ) : null,
               }}
-              onChange={(event) => setEmail(event.target.value)}
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
+            <Input
               fullWidth
               id="phone"
               name="phone"
@@ -180,9 +181,7 @@ export function UpdateProfile() {
           sx={{
             pt: 2,
             gap: 2,
-            flex: 1,
             display: "flex",
-            alignItems: "center",
             justifyContent: "flex-end",
           }}
         >
@@ -253,7 +252,7 @@ export function UpdatePassword() {
       >
         <Grid container spacing={2}>
           <Grid item sm={6}>
-            <TextField
+            <Input
               required
               fullWidth
               type="password"
@@ -266,7 +265,7 @@ export function UpdatePassword() {
             />
           </Grid>
           <Grid item sm={6}>
-            <TextField
+            <Input
               required
               fullWidth
               id="password"
@@ -285,9 +284,7 @@ export function UpdatePassword() {
           sx={{
             pt: 2,
             gap: 2,
-            flex: 1,
             display: "flex",
-            alignItems: "center",
             justifyContent: "flex-end",
           }}
         >

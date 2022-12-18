@@ -1,9 +1,9 @@
 import { Box } from "@mui/material"
 
+import { Button } from "@ui/Button"
 import { Heading } from "@components/Title"
-import { Button } from "@components/Button"
-import { DateRangeType } from "@utils/types"
 import { DateRange } from "@components/DateRange"
+import { DateRange as DateRangeType } from "@utils/types"
 
 export const DateRangePicker = ({
   value,
@@ -13,9 +13,9 @@ export const DateRangePicker = ({
   onChange: (args: DateRangeType) => void
 }) => {
   return (
-    <Box>
+    <>
       <Box
-        mb={1}
+        mb={2}
         display="flex"
         alignItems="flex-end"
         justifyContent="space-between"
@@ -31,6 +31,6 @@ export const DateRangePicker = ({
       </Box>
 
       <DateRange value={value} onChange={onChange} />
-    </Box>
+    </>
   )
 }

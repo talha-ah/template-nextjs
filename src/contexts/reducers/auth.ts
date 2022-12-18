@@ -23,7 +23,7 @@ export const AuthReducer = (state: AuthStateType, action: ActionType) => {
     case AuthTypes.LOGIN:
       const { token, refreshToken } = action.payload
       setBrowserItem(token)
-      setBrowserItem(refreshToken, "refreshToken")
+      setBrowserItem(refreshToken, "refresh-token")
       return {
         ...state,
         ...action.payload,

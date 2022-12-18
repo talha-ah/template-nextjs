@@ -2,16 +2,16 @@ import React from "react"
 import { useEffect, useState } from "react"
 
 import { Box } from "@mui/material"
-import { Button } from "@mui/material"
 import { Container } from "@mui/material"
-import { useMediaQuery } from "@mui/material"
-import { styled, useTheme, Theme } from "@mui/material/styles"
+import { styled, Theme } from "@mui/material/styles"
 
+import { Button } from "@ui/Button"
 import { Logo } from "@components/Logo"
 import { useAppContext } from "@contexts/index"
 import { UserMenu } from "@components/UserMenu"
+import { LinkBehaviour } from "@components/Link"
+import { useIsMobile } from "@hooks/useIsMobile"
 import { APP_BAR_HEIGHT } from "@utils/constants"
-import { NextLinkComposed } from "@components/Link"
 
 const Main = styled("main")(({ theme }) => ({
   padding: 0,
@@ -55,9 +55,7 @@ const Children = styled(Container)(() => ({
 }))
 
 export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
-  const theme = useTheme()
-
-  const isMobile = useMediaQuery(`(max-width:${theme.breakpoints.values.md}px)`)
+  const { isMobile } = useIsMobile()
 
   return (
     <Main>
@@ -128,7 +126,7 @@ const Header = ({ isMobile }: { isMobile: boolean }) => {
                 <Button
                   to="/auth/login"
                   variant="outlined"
-                  component={NextLinkComposed}
+                  component={LinkBehaviour}
                 >
                   Login
                 </Button>
@@ -136,7 +134,7 @@ const Header = ({ isMobile }: { isMobile: boolean }) => {
                   <Button
                     to="/auth/register"
                     variant="contained"
-                    component={NextLinkComposed}
+                    component={LinkBehaviour}
                   >
                     Register
                   </Button>

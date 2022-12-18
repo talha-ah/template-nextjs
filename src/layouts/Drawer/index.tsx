@@ -1,12 +1,11 @@
 import * as React from "react"
 import { useEffect, useState } from "react"
 
-import Box from "@mui/material/Box"
-import Fab from "@mui/material/Fab"
-import Menu from "@mui/icons-material/Menu"
-import useMediaQuery from "@mui/material/useMediaQuery"
-import { styled, Theme, useTheme } from "@mui/material/styles"
+import { Box, Fab } from "@mui/material"
+import { Menu } from "@mui/icons-material"
+import { styled, Theme } from "@mui/material/styles"
 
+import { useIsMobile } from "@hooks/useIsMobile"
 import { ActionHeader } from "@layouts/Drawer/Header"
 import { DRAWER_WIDTH, APP_BAR_HEIGHT } from "@utils/constants"
 
@@ -77,19 +76,15 @@ export const DrawerLayout = ({
   actions?: React.ReactNode
   children: React.ReactNode
 }) => {
-  const theme = useTheme()
+  const { isMobile } = useIsMobile()
 
   const [open, setOpen] = useState(true)
-  const isMobile = useMediaQuery(`(max-width:${theme.breakpoints.values.md}px)`)
 
   const triggerDrawer = () => setOpen((s) => !s)
 
   useEffect(() => {
-    if (isMobile) {
-      setOpen(false)
-    } else {
-      setOpen(true)
-    }
+    if (isMobile) setOpen(false)
+    else setOpen(true)
   }, [isMobile])
 
   return (

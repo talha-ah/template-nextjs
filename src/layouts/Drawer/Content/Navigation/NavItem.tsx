@@ -1,11 +1,6 @@
 import { useRouter } from "next/router"
 
-import {
-  Theme,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-} from "@mui/material"
+import { ListItemText, ListItemButton } from "@mui/material"
 
 import { NavLink } from "@utils/types"
 
@@ -13,6 +8,7 @@ const NavItem = ({ item }: { item: NavLink }) => {
   const router = useRouter()
 
   const Icon = item.icon
+  const actions = item.actions
   const isExternal = item.href?.startsWith("http")
   const isSelected = item.href
     ? item.exact
@@ -32,28 +28,19 @@ const NavItem = ({ item }: { item: NavLink }) => {
 
   return (
     <ListItemButton
-      key={item.label}
+      key={item.value}
       onClick={itemHandler}
       selected={isSelected}
-      sx={(theme: Theme) => ({
+      sx={{
         mb: 1,
-      })}
+        gap: 1.5,
+      }}
     >
-      {Icon && (
-        <ListItemIcon
-          sx={{
-            mr: 1,
-            width: 32,
-            height: 32,
-            minWidth: 24,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {Icon}
-        </ListItemIcon>
-      )}
-      <ListItemText primary={item.label} disableTypography />
+      {Icon && Icon}
+
+      <ListItemText primary={item.value} />
+
+      {actions && actions.map((action) => action)}
     </ListItemButton>
   )
 }

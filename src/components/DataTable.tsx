@@ -1,7 +1,6 @@
-import React from "react"
+import * as React from "react"
 
 import { Box } from "@mui/material"
-import { Grid } from "@mui/material"
 import { Paper } from "@mui/material"
 import { Table } from "@mui/material"
 import { TableRow } from "@mui/material"
@@ -9,13 +8,15 @@ import { TableBody } from "@mui/material"
 import { TableCell } from "@mui/material"
 import { TableHead } from "@mui/material"
 import { Pagination } from "@mui/material"
-import { Select } from "@components/Select"
-import { useMediaQuery } from "@mui/material"
 import { TableContainer } from "@mui/material"
 import { CircularProgress } from "@mui/material"
 
+import { Select } from "@ui/Select"
 import { generateId } from "@utils/common"
+import { Sort } from "@mui/icons-material"
+import { IconButton } from "@ui/IconButton"
 import { DataTableHeader } from "@utils/types"
+import { useIsMobile } from "@hooks/useIsMobile"
 
 function getValue(
   obj: any,
@@ -30,12 +31,19 @@ function getValue(
   return value
 }
 
+export interface Totals {
+  key: string
+  value: string
+}
+
 export const DataTable = ({
   page,
   limit,
   loading,
+  disabled,
   data = [],
   totalPages,
+  totals = [],
   columns = [],
   onPageChange,
   onLimitChange,
@@ -43,15 +51,17 @@ export const DataTable = ({
   data?: any[]
   page?: number
   limit?: number
+  totals?: Totals[]
   loading?: boolean
+  disabled?: boolean
   totalPages?: number
   columns?: DataTableHeader[]
   onPageChange?: (page: number) => void
   onLimitChange?: (limit: number) => void
 }) => {
-  const isMobile = useMediaQuery("(max-width: 600px)")
+  const { isMobile } = useIsMobile()
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     onPageChange && onPageChange(newPage)
   }
 
@@ -63,54 +73,87 @@ export const DataTable = ({
   return (
     <Box sx={{ width: "100%" }}>
       <TableContainer component={Paper} variant="outlined">
-        <Table aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
-                  key={column.id}
+                  key={column.key}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  sx={{ whiteSpace: "nowrap", minWidth: column.minWidth }}
                 >
-                  {column.label}
+                  {column.value}
+                  {column.onSort && (
+                    <IconButton
+                      size="small"
+                      sx={{ ml: 1 }}
+                      tooltip="sort"
+                      aria-label="sort"
+                      onClick={column.onSort}
+                    >
+                      <Sort fontSize="inherit" />
+                    </IconButton>
+                  )}
+                  {column.actions && column.actions()}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row: any) => {
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row._id || generateId()}
+            {(loading || data.length === 0) && (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  sx={{ textAlign: "center", whiteSpace: "nowrap" }}
                 >
+                  {loading ? <CircularProgress /> : "No data available"}
+                </TableCell>
+              </TableRow>
+            )}
+
+            {data.map((row: any, index: number) => {
+              return (
+                <TableRow hover tabIndex={-1} key={row._id || generateId()}>
                   {columns.map((column: DataTableHeader) => {
                     let value
-                    if (column.render) {
-                      value = column.render(row)
-                    } else {
-                      value = getValue(row, column.id.split("."))
-                    }
+
+                    if (column.render) value = column.render(row, index)
+                    else value = getValue(row, column.key.split("."))
+
+                    if (column.format) value = column.format(value)
 
                     return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format ? column.format(value) : value}
+                      <TableCell
+                        key={column.key}
+                        align={column.align}
+                        sx={{ whiteSpace: "nowrap" }}
+                      >
+                        {value}
                       </TableCell>
                     )
                   })}
                 </TableRow>
               )
             })}
-            {(loading || data.length === 0) && (
+
+            {data.length > 0 && totals.length > 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  sx={{ textAlign: "center" }}
-                >
-                  {loading ? <CircularProgress /> : "No data available"}
-                </TableCell>
+                {columns.map((column: DataTableHeader) => {
+                  let value = ""
+
+                  let find = totals.find((item) => item.key === column.key)
+                  if (find) value = find.value
+
+                  return (
+                    <TableCell
+                      key={column.key}
+                      align={column.align}
+                      sx={{ whiteSpace: "nowrap" }}
+                    >
+                      {value}
+                    </TableCell>
+                  )
+                })}
               </TableRow>
             )}
           </TableBody>
@@ -118,42 +161,36 @@ export const DataTable = ({
       </TableContainer>
 
       {page && limit && (
-        <Grid
-          container
-          spacing={2}
-          sx={{ mt: 0.5 }}
-          direction={isMobile ? "column-reverse" : "row"}
+        <Box
+          sx={{
+            mt: 2,
+            gap: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            flexDirection: isMobile ? "column" : "row",
+          }}
         >
-          <Grid item xs={12} md={6}>
-            <Select
-              size="small"
-              fullWidth={isMobile}
-              value={String(limit)}
-              onChange={handleLimitChange}
-              options={["10", "25", "100"].map((option: string) => ({
-                value: option,
-                label: `${option} items per page`,
-              }))}
-            />
-          </Grid>
-          <Grid
-            item
-            md={6}
-            xs={12}
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <Pagination
-              page={page}
-              // showLastButton
-              // showFirstButton
-              shape="rounded"
-              count={totalPages}
-              onChange={handleChangePage}
-            />
-          </Grid>
-        </Grid>
+          <Pagination
+            page={page}
+            shape="rounded"
+            siblingCount={0}
+            disabled={loading}
+            count={totalPages}
+            onChange={handleChangePage}
+          />
+
+          <Select
+            size="small"
+            fullWidth={isMobile}
+            value={String(limit)}
+            onChange={handleLimitChange}
+            options={["10", "20", "50", "100"].map((option: string) => ({
+              key: option,
+              value: `${option} items per page`,
+            }))}
+          />
+        </Box>
       )}
     </Box>
   )

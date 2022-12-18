@@ -11,11 +11,7 @@ import { Paper } from "@mui/material"
 import { Typography } from "@mui/material"
 import { useTheme, Theme } from "@mui/material/styles"
 
-export type Props = {
-  key: string
-  value: string | number
-  [key: string]: any
-}
+import { ChartProps } from "@utils/types"
 
 const CustomLabel = (props: any) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props
@@ -61,10 +57,10 @@ const CustomLegend = (props: any) => {
   return (
     <ul
       style={{
-        display: "flex",
         gap: 2,
-        alignItems: "center",
+        display: "flex",
         listStyle: "none",
+        alignItems: "center",
       }}
     >
       {payload.map((entry: any, index: number) => (
@@ -80,23 +76,23 @@ const CustomLegend = (props: any) => {
 }
 
 const getThemeColors = (theme: Theme) => {
-  let colors = []
-  colors.push(theme.palette.primary.main)
-  colors.push(theme.palette.secondary.main)
-  colors.push(theme.palette.error.main)
-  colors.push(theme.palette.warning.main)
-  colors.push(theme.palette.success.main)
-  colors.push(theme.palette.info.main)
-  colors.push(theme.palette.grey[100])
-  return colors
+  return [
+    theme.palette.primary.main,
+    theme.palette.secondary.main,
+    theme.palette.error.main,
+    theme.palette.warning.main,
+    theme.palette.success.main,
+    theme.palette.info.main,
+    theme.palette.grey[100],
+  ]
 }
 
 export const PieChart = ({
-  data = [],
   loading,
+  data = [],
 }: {
-  data: Props[]
   loading?: boolean
+  data: ChartProps[]
 }) => {
   const theme = useTheme()
   const colors = getThemeColors(theme)

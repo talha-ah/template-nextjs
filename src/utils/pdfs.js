@@ -1,10 +1,25 @@
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 
-import { dateUtility } from "@utils/date"
-import { calculateDiscount, pad, numberWithCommas } from "@utils/common"
+import { formatDate } from "@utils/date"
+import {
+  pad,
+  getFullName,
+  numberWithCommas,
+  calculateDiscount,
+} from "@utils/common"
 
-export const generateReceipt = ({ data, type = "order", settings }) => {
+export const generateInvoice = ({ type = "order", data, settings }) => {
+  if (type === "quotation") {
+    generateQuotationInvoice(data, settings)
+  } else {
+    throw new Error("Invalid type")
+  }
+
+  return
+}
+
+const generateQuotationInvoice = (data, settings) => {
   const pdfHeaders = [
     {
       header: "Sr",
@@ -15,7 +30,7 @@ export const generateReceipt = ({ data, type = "order", settings }) => {
       dataKey: "title",
     },
     {
-      header: "Qty",
+      header: "Quantity",
       dataKey: "quantity",
     },
     {
@@ -32,11 +47,11 @@ export const generateReceipt = ({ data, type = "order", settings }) => {
     },
     {
       header: "Amount",
-      dataKey: "totalPrice",
+      dataKey: "amount",
     },
   ]
 
-  let totalQty = 0
+  let amount = 0
   let totalPrice = 0
   let totalDiscount = 0
 
@@ -53,66 +68,104 @@ export const generateReceipt = ({ data, type = "order", settings }) => {
       item.discount.value
     ).value
 
-    totalPrice += Number(total)
-    totalQty += Number(quantity)
+    amount += Number(total)
     totalDiscount += Number(discountedPrice)
+    totalPrice += Number(item.salePrice * quantity)
 
     return {
       id: String(index + 1),
       sr: String(index + 1),
       title: item.itemId.title,
       quantity: String(quantity),
-      price: String(numberWithCommas(item.salePrice)),
+      amount: String(numberWithCommas(total)),
       discount: String(numberWithCommas(discount)),
+      price: String(numberWithCommas(item.salePrice)),
       discountedPrice: String(numberWithCommas(discountedPrice)),
-      totalPrice: String(numberWithCommas(total)),
     }
   })
 
   pdfData[pdfData.length] = {
     title: "Total",
-    quantity: numberWithCommas(totalQty),
-    totalPrice: numberWithCommas(totalPrice),
+    amount: numberWithCommas(amount),
+    price: numberWithCommas(totalPrice),
     discountedPrice: numberWithCommas(totalDiscount),
   }
 
+  let address = [settings?.address?.addressOne]
+  if (settings?.address?.addressTwo) address.push(settings?.address?.addressTwo)
+  if (settings?.address?.city) address.push(settings?.address?.city)
+  if (settings?.address?.zip) address.push(settings?.address?.zip)
+  if (settings?.address?.state) address.push(settings?.address?.state)
+  if (settings?.address?.country) address.push(settings?.address?.country)
+
+  let vPos = 15
+
+  const LEFT_POS = 14
+  const RIGHT_POS = 196
+  const CENTER_POS = 105
+  const VERTICAL_GAP = 6
+  const BODY_FONT_SIZE = 10
+  const HEADER_FONT_SIZE = 20
+
   var doc = new jsPDF({ unit: "mm", format: "a4", orientation: "p" })
-  doc.setFontSize(26, "bold")
-  doc.text(settings?.name || "", 105, 20, null, null, "center")
-  doc.setFontSize(12)
+
+  // Header
+  doc.setFontSize(HEADER_FONT_SIZE, "bold")
+  doc.text(settings?.name || "", CENTER_POS, vPos, null, null, "center")
+  vPos += VERTICAL_GAP + 5
+
+  doc.setFontSize(BODY_FONT_SIZE)
   doc.text(
-    `Address: ${settings?.address?.addressOne || ""}`,
-    105,
-    28,
+    `Address: ${address.join(", ") || ""}`,
+    CENTER_POS,
+    vPos,
     null,
     null,
     "center"
   )
-  doc.text(`Mobile #: ${settings?.phone || ""}`, 105, 35, null, null, "center")
+  vPos += VERTICAL_GAP
+
   doc.text(
-    `${type === "quotation" ? "Quotation" : "Receipt"} #: ${pad(data.sr)}`,
-    14,
-    44
+    `Mobile #: ${settings?.phone || ""}`,
+    CENTER_POS,
+    vPos,
+    null,
+    null,
+    "center"
   )
+  vPos += VERTICAL_GAP
+
+  doc.text(`Quotation #: ${pad(data.sr)}`, LEFT_POS, vPos)
   doc.text(
-    `Date: ${dateUtility.formatDate(data.createdAt)}`,
-    196,
-    44,
+    `Date: ${formatDate(data.createdAt)}`,
+    RIGHT_POS,
+    vPos,
     null,
     null,
     "right"
   )
-  doc.text("Customer: " + data?.customerName, 14, 52)
+  vPos += VERTICAL_GAP
+
+  doc.text(`Customer: ${getFullName(data?.customerId)}`, LEFT_POS, vPos)
+  vPos += VERTICAL_GAP
 
   doc.autoTable({
     startX: 0,
-    startY: 56,
+    startY: vPos,
     body: pdfData,
     theme: "grid",
     columns: pdfHeaders,
-    columnStyles: { text: { cellWidth: "auto" } },
     styles: { overflow: "ellipsize", cellWidth: "wrap" },
+    columnStyles: {
+      text: { cellWidth: "auto" },
+      quantity: { halign: "right" },
+      price: { halign: "right" },
+      discount: { halign: "right" },
+      discountedPrice: { halign: "right" },
+      amount: { halign: "right" },
+    },
     headStyles: {
+      fontSize: BODY_FONT_SIZE,
       fillColor: [255, 255, 255],
       textColor: 0,
       fontStyle: "bold",
@@ -120,10 +173,24 @@ export const generateReceipt = ({ data, type = "order", settings }) => {
       lineWidth: 0.1,
     },
     bodyStyles: {
+      fontSize: BODY_FONT_SIZE,
       fillColor: [255, 255, 255],
       textColor: 0,
       lineColor: [0, 0, 0],
       lineWidth: 0.1,
+    },
+    didParseCell: (data) => {
+      if (data.section === "head") {
+        if (
+          data.column.dataKey === "quantity" ||
+          data.column.dataKey === "price" ||
+          data.column.dataKey === "discount" ||
+          data.column.dataKey === "discountedPrice" ||
+          data.column.dataKey === "amount"
+        ) {
+          data.cell.styles.halign = "right"
+        }
+      }
     },
   })
 

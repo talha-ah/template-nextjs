@@ -6,21 +6,21 @@ import { useState, useEffect, useMemo } from "react"
 import { Box, Tabs, Tab } from "@mui/material"
 import { Replay as ReplayIcon, Delete } from "@mui/icons-material"
 
+import { Button } from "@ui/Button"
+import { Select } from "@ui/Select"
 import { useApi } from "@hooks/useApi"
 import { InviteUser } from "@forms/users"
 import { Title } from "@components/Title"
-import { Select } from "@components/Select"
 import { User, Invite } from "@utils/types"
-import { Button } from "@components/Button"
+import { IconButton } from "@ui/IconButton"
 import { Dialog } from "@components/Dialog"
 import { Confirm } from "@components/Confirm"
 import { HeaderLayout } from "@layouts/Header"
 import { checkPermission } from "@utils/common"
 import { useAppContext } from "@contexts/index"
 import { DataTable } from "@components/DataTable"
-import { IconButton } from "@components/IconButton"
-import { getName, toTitleCase } from "@utils/common"
 import { APP_NAME, ENDPOINTS } from "@utils/constants"
+import { getFullName, toTitleCase } from "@utils/common"
 import { UpdateOrganization } from "@forms/organization"
 import { SelectTheme, UpdateProfile, UpdatePassword } from "@forms/profile"
 
@@ -36,14 +36,14 @@ export default function ProfileSettings() {
     if (
       query.tab &&
       query.tab !== "profile" &&
-      checkPermission(state.auth.user.permissions, "users")
+      checkPermission(state.auth.user.permissions, "Dashboard", "users")
     ) {
       setTab(query.tab as string)
     } else {
       setTab("profile")
     }
 
-    if (checkPermission(state.auth.user.permissions, "users")) {
+    if (checkPermission(state.auth.user.permissions, "Dashboard", "users")) {
       setCanManageOrg(true)
     }
     // eslint-disable-next-line
@@ -199,18 +199,18 @@ const Users = () => {
   const Columns = useMemo(
     () => [
       {
-        id: "name",
-        label: "Name",
+        key: "name",
+        value: "Name",
         minWidth: 170,
-        render: (row: User) => getName(row),
+        render: (row: User) => getFullName(row),
       },
       {
-        id: "email",
-        label: "Email",
+        key: "email",
+        value: "Email",
       },
       {
-        id: "role",
-        label: "Role",
+        key: "role",
+        value: "Role",
         render: (row: User) => (
           <Select
             size="small"
@@ -219,14 +219,14 @@ const Users = () => {
             onChange={(event: any) => updateUserRole(row, event.target.value)}
             options={["user", "admin"].map((option: string) => ({
               value: option,
-              label: toTitleCase(option),
+              value: toTitleCase(option),
             }))}
           />
         ),
       },
       {
-        id: "actions",
-        label: "Actions",
+        key: "actions",
+        value: "Actions",
         render: (row: User) => (
           <Confirm
             title="Delete User"
@@ -322,17 +322,17 @@ const Invites = () => {
   const Columns = useMemo(
     () => [
       {
-        id: "name",
-        label: "Name",
-        render: (row: Invite) => getName(row),
+        key: "name",
+        value: "Name",
+        render: (row: Invite) => getFullName(row),
       },
       {
-        id: "email",
-        label: "Email",
+        key: "email",
+        value: "Email",
       },
       {
-        id: "actions",
-        label: "Actions",
+        key: "actions",
+        value: "Actions",
         render: (row: Invite) => (
           <>
             <IconButton

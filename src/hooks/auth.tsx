@@ -1,18 +1,15 @@
 import { useRouter } from "next/router"
 import { useEffect, useState, useMemo } from "react"
 
-import { Person } from "@mui/icons-material"
-import { Logout } from "@mui/icons-material"
-import { HomeOutlined } from "@mui/icons-material"
-import { AnalyticsOutlined } from "@mui/icons-material"
+import { Logout, Person } from "@mui/icons-material"
+import { Dashboard, HomeOutlined } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
 import { ENDPOINTS } from "@utils/constants"
 import { checkPermission } from "@utils/common"
-import { setOrgMetadata } from "@utils/browser-utility"
 import { getBrowserItem } from "@utils/browser-utility"
 import { AuthTypes, useAppContext } from "@contexts/index"
-import { NavLink, MenuLink, Metadata } from "@utils/types"
+import { NavLink, MenuLink, SettingsTypes } from "@utils/types"
 
 export const useRouteLinks = () => {
   const router = useRouter()
@@ -25,14 +22,14 @@ export const useRouteLinks = () => {
     () => [
       {
         type: "group",
-        label: "App",
+        value: "App",
         children: [
           {
-            type: "item",
-            label: "Dashboard",
-            href: "/app/dashboard",
-            icon: <AnalyticsOutlined fontSize="small" color="primary" />,
             exact: true,
+            type: "item",
+            value: "Dashboard",
+            href: "/app/template",
+            icon: <Dashboard color="action" />,
           },
         ],
       },
@@ -45,20 +42,20 @@ export const useRouteLinks = () => {
       {
         type: "item",
         href: "/app",
-        label: "Home",
+        value: "Home",
         icon: <HomeOutlined fontSize="small" />,
       },
       {
         type: "item",
-        label: "Profile",
+        value: "Profile",
         href: "/profile",
         icon: <Person fontSize="small" />,
       },
       {
         type: "item",
         color: "error",
-        label: "Logout",
-        icon: <Logout fontSize="small" />,
+        value: "Logout",
+        icon: <Logout fontSize="small" color="error" />,
         onClick: () => {
           dispatch({ type: AuthTypes.LOGOUT })
           router.push("/")
@@ -78,14 +75,14 @@ export const useRouteLinks = () => {
       NavLinks.map((link) => {
         if (link.type === "group") {
           const children = (link.children || []).filter((child) =>
-            checkPermission(permissions, child.label)
+            checkPermission(permissions, child.value)
           )
 
           if (children.length > 0) {
             links.push({ ...link, children })
           }
         } else if (link.type === "item") {
-          if (checkPermission(permissions, link.label)) {
+          if (checkPermission(permissions, link.value)) {
             links.push(link)
           }
         }
@@ -106,7 +103,7 @@ export const useRouteLinks = () => {
 export const AuthWrapper = ({ children }: { children: any }) => {
   const router = useRouter()
   const { dispatch } = useAppContext()
-  const { fetchMetadata } = useFetchMetadata()
+  const { fetchSettings } = useFetchSettings()
 
   const API = useApi()
 
@@ -130,11 +127,15 @@ export const AuthWrapper = ({ children }: { children: any }) => {
 
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: { token, user: response?.data?.user },
+        payload: {
+          token,
+          user: response?.data?.user,
+          refreshToken: response?.data?.refresh_token,
+        },
       })
 
       // Fetch Metadata
-      fetchMetadata()
+      fetchSettings("inventory")
 
       if (router.asPath.startsWith("/app")) {
         route = router.asPath
@@ -162,28 +163,32 @@ export const AuthWrapper = ({ children }: { children: any }) => {
   return children
 }
 
-export const useFetchMetadata = () => {
+export const useFetchSettings = () => {
   const API = useApi()
 
-  const [metadata, setMetadata] = useState<Metadata | null>(null)
+  const { dispatch } = useAppContext()
+
   const [loading, setLoading] = useState<boolean>(true)
 
-  const fetchMetadata = async () => {
+  const fetchSettings = async (type: SettingsTypes) => {
     try {
       setLoading(true)
 
-      const response = await API({
-        uri: `${ENDPOINTS.organizationMetadata}?filter=`,
-      })
+      // const response = await API({
+      //   uri: `${ENDPOINTS.settings}/${type}`,
+      // })
 
-      setMetadata(response?.data)
+      // dispatch({
+      //   type: InventoryTypes.UPDATE_INVENTORY_SETTINGS,
+      //   payload: response.data,
+      // })
 
-      setOrgMetadata(response?.data)
+      // return response.data
     } catch (error) {
     } finally {
-      setLoading(true)
+      setLoading(false)
     }
   }
 
-  return { loading, metadata, fetchMetadata }
+  return { loading, fetchSettings }
 }

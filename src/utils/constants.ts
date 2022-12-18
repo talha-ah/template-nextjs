@@ -31,6 +31,7 @@ export const YEARS: string[] = Array.from(new Array(10), (_, i) =>
 ).reverse()
 
 export const ENDPOINTS = {
+  // Auth
   login: "/auth/login",
   register: "/auth/register",
   authProfile: "/auth/profile",
@@ -62,6 +63,9 @@ export const ENDPOINTS = {
   acceptInvite: "/invites/accept",
   rejectInvite: "/invites/reject",
   resendInvite: "/invites/resend",
+
+  // Settings
+  settings: "/settings",
 
   // Customers
   customers: "/customers",

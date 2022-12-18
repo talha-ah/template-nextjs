@@ -2,8 +2,8 @@ import React from "react"
 import Head from "next/head"
 import type { NextPage } from "next"
 
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import { Box } from "@mui/material"
+import { Typography } from "@mui/material"
 
 import { APP_NAME } from "@utils/constants"
 import { HeaderLayout } from "@layouts/Header"
