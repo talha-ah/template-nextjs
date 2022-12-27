@@ -20,6 +20,7 @@
       "@pages/*": ["./src/pages/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@forms/*": ["./src/forms/*"],
+      "@static/*": ["./src/static/*"],
       "@public/*": ["./src/public/*"],
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],

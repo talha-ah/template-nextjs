@@ -218,7 +218,7 @@ const Users = () => {
             disabled={actionLoading}
             onChange={(event: any) => updateUserRole(row, event.target.value)}
             options={["user", "admin"].map((option: string) => ({
-              value: option,
+              key: option,
               value: toTitleCase(option),
             }))}
           />

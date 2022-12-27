@@ -3,7 +3,7 @@ import { List, Typography } from "@mui/material"
 import NavItem from "./NavItem"
 import { NavLink } from "@utils/types"
 
-const NavGroup = ({ item }: { item: NavLink }) => {
+export const NavGroup = ({ item }: { item: NavLink }) => {
   const navCollapse = item.children?.map((menuItem: NavLink) => {
     switch (menuItem.type) {
       case "item":
@@ -39,5 +39,3 @@ const NavGroup = ({ item }: { item: NavLink }) => {
     </List>
   )
 }
-
-export default NavGroup

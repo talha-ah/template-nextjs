@@ -51,11 +51,14 @@ export const Menu = ({ sx, trigger, options, onClick }: Props) => {
         {options.map((option, index) => (
           <MenuItem
             key={index}
+            sx={{ gap: 2, display: "flex", alignItems: "center" }}
             onClick={() => {
               toggleOpen()
               onClick(option)
             }}
           >
+            {option.icon && <option.icon fontSize="inherit" />}
+
             {option.value}
           </MenuItem>
         ))}

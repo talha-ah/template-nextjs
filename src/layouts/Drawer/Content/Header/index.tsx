@@ -1,9 +1,10 @@
 import * as React from "react"
 
-import Box from "@mui/material/Box"
+import { Box } from "@mui/material"
 import { Theme } from "@mui/material/styles"
 
 import { Logo } from "@components/Logo"
+import { SelectTheme } from "@forms/profile"
 import { APP_BAR_HEIGHT } from "@utils/constants"
 
 export default function Header() {
@@ -29,6 +30,8 @@ export default function Header() {
       >
         <Logo />
       </Box>
+
+      <SelectTheme view="icons" />
     </Box>
   )
 }

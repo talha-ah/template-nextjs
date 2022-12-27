@@ -2,7 +2,7 @@ import React from "react"
 
 import { Box, Typography } from "@mui/material"
 
-import NavGroup from "./NavGroup"
+import { NavGroup } from "./NavGroup"
 import { NavLink } from "@utils/types"
 import { useRouteLinks } from "@hooks/auth"
 

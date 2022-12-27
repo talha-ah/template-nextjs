@@ -18,11 +18,8 @@ const NavItem = ({ item }: { item: NavLink }) => {
 
   const itemHandler = () => {
     if (item.href) {
-      if (isExternal) {
-        window.open(item.href, "_blank")
-      } else {
-        router.push(item.href)
-      }
+      if (isExternal) window.open(item.href, "_blank")
+      else router.push(item.href)
     }
   }
 

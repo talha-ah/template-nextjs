@@ -20,6 +20,7 @@ export const ActionHeader = ({
     <Box
       sx={(theme: Theme) => ({
         py: 2,
+        gap: 1,
         width: "100%",
         display: "flex",
         flexDirection: "row",
@@ -31,7 +32,6 @@ export const ActionHeader = ({
     >
       <Box
         sx={{
-          mr: 1,
           gap: 1,
           display: "flex",
           flexDirection: "row",

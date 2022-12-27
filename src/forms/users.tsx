@@ -97,25 +97,25 @@ export function InviteUser({
               label="Email Address"
             />
           </Grid>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button onClick={onClose} variant="text">
+                Cancel
+              </Button>
+              <Button type="submit" loading={loading}>
+                Invite
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Box
-          sx={{
-            pt: 2,
-            gap: 2,
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button onClick={onClose} variant="text">
-            Cancel
-          </Button>
-          <Button type="submit" loading={loading}>
-            Invite
-          </Button>
-        </Box>
       </Box>
     </Box>
   )
@@ -214,25 +214,25 @@ export function EditUser({
               defaultValue={value.email}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button onClick={onClose} variant="text">
+                Cancel
+              </Button>
+              <Button type="submit" loading={loading} variant="text">
+                Update
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Box
-          sx={{
-            pt: 2,
-            gap: 2,
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button onClick={onClose} variant="text">
-            Cancel
-          </Button>
-          <Button type="submit" loading={loading} variant="text">
-            Update
-          </Button>
-        </Box>
       </Box>
     </Box>
   )

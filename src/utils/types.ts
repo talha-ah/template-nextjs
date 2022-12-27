@@ -1,11 +1,12 @@
 import React from "react"
 
 export type Status = "active" | "inactive"
+export type ExportFormats = "pdf" | "excel"
+export type DateRange = [Date | null, Date | null]
 export type SettingsTypes = "general" | "inventory"
 export type ThemeMode = "light" | "dark" | "system"
 export type Currency = "PKR" | "USD" | "EUR" | "GBP"
 export type Width = "xs" | "sm" | "md" | "lg" | "xl"
-export type DateRange = [Date | null, Date | null]
 export type Interval = "day" | "week" | "month" | "year"
 export type Align = "right" | "inherit" | "left" | "center" | "justify"
 

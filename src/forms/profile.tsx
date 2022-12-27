@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { Box } from "@mui/material"
 import { Grid } from "@mui/material"
@@ -173,22 +173,22 @@ export function UpdateProfile() {
               onChange={(event) => setPhone(event.target.value)}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button type="submit" loading={loading}>
+                Update
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Box
-          sx={{
-            pt: 2,
-            gap: 2,
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button type="submit" loading={loading}>
-            Update
-          </Button>
-        </Box>
       </Box>
     </Box>
   )
@@ -276,32 +276,32 @@ export function UpdatePassword() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </Grid>
+          <Grid item sm={6}>
+            <Box
+              sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button type="submit" loading={loading}>
+                Update
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Box
-          sx={{
-            pt: 2,
-            gap: 2,
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button type="submit" loading={loading}>
-            Update
-          </Button>
-        </Box>
       </Box>
     </Box>
   )
 }
 
-export function SelectTheme() {
+export function SelectTheme({ view = "cards" }: { view?: "cards" | "icons" }) {
   const API = useApi()
   const { state, dispatch } = useAppContext()
 
-  const handleSubmit = async (theme: ThemeMode) => {
+  const handleSubmit = useCallback(async (theme: ThemeMode) => {
     try {
       dispatch({
         type: AuthTypes.SET_THEME,
@@ -314,10 +314,11 @@ export function SelectTheme() {
         body: JSON.stringify({ theme }),
       })
     } catch (error: any) {}
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const Card = ({ type, active }: { type: ThemeMode; active: boolean }) => {
-    return (
+  const Card = useCallback(
+    ({ type }: { type: ThemeMode }) => (
       <MuiCard variant="outlined">
         <CardActionArea
           onClick={() => handleSubmit(type)}
@@ -327,7 +328,8 @@ export function SelectTheme() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: active ? "divider" : "background.paper",
+            backgroundColor:
+              type === state.auth.theme ? "divider" : "background.paper",
           }}
         >
           {type === "light" ? (
@@ -354,29 +356,49 @@ export function SelectTheme() {
           </Typography>
         </CardActionArea>
       </MuiCard>
-    )
-  }
-
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Grid container spacing={2}>
-        <Grid item sm={4}>
-          <Card type="light" active={state.auth.theme === "light"} />
-        </Grid>
-        <Grid item sm={4}>
-          <Card type="dark" active={state.auth.theme === "dark"} />
-        </Grid>
-        <Grid item sm={4}>
-          <Card type="system" active={state.auth.theme === "system"} />
-        </Grid>
-      </Grid>
-    </Box>
+    ),
+    [handleSubmit, state.auth.theme]
   )
+
+  const Cards = useCallback(
+    () => (
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid item sm={4}>
+            <Card type="light" />
+          </Grid>
+          <Grid item sm={4}>
+            <Card type="dark" />
+          </Grid>
+          <Grid item sm={4}>
+            <Card type="system" />
+          </Grid>
+        </Grid>
+      </Box>
+    ),
+    [Card]
+  )
+
+  const Icons = useCallback(
+    () => (
+      <IconButton
+        tooltip="Toggle Theme"
+        onClick={() =>
+          handleSubmit(state.auth.theme === "light" ? "dark" : "light")
+        }
+      >
+        {state.auth.theme === "light" ? <LightMode /> : <DarkMode />}
+      </IconButton>
+    ),
+    [handleSubmit, state.auth.theme]
+  )
+
+  return view === "icons" ? <Icons /> : <Cards />
 }

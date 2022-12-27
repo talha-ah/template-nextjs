@@ -72,8 +72,12 @@ export const DataTable = ({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <TableContainer component={Paper} variant="outlined">
-        <Table stickyHeader aria-label="sticky table">
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={(theme) => ({ backgroundColor: theme.palette.background.default })}
+      >
+        <Table>
           <TableHead>
             <TableRow>
               {columns.map((column) => (

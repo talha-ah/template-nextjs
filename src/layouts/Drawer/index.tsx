@@ -97,9 +97,12 @@ export const DrawerLayout = ({
         backgroundColor: theme.palette.background.default,
       })}
     >
+      {/* Web Page Side Navigation */}
       <Drawer open={open} isMobile={isMobile} triggerDrawer={triggerDrawer} />
 
+      {/* Web Page Content */}
       <Main open={open || isMobile}>
+        {/* Page Header */}
         {title && (
           <Box sx={{ px: 2 }}>
             <ActionHeader title={title} withBackButton={withBackButton}>
@@ -107,6 +110,8 @@ export const DrawerLayout = ({
             </ActionHeader>
           </Box>
         )}
+
+        {/* Page Content */}
         <Children
           sx={{
             width: "100%",
@@ -117,6 +122,7 @@ export const DrawerLayout = ({
         </Children>
       </Main>
 
+      {/* Fab Button For Mobile View */}
       {isMobile && (
         <Box
           sx={(theme: Theme) => ({

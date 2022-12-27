@@ -70,7 +70,7 @@ export const calculateTableTotal = (
   rows: any,
   accessor: string | ((row: any) => number)
 ) => {
-  const total = rows.reduce(
+  const total = (rows || []).reduce(
     (acc: number, row: any) =>
       acc + (typeof accessor === "string" ? +row[accessor] : +accessor(row)),
     0

@@ -158,30 +158,30 @@ export function EditInventorySettings() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Input
-              fullWidth
-              id="country"
-              name="country"
-              label="Country"
-              defaultValue={state.inventory.settings.address?.country}
-            />
-          </Grid> */}
+          <Input
+          fullWidth
+          id="country"
+          name="country"
+          label="Country"
+          defaultValue={state.inventory.settings.address?.country}
+          />
+        </Grid> */}
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button type="submit" loading={loading}>
+                Update
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Box
-          sx={{
-            pt: 2,
-            gap: 2,
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button type="submit" loading={loading}>
-            Update
-          </Button>
-        </Box>
       </Box>
     </Box>
   )

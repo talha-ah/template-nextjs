@@ -123,22 +123,22 @@ export function UpdateOrganization() {
               onChange={(event) => setPhone(event.target.value)}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button type="submit" loading={loading}>
+                Update
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
 
         <Alert type="error" message={error} />
-
-        <Box
-          sx={{
-            pt: 2,
-            gap: 2,
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button type="submit" loading={loading}>
-            Update
-          </Button>
-        </Box>
       </Box>
     </Box>
   )
