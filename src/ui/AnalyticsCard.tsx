@@ -9,7 +9,7 @@ import { TrendingDown } from "@mui/icons-material"
 import { Box, CircularProgress } from "@mui/material"
 
 import { Color } from "@utils/types"
-import { Heading } from "@components/Title"
+import { Heading } from "@ui/Title"
 import { numberWithCommas } from "@utils/common"
 
 const Card = styled(Paper)(({ theme }) => ({

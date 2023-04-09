@@ -11,7 +11,7 @@ import { Input } from "@ui/Input"
 import { Alert } from "@ui/Alert"
 import { Button } from "@ui/Button"
 import { useApi } from "@hooks/useApi"
-import { Link } from "@components/Link"
+import { Link } from "@ui/Link"
 import { ENDPOINTS } from "@utils/constants"
 import { AuthTypes, useAppContext } from "@contexts/index"
 

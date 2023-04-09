@@ -6,10 +6,10 @@ import { Container } from "@mui/material"
 import { styled, Theme } from "@mui/material/styles"
 
 import { Button } from "@ui/Button"
-import { Logo } from "@components/Logo"
+import { Logo } from "@ui/Logo"
 import { useAppContext } from "@contexts/index"
-import { UserMenu } from "@components/UserMenu"
-import { LinkBehaviour } from "@components/Link"
+import { UserMenu } from "@ui/UserMenu"
+import { LinkBehaviour } from "@ui/Link"
 import { useIsMobile } from "@hooks/useIsMobile"
 import { APP_BAR_HEIGHT } from "@utils/constants"
 

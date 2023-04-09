@@ -2,9 +2,9 @@ import * as React from "react"
 
 import { Typography } from "@mui/material"
 
-import { Link } from "@components/Link"
+import { Link } from "@ui/Link"
 import { APP_NAME } from "@utils/constants"
-import { GradientText } from "@components/GradientText"
+import { GradientText } from "@ui/GradientText"
 
 export const Logo = () => {
   return (

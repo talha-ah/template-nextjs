@@ -2,7 +2,7 @@ import { Box } from "@mui/material"
 import { Button } from "@mui/material"
 import { Typography } from "@mui/material"
 
-import { LinkBehaviour } from "@components/Link"
+import { LinkBehaviour } from "@ui/Link"
 
 export default function NotFoundTitle() {
   return (

@@ -8,7 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress"
 
 import { Alert } from "@ui/Alert"
 import { useApi } from "@hooks/useApi"
-import { Link } from "@components/Link"
+import { Link } from "@ui/Link"
 import { ENDPOINTS } from "@utils/constants"
 import { AcceptInviteForm } from "@forms/auth"
 import { HeaderLayout } from "@layouts/Header"

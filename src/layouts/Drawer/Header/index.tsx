@@ -3,9 +3,9 @@ import * as React from "react"
 import { Box } from "@mui/material"
 import { Theme } from "@mui/material/styles"
 
-import { Title } from "@components/Title"
+import { Title } from "@ui/Title"
 import { APP_BAR_HEIGHT } from "@utils/constants"
-import { BackButton } from "@components/BackButton"
+import { BackButton } from "@ui/BackButton"
 
 export const ActionHeader = ({
   title,

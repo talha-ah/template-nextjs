@@ -9,6 +9,9 @@ const nextConfig = {
     apiVersion: process.env.NEXT_PUBLIC_API_VERSION,
     storageKey: process.env.NEXT_PUBLIC_STORAGE_KEY,
   },
+  images: {
+    domains: ["source.unsplash.com", "premiumlayers.com"],
+  },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -17,6 +20,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // experimental: {
+  //   appDir: true,
   //   esmExternals: "loose",
   // },
 }

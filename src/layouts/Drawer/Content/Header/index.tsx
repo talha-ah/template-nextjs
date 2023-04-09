@@ -3,7 +3,7 @@ import * as React from "react"
 import { Box } from "@mui/material"
 import { Theme } from "@mui/material/styles"
 
-import { Logo } from "@components/Logo"
+import { Logo } from "@ui/Logo"
 import { SelectTheme } from "@forms/profile"
 import { APP_BAR_HEIGHT } from "@utils/constants"
 

@@ -10,9 +10,9 @@ import { IconButton } from "@ui/IconButton"
 import { DrawerLayout } from "@layouts/Drawer"
 import { useAppContext } from "@contexts/index"
 import { checkPermission } from "@utils/common"
-import { LinkBehaviour } from "@components/Link"
+import { LinkBehaviour } from "@ui/Link"
 import { DateRange, Interval } from "@utils/types"
-import { DateRangePicker } from "@components/DateRangePicker"
+import { DateRangePicker } from "@ui/DateRangePicker"
 
 /**
  * Template Dashboard

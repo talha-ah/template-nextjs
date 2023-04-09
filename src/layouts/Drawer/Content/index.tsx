@@ -8,7 +8,7 @@ import { DRAWER_WIDTH, APP_BAR_HEIGHT } from "@utils/constants"
 
 import Header from "./Header"
 import Navigation from "./Navigation"
-import { UserMenu } from "@components/UserMenu"
+import { UserMenu } from "@ui/UserMenu"
 
 export default function DrawerLayout({
   open,

@@ -8,9 +8,9 @@ import { CardContent } from "@mui/material"
 import { CardActionArea } from "@mui/material"
 import { Inventory } from "@mui/icons-material"
 
+import { LinkBehaviour } from "@ui/Link"
 import { APP_NAME } from "@utils/constants"
 import { HeaderLayout } from "@layouts/Header"
-import { LinkBehaviour } from "@components/Link"
 
 const sections = [
   {

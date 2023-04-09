@@ -3,8 +3,8 @@ import * as React from "react"
 import { Box } from "@mui/material"
 import { Theme } from "@mui/material/styles"
 
-import { Title } from "@components/Title"
-import { BackButton } from "@components/BackButton"
+import { Title } from "@ui/Title"
+import { BackButton } from "@ui/BackButton"
 
 export const ActionHeader = ({
   title,

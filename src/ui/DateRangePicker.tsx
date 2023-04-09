@@ -1,8 +1,8 @@
 import { Box } from "@mui/material"
 
 import { Button } from "@ui/Button"
-import { Heading } from "@components/Title"
-import { DateRange } from "@components/DateRange"
+import { Heading } from "@ui/Title"
+import { DateRange } from "@ui/DateRange"
 import { DateRange as DateRangeType } from "@utils/types"
 
 export const DateRangePicker = ({

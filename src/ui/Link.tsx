@@ -1,8 +1,8 @@
 import * as React from "react"
 import NextLink, { LinkProps } from "next/link"
 
+import { Typography } from "@mui/material"
 import { styled } from "@mui/material/styles"
-import { Link as MuiLink } from "@mui/material"
 
 // Add support for the sx prop for consistency with the other branches.
 const Anchor = styled("a")({})
@@ -49,17 +49,18 @@ export const Link = ({
   [key: string]: any
 }) => {
   return to ? (
-    <NextLink href={to} passHref>
-      <MuiLink
-        sx={sx}
-        color="inherit"
-        variant="body2"
-        underline={underline ? "always" : "none"}
-        {...other}
-      >
-        {children}
-      </MuiLink>
-    </NextLink>
+    <Typography
+      sx={sx}
+      passHref
+      href={to}
+      color="inherit"
+      variant="body2"
+      component={NextLink}
+      style={{ textDecoration: underline ? "underline" : "none" }}
+      {...other}
+    >
+      {children}
+    </Typography>
   ) : (
     <>{children}</>
   )

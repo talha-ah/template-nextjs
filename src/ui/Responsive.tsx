@@ -4,7 +4,7 @@ import { Box, Badge } from "@mui/material"
 import { FilterList } from "@mui/icons-material"
 
 import { Button } from "@ui/Button"
-import { Popover } from "@components/Popover"
+import { Popover } from "@ui/Popover"
 import { useIsMobile } from "@hooks/useIsMobile"
 
 interface Props {
