@@ -1,5 +1,6 @@
 import React from "react"
 
+export type View = "list" | "grid"
 export type Status = "active" | "inactive"
 export type ExportFormats = "pdf" | "excel"
 export type DateRange = [Date | null, Date | null]
@@ -28,14 +29,22 @@ export interface ActionType {
   payload: any
 }
 
+export interface LoginResponse {
+  user: User | null
+  accessToken: string
+  refreshToken: string
+}
+
 export interface AuthStateType {
-  user: User
-  token: string
   isAuth: boolean
   loading: boolean
   theme: ThemeMode
-  refreshToken: string
+
+  redirect: string
+  initializing: boolean
 }
+
+export interface AuthInitialStateType extends AuthStateType, LoginResponse {}
 
 export interface NavLink {
   type: string
@@ -49,17 +58,17 @@ export interface NavLink {
 }
 
 export interface MenuLink {
+  icon?: any
   type: string
   href?: string
   value: string
   color?: string
   onClick?: () => void
-  icon?: React.ReactElement
 }
 
 export interface Option {
   key: string
-  value: string
+  value: string | React.ReactNode
 }
 
 export interface ChartProps {
@@ -132,7 +141,7 @@ export interface Address {
   addressOne: string
   addressTwo?: string
   addressThree?: string
-  zip: string
+  postalCode: string
   city: string
   state: string
   country: string
@@ -170,4 +179,87 @@ export interface Invite {
   firstName: string
   lastName?: string
   organizationId: string
+}
+
+// Listings
+export interface ContactPerson {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+}
+
+export type ListingPricingPeriods =
+  | "one-off"
+  | "per-night"
+  | "per-week"
+  | "per-month"
+  | "per-year"
+
+export type ListingPropertyType =
+  | "apartment"
+  | "house"
+  | "condo"
+  | "townhouse"
+  | "office"
+  | "land"
+  | "commercial"
+  | "industrial"
+  | "retail"
+  | "warehouse"
+  | "other"
+
+export type ListingPropertyKeys =
+  | "year-built"
+  | "bathrooms"
+  | "bedrooms"
+  | "building-size"
+  | "building-size-unit"
+  | "lot-size"
+  | "lot-size-unit"
+
+export interface ListingProperty {
+  value: string
+  key: ListingPropertyKeys
+}
+
+export interface ListingPrice {
+  minAmount: number
+  maxAmount: number
+  type: ListingType
+  currency: Currency
+  period: ListingPricingPeriods
+}
+
+export interface Media {
+  url: string
+  type: "image" | "video"
+}
+
+export interface Location {
+  lat: number
+  long: number
+}
+
+export type ListingType = "rent" | "sale" | "listing"
+
+export interface Listing {
+  _id: string
+  title: string
+  status: Status
+  media: Media[]
+  createdAt: Date
+  updatedAt: Date
+  address: Address
+  features: string[]
+  location: Location
+  availableFrom: Date
+  description: string
+  prices: ListingPrice[]
+  shortDescription: string
+  organization: Organization
+  listingTypes: ListingType[]
+  properties: ListingProperty[]
+  contactPersons: ContactPerson[]
+  propertyType: ListingPropertyType
 }

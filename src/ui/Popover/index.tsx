@@ -1,26 +1,21 @@
 import * as React from "react"
 import { useState } from "react"
 
+import { Box } from "@mui/material"
 import { SxProps, Theme } from "@mui/material/styles"
-import { Menu as MuiMenu, MenuItem } from "@mui/material"
+import { Popover as MuiPopover } from "@mui/material"
 
 import { useMaxWidth } from "@hooks/useMaxWidth"
 import { useIsMobile } from "@hooks/useIsMobile"
 
-export interface Option {
-  key: string
-  value: string
-  [key: string]: any
-}
-
 interface Props {
   sx?: SxProps<Theme>
-  onClick: (args: any) => void
+  popoverSx?: SxProps<Theme>
   trigger: (args: any) => void
-  options: Option[]
+  content: React.ReactNode | ((args: any) => React.ReactNode)
 }
 
-export const Menu = ({ sx, trigger, options, onClick }: Props) => {
+export const Popover = ({ sx, popoverSx, trigger, content }: Props) => {
   const { isMobile } = useIsMobile()
   const { maxWidth } = useMaxWidth()
 
@@ -33,12 +28,11 @@ export const Menu = ({ sx, trigger, options, onClick }: Props) => {
     <>
       {trigger({ toggleOpen, ref: ref })}
 
-      <MuiMenu
-        keepMounted
+      <MuiPopover
         open={open}
         onClose={toggleOpen}
         anchorEl={ref.current}
-        sx={{ mt: 1, ...(isMobile ? { width: maxWidth } : {}), ...sx }}
+        sx={{ mt: 1, ...popoverSx }}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",
@@ -48,21 +42,18 @@ export const Menu = ({ sx, trigger, options, onClick }: Props) => {
           horizontal: "right",
         }}
       >
-        {options.map((option, index) => (
-          <MenuItem
-            key={index}
-            sx={{ gap: 2, display: "flex", alignItems: "center" }}
-            onClick={() => {
-              toggleOpen()
-              onClick(option)
-            }}
-          >
-            {option.icon && <option.icon fontSize="inherit" />}
-
-            {option.value}
-          </MenuItem>
-        ))}
-      </MuiMenu>
+        <Box
+          sx={{
+            p: 2,
+            ...(isMobile ? { width: maxWidth } : {}),
+            ...sx,
+          }}
+        >
+          {typeof content === "function"
+            ? content({ onClose: toggleOpen })
+            : content}
+        </Box>
+      </MuiPopover>
     </>
   )
 }

@@ -53,7 +53,7 @@ const Card = ({
 export function LoginForm() {
   const API = useApi()
   const router = useRouter()
-  const { dispatch } = useAppContext()
+  const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -81,14 +81,11 @@ export function LoginForm() {
 
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: {
-          ...response?.data,
-          token: response?.data.access_token,
-          refreshToken: response?.data.refresh_token,
-        },
+        payload: response?.data,
       })
 
-      router.replace("/app")
+      router.replace(state.auth.redirect || "/")
+      dispatch({ type: AuthTypes.SET_REDIRECT, payload: { redirect: "" } })
     } catch (error: any) {
       setError(error.message)
     } finally {
@@ -150,7 +147,7 @@ export function LoginForm() {
 export function Registerform() {
   const API = useApi()
   const router = useRouter()
-  const { dispatch } = useAppContext()
+  const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -181,14 +178,11 @@ export function Registerform() {
 
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: {
-          ...response?.data,
-          token: response?.data.access_token,
-          refreshToken: response?.data.refresh_token,
-        },
+        payload: response?.data,
       })
 
-      router.replace("/app")
+      router.replace(state.auth.redirect || "/")
+      dispatch({ type: AuthTypes.SET_REDIRECT, payload: { redirect: "" } })
     } catch (error: any) {
       setError(error.message)
     } finally {
@@ -461,11 +455,7 @@ export function AcceptInviteForm({
 
       dispatch({
         type: AuthTypes.LOGIN,
-        payload: {
-          ...response?.data,
-          token: response?.data.access_token,
-          refreshToken: response?.data.refresh_token,
-        },
+        payload: response?.data,
       })
 
       router.replace("/app")

@@ -3,16 +3,25 @@ import { useState, useEffect } from "react"
 
 import { API_LIMIT } from "@utils/constants"
 
-export const useSearchPagination = () => {
+interface Props {
+  showOnUrl?: boolean
+}
+
+export const useSearchPagination = (props?: Props) => {
+  const { showOnUrl } = props || {
+    showOnUrl: false,
+  }
+
   const router = useRouter()
 
   const [page, setPage] = useState<number>(1)
   const [search, setSearch] = useState<string>("")
   const [limit, setLimit] = useState<number>(+API_LIMIT)
   const [mounted, setMounted] = useState<boolean>(false)
+  const [totalPages, setTotalPages] = useState<number>(1)
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && showOnUrl) {
       const query = { ...router.query }
 
       query["search"] = search
@@ -44,5 +53,7 @@ export const useSearchPagination = () => {
     setPage,
     setLimit,
     setSearch,
+    totalPages,
+    setTotalPages,
   }
 }

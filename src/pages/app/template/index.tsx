@@ -5,12 +5,12 @@ import { useState, useEffect } from "react"
 import { Box } from "@mui/material"
 import { Settings } from "@mui/icons-material"
 
+import { LinkBehaviour } from "@ui/Link"
 import { APP_NAME } from "@utils/constants"
 import { IconButton } from "@ui/IconButton"
 import { DrawerLayout } from "@layouts/Drawer"
 import { useAppContext } from "@contexts/index"
 import { checkPermission } from "@utils/common"
-import { LinkBehaviour } from "@ui/Link"
 import { DateRange, Interval } from "@utils/types"
 import { DateRangePicker } from "@ui/DateRangePicker"
 
@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setIsAdmin(
-      checkPermission(state.auth.user.permissions, "Dashboard", "users")
+      checkPermission(state?.auth?.user?.permissions, "Dashboard", "users")
     )
   }, [state])
 

@@ -5,12 +5,15 @@ import { Theme } from "@mui/material/styles"
 
 import { Title } from "@ui/Title"
 import { BackButton } from "@ui/BackButton"
+import { APP_BAR_HEIGHT } from "@utils/constants"
 
 export const ActionHeader = ({
+  sx,
   title,
   children,
   withBackButton,
 }: {
+  sx?: any
   title: string
   withBackButton?: boolean
   children?: React.ReactNode
@@ -19,13 +22,15 @@ export const ActionHeader = ({
     <Box
       sx={(theme: Theme) => ({
         py: 2,
+        gap: 1,
         width: "100%",
-        height: "64px",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        height: `${APP_BAR_HEIGHT}px`,
         justifyContent: "space-between",
         borderBottom: `1px solid ${theme.palette.divider}`,
+        ...sx,
       })}
     >
       <Box

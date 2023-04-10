@@ -6,6 +6,7 @@ import { ButtonProps as MuiButtonProps } from "@mui/material/Button"
 
 import { IconButton } from "@ui/IconButton"
 import { useIsMobile } from "@hooks/useIsMobile"
+import { LinkBehaviour } from "@ui/Link"
 
 interface ButtonProps extends MuiButtonProps {
   to?: string
@@ -19,6 +20,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const { isMobile } = useIsMobile()
 
     const defaultVariant = "contained"
+
+    if (props.to) {
+      props.component = LinkBehaviour
+    }
 
     if (responsive && isMobile && (startIcon || endIcon)) {
       return (

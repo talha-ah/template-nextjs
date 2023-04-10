@@ -1,6 +1,8 @@
 import * as React from "react"
 
 import { Box } from "@mui/material"
+import { CssBaseline } from "@mui/material"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
 
 import { APP_NAME } from "@utils/constants"
 
@@ -173,30 +175,35 @@ const footer = {
     "together yet they were all alone. Wouldn't you like to get away? Sometimes you want to go where everybody",
 }
 
+const theme = createTheme()
+
 export const LandingPage = () => {
   return (
-    <Box sx={{ backgroundColor: "#f5f5f5" }}>
-      <Header
-        links={links}
-        logo={APP_NAME}
-        socials={socials}
-        contact={contact}
-        availability={availability}
-      />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ backgroundColor: "#f5f5f5" }}>
+        <Header
+          links={links}
+          logo={APP_NAME}
+          socials={socials}
+          contact={contact}
+          availability={availability}
+        />
 
-      <main>
-        <Jumbotron post={jumbotron} />
+        <main>
+          <Jumbotron post={jumbotron} />
 
-        <Services sections={services} header={servicesHeader} />
+          <Services sections={services} header={servicesHeader} />
 
-        <About sections={aboutSections} header={aboutHeader} />
+          <About sections={aboutSections} header={aboutHeader} />
 
-        <Reviews header={reviewsHeader} sections={reviews} />
+          <Reviews header={reviewsHeader} sections={reviews} />
 
-        <ContactUs header={contactHeader} />
-      </main>
+          <ContactUs header={contactHeader} />
+        </main>
 
-      <Footer copyright={copyright} footer={footer} />
-    </Box>
+        <Footer copyright={copyright} footer={footer} />
+      </Box>
+    </ThemeProvider>
   )
 }

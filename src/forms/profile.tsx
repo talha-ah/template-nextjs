@@ -10,13 +10,14 @@ import { LightMode } from "@mui/icons-material"
 import { Card as MuiCard } from "@mui/material"
 import { SettingsBrightnessOutlined } from "@mui/icons-material"
 
+import { Menu } from "@ui/Menu"
 import { Alert } from "@ui/Alert"
 import { Input } from "@ui/Input"
 import { Button } from "@ui/Button"
 import { useApi } from "@hooks/useApi"
 import { ThemeMode } from "@utils/types"
-import { ENDPOINTS } from "@utils/constants"
 import { IconButton } from "@ui/IconButton"
+import { ENDPOINTS } from "@utils/constants"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 export function UpdateProfile() {
@@ -33,11 +34,11 @@ export function UpdateProfile() {
   const [lastName, setLastName] = useState<string | undefined>("")
 
   useEffect(() => {
-    setEmail(state.auth.user.email || "")
-    setPhone(state.auth.user.phone || "")
-    setLastName(state.auth.user.lastName || "")
-    setFirstName(state.auth.user.firstName || "")
-  }, [state.auth.user])
+    setEmail(state?.auth?.user?.email || "")
+    setPhone(state?.auth?.user?.phone || "")
+    setLastName(state?.auth?.user?.lastName || "")
+    setFirstName(state?.auth?.user?.firstName || "")
+  }, [state?.auth?.user])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -150,13 +151,13 @@ export function UpdateProfile() {
               onChange={(event) => setEmail(event.target.value)}
               InputProps={{
                 endAdornment:
-                  state.auth.user.status === "pending" ? (
+                  state?.auth?.user?.status === "pending" ? (
                     <IconButton
                       onClick={sendVerifyEmail}
                       loading={verifyEmailLoading}
                       tooltip="Kindly verify your email. Click to resend verification email"
                     >
-                      <MailLock color="info" />
+                      <MailLock color="primary" />
                     </IconButton>
                   ) : null,
               }}
@@ -276,7 +277,7 @@ export function UpdatePassword() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </Grid>
-          <Grid item sm={6}>
+          <Grid item sm={12}>
             <Box
               sx={{
                 gap: 2,
@@ -308,6 +309,8 @@ export function SelectTheme({ view = "cards" }: { view?: "cards" | "icons" }) {
         payload: { theme },
       })
 
+      if (!state.auth.isAuth) return
+
       await API({
         method: "PUT",
         uri: ENDPOINTS.profileTheme,
@@ -328,8 +331,9 @@ export function SelectTheme({ view = "cards" }: { view?: "cards" | "icons" }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            color: type === state.auth.theme ? "white" : "inherit",
             backgroundColor:
-              type === state.auth.theme ? "divider" : "background.paper",
+              type === state.auth.theme ? "primary.main" : "background.default",
           }}
         >
           {type === "light" ? (
@@ -345,7 +349,6 @@ export function SelectTheme({ view = "cards" }: { view?: "cards" | "icons" }) {
               ml: 2,
               fontSize: 14,
               fontWeight: 500,
-              color: "text.secondary",
             }}
           >
             {type === "light"
@@ -388,14 +391,46 @@ export function SelectTheme({ view = "cards" }: { view?: "cards" | "icons" }) {
 
   const Icons = useCallback(
     () => (
-      <IconButton
-        tooltip="Toggle Theme"
-        onClick={() =>
-          handleSubmit(state.auth.theme === "light" ? "dark" : "light")
-        }
-      >
-        {state.auth.theme === "light" ? <LightMode /> : <DarkMode />}
-      </IconButton>
+      <Menu
+        selected={state.auth.theme}
+        onClick={(option) => handleSubmit(option.key as ThemeMode)}
+        options={[
+          {
+            key: "light",
+            icon: LightMode,
+            value: "Light Mode",
+            onClick: () => handleSubmit("light"),
+          },
+          {
+            key: "dark",
+            icon: DarkMode,
+            value: "Dark Mode",
+            onClick: () => handleSubmit("dark"),
+          },
+          {
+            key: "system",
+            value: "System",
+            icon: SettingsBrightnessOutlined,
+            onClick: () => handleSubmit("system"),
+          },
+        ]}
+        trigger={({ toggleOpen, ref }) => (
+          <IconButton
+            ref={ref}
+            onClick={toggleOpen}
+            tooltip="Toggle Theme"
+            aria-label="Toggle Theme"
+          >
+            {state.auth.theme === "light" ? (
+              <LightMode />
+            ) : state.auth.theme === "dark" ? (
+              <DarkMode />
+            ) : (
+              <SettingsBrightnessOutlined />
+            )}
+          </IconButton>
+        )}
+      />
     ),
     [handleSubmit, state.auth.theme]
   )

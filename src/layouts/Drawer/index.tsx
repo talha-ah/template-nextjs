@@ -5,8 +5,8 @@ import { Box, Fab } from "@mui/material"
 import { Menu } from "@mui/icons-material"
 import { styled, Theme } from "@mui/material/styles"
 
+import { ActionHeader } from "@ui/ActionHeader"
 import { useIsMobile } from "@hooks/useIsMobile"
-import { ActionHeader } from "@layouts/Drawer/Header"
 import { DRAWER_WIDTH, APP_BAR_HEIGHT } from "@utils/constants"
 
 import Drawer from "./Content"
@@ -20,11 +20,11 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   display: "flex",
   overflow: "hidden",
   flexDirection: "column",
+  marginLeft: `-${DRAWER_WIDTH}px`,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${DRAWER_WIDTH}px`,
   ...(open && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,

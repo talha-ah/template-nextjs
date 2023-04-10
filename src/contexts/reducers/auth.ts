@@ -1,14 +1,16 @@
-import { setBrowserItem, removeBrowserItem } from "@utils/browser-utility"
+import { saveBrowserObj, removeBrowserItem } from "@utils/browser-utility"
 
-import { User, ActionType, AuthStateType, ThemeMode } from "@utils/types"
+import { ActionType, AuthInitialStateType } from "@utils/types"
 
-export const AuthInitialState = {
-  user: {} as User,
-  token: "" as string,
-  loading: true as boolean,
-  isAuth: false as boolean,
-  refreshToken: "" as string,
-  theme: "light" as ThemeMode,
+export const AuthInitialState: AuthInitialStateType = {
+  user: null,
+  redirect: "",
+  loading: true,
+  isAuth: false,
+  theme: "light",
+  accessToken: "",
+  refreshToken: "",
+  initializing: true,
 }
 
 export const AuthTypes = {
@@ -16,14 +18,18 @@ export const AuthTypes = {
   LOGOUT: "LOGOUT",
   SET_USER: "SET_USER",
   SET_THEME: "SET_THEME",
+  SET_REDIRECT: "SET_REDIRECT",
+  SET_INITIALIZED: "SET_INITIALIZED",
 }
 
-export const AuthReducer = (state: AuthStateType, action: ActionType) => {
+export const AuthReducer = (
+  state: AuthInitialStateType,
+  action: ActionType
+) => {
   switch (action.type) {
     case AuthTypes.LOGIN:
-      const { token, refreshToken } = action.payload
-      setBrowserItem(token)
-      setBrowserItem(refreshToken, "refresh-token")
+      saveBrowserObj(undefined, action.payload)
+
       return {
         ...state,
         ...action.payload,
@@ -36,9 +42,10 @@ export const AuthReducer = (state: AuthStateType, action: ActionType) => {
       return {
         ...state,
         user: "",
-        token: "",
         isAuth: false,
         loading: false,
+        accessToken: "",
+        refreshToken: "",
       }
     case AuthTypes.SET_USER:
       return {
@@ -49,6 +56,16 @@ export const AuthReducer = (state: AuthStateType, action: ActionType) => {
       return {
         ...state,
         theme: action.payload.theme || "light",
+      }
+    case AuthTypes.SET_REDIRECT:
+      return {
+        ...state,
+        redirect: action.payload.redirect,
+      }
+    case AuthTypes.SET_INITIALIZED:
+      return {
+        ...state,
+        initializing: action.payload.initializing,
       }
     default:
       return state

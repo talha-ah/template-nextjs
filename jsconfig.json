@@ -2,6 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@ui/*": ["./src/ui/*"],
+      "@auth/*": ["./src/auth/*"],
       "@utils/*": ["./src/utils/*"],
       "@pages/*": ["./src/pages/*"],
       "@hooks/*": ["./src/hooks/*"],
@@ -11,7 +13,6 @@
       "@assets/*": ["./src/assets/*"],
       "@static/*": ["./src/static/*"],
       "@layouts/*": ["./src/layouts/*"],
-      "@ui/*": ["./src/components/ui/*"],
       "@elements/*": ["./src/elements/*"],
       "@contexts/*": ["./src/contexts/*"],
       "@components/*": ["./src/components/*"]

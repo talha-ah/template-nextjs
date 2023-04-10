@@ -1,18 +1,14 @@
 import React from "react"
 import { useRouter } from "next/router"
 
-import { Box } from "@mui/material"
-import { Menu } from "@mui/material"
-import { Theme } from "@mui/material"
-import { MenuItem } from "@mui/material"
-import { IconButton } from "@mui/material"
-import { ListItemIcon } from "@mui/material"
-import { ListItemText } from "@mui/material"
-import { AccountCircle } from "@mui/icons-material"
+import { Avatar } from "@mui/material"
 
+import { Menu } from "@ui/Menu"
 import { MenuLink } from "@utils/types"
 import { useRouteLinks } from "@hooks/auth"
-import { DRAWER_WIDTH } from "@utils/constants"
+import { IconButton } from "@ui/IconButton"
+import { getInitials } from "@utils/common"
+import { useAppContext } from "@contexts/index"
 
 export const UserMenu = ({
   position = "bottom",
@@ -20,71 +16,41 @@ export const UserMenu = ({
   position?: "bottom" | "top"
 }) => {
   const router = useRouter()
+  const { state } = useAppContext()
   const { menuLinks } = useRouteLinks()
 
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  )
-
-  const openUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget)
-  }
-
-  const closeUserMenu = () => setAnchorElUser(null)
-
   return (
-    <Box>
-      <IconButton onClick={openUserMenu}>
-        <AccountCircle sx={{ fontSize: 32 }} />
-      </IconButton>
-      <Menu
-        keepMounted
-        id="user-menu"
-        anchorEl={anchorElUser}
-        onClose={closeUserMenu}
-        open={Boolean(anchorElUser)}
-        anchorOrigin={
-          position === "top"
-            ? { vertical: "top", horizontal: "center" }
-            : {
-                vertical: "bottom",
-                horizontal: "right",
-              }
-        }
-        transformOrigin={
-          position === "top"
-            ? { vertical: "bottom", horizontal: "center" }
-            : {
-                vertical: "top",
-                horizontal: "right",
-              }
-        }
-        sx={(theme: Theme) => ({
-          "& .MuiMenu-paper": {
-            mt: position === "top" ? -1 : 1,
-            width: DRAWER_WIDTH - +theme.spacing(4).replace("px", ""),
-          },
-        })}
-      >
-        {menuLinks.map((item: MenuLink) => (
-          <MenuItem
-            key={item.value}
-            onClick={() => {
-              if (item.onClick) item.onClick()
-              if (item.href) router.push(item.href)
-              closeUserMenu()
-            }}
+    <Menu
+      position={position}
+      onClick={(option) => {
+        if (option.onClick) option.onClick()
+        if (option.href) router.push(option.href)
+      }}
+      options={menuLinks.map((item: MenuLink) => ({
+        key: item.value,
+        ...item,
+      }))}
+      trigger={({ toggleOpen, ref }) => (
+        <IconButton
+          ref={ref}
+          size="small"
+          tooltip="User menu"
+          onClick={toggleOpen}
+          aria-label="User menu"
+        >
+          <Avatar
+            sx={(theme) => ({
+              width: 32,
+              height: 32,
+              fontSize: 16,
+              bgcolor: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+            })}
           >
-            {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-
-            <ListItemText
-              disableTypography
-              color={item.color}
-              primary={item.value}
-            />
-          </MenuItem>
-        ))}
-      </Menu>
-    </Box>
+            {getInitials(state.auth.user)}
+          </Avatar>
+        </IconButton>
+      )}
+    />
   )
 }

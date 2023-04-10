@@ -28,10 +28,7 @@ const NavItem = ({ item }: { item: NavLink }) => {
       key={item.value}
       onClick={itemHandler}
       selected={isSelected}
-      sx={{
-        mb: 1,
-        gap: 1.5,
-      }}
+      sx={{ mb: 1, gap: 1.5 }}
     >
       {Icon && Icon}
 

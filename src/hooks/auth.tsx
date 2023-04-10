@@ -5,9 +5,7 @@ import { Logout, Person } from "@mui/icons-material"
 import { Dashboard, HomeOutlined } from "@mui/icons-material"
 
 import { useApi } from "@hooks/useApi"
-import { ENDPOINTS } from "@utils/constants"
 import { checkPermission } from "@utils/common"
-import { getBrowserItem } from "@utils/browser-utility"
 import { AuthTypes, useAppContext } from "@contexts/index"
 import { NavLink, MenuLink, SettingsTypes } from "@utils/types"
 
@@ -27,8 +25,8 @@ export const useRouteLinks = () => {
           {
             exact: true,
             type: "item",
+            href: "/app",
             value: "Dashboard",
-            href: "/app/template",
             icon: <Dashboard color="action" />,
           },
         ],
@@ -40,25 +38,25 @@ export const useRouteLinks = () => {
   const MenuLinks: MenuLink[] = useMemo(
     () => [
       {
+        href: "/",
         type: "item",
-        href: "/app",
         value: "Home",
-        icon: <HomeOutlined fontSize="small" />,
+        icon: HomeOutlined,
       },
       {
         type: "item",
+        icon: Person,
         value: "Profile",
         href: "/profile",
-        icon: <Person fontSize="small" />,
       },
       {
         type: "item",
+        icon: Logout,
         color: "error",
         value: "Logout",
-        icon: <Logout fontSize="small" color="error" />,
         onClick: () => {
-          dispatch({ type: AuthTypes.LOGOUT })
           router.push("/")
+          dispatch({ type: AuthTypes.LOGOUT })
         },
       },
     ],
@@ -95,72 +93,9 @@ export const useRouteLinks = () => {
 
     setMenuLinks(MenuLinks)
     // eslint-disable-next-line
-  }, [router.asPath, state.auth.token])
+  }, [router.asPath, state.auth.accessToken])
 
   return { navLinks, menuLinks }
-}
-
-export const AuthWrapper = ({ children }: { children: any }) => {
-  const router = useRouter()
-  const { dispatch } = useAppContext()
-  const { fetchSettings } = useFetchSettings()
-
-  const API = useApi()
-
-  const checkAuth = async () => {
-    let route = "/"
-
-    try {
-      const token = getBrowserItem()
-
-      if (!token) {
-        if (router.asPath.startsWith("/app")) route = "/"
-        else route = router.asPath
-
-        dispatch({ type: AuthTypes.LOGOUT })
-        return
-      }
-
-      const response = await API({
-        uri: ENDPOINTS.authProfile,
-      })
-
-      dispatch({
-        type: AuthTypes.LOGIN,
-        payload: {
-          token,
-          user: response?.data?.user,
-          refreshToken: response?.data?.refresh_token,
-        },
-      })
-
-      // Fetch Metadata
-      fetchSettings("inventory")
-
-      if (router.asPath.startsWith("/app")) {
-        route = router.asPath
-      } else if (
-        router.asPath.startsWith("/auth/login") ||
-        router.asPath.startsWith("/auth/register")
-      ) {
-        route = "/"
-      } else if (router.asPath.startsWith("/auth")) {
-        route = router.asPath
-      } else {
-        route = router.asPath
-      }
-    } catch (error: any) {
-    } finally {
-      if (route !== router.asPath) router.replace(route)
-    }
-  }
-
-  useEffect(() => {
-    checkAuth()
-    // eslint-disable-next-line
-  }, [])
-
-  return children
 }
 
 export const useFetchSettings = () => {

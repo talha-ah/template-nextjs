@@ -6,19 +6,19 @@ import { useState, useEffect, useMemo } from "react"
 import { Box, Tabs, Tab } from "@mui/material"
 import { Replay as ReplayIcon, Delete } from "@mui/icons-material"
 
+import { Title } from "@ui/Title"
+import { Dialog } from "@ui/Dialog"
 import { Button } from "@ui/Button"
 import { Select } from "@ui/Select"
+import { Confirm } from "@ui/Confirm"
 import { useApi } from "@hooks/useApi"
 import { InviteUser } from "@forms/users"
-import { Title } from "@ui/Title"
+import { DataTable } from "@ui/DataTable"
 import { User, Invite } from "@utils/types"
 import { IconButton } from "@ui/IconButton"
-import { Dialog } from "@ui/Dialog"
-import { Confirm } from "@ui/Confirm"
 import { HeaderLayout } from "@layouts/Header"
 import { checkPermission } from "@utils/common"
 import { useAppContext } from "@contexts/index"
-import { DataTable } from "@ui/DataTable"
 import { APP_NAME, ENDPOINTS } from "@utils/constants"
 import { getFullName, toTitleCase } from "@utils/common"
 import { UpdateOrganization } from "@forms/organization"
@@ -36,14 +36,14 @@ export default function ProfileSettings() {
     if (
       query.tab &&
       query.tab !== "profile" &&
-      checkPermission(state.auth.user.permissions, "Dashboard", "users")
+      checkPermission(state?.auth?.user?.permissions, "Dashboard", "users")
     ) {
       setTab(query.tab as string)
     } else {
       setTab("profile")
     }
 
-    if (checkPermission(state.auth.user.permissions, "Dashboard", "users")) {
+    if (checkPermission(state?.auth?.user?.permissions, "Dashboard", "users")) {
       setCanManageOrg(true)
     }
     // eslint-disable-next-line
@@ -146,7 +146,9 @@ const Users = () => {
       })
 
       setData(
-        response.data.filter((user: User) => user._id !== state.auth.user._id)
+        response.data.filter(
+          (user: User) => user._id !== state?.auth?.user?._id
+        )
       )
     } catch (error) {
     } finally {

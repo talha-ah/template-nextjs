@@ -12,14 +12,55 @@ export const generateId = (prefix = "", length = 7) => {
   return result.toUpperCase()
 }
 
+export const isNotEmpty = (item: any) => {
+  return item !== undefined && item !== null && item !== "" && item.length !== 0
+}
+
+export const getInitials = (user: any) => {
+  let initials = ""
+  if (user.firstName) initials += user.firstName.charAt(0)
+  if (user.lastName) initials += user.lastName.charAt(0)
+  return initials
+}
+
+export const ellipside = (str: string, length = 20) => {
+  if (str.length > length) return str.substring(0, length) + "..."
+  return str
+}
+
+export const getCurrency = (currency?: string) => {
+  switch (currency) {
+    case "USD":
+      return "$"
+    case "EUR":
+      return "€"
+    case "GBP":
+      return "£"
+    case "PKR":
+      return "₨"
+    default:
+      return "₨"
+  }
+}
+
 export const getFullName = (user: any) => {
   let name = user.firstName
   if (user.lastName) name += " " + user.lastName
   return name
 }
 
-export const isNotEmpty = (item: any) => {
-  return item !== undefined && item !== null && item !== "" && item.length !== 0
+export const getAddress = (address: any) => {
+  let fullAddress = ""
+  if (address.address1) fullAddress += address.address1 + ", "
+  if (address.address2) fullAddress += address.address2 + ", "
+  if (address.city) fullAddress += address.city + ", "
+  if (address.postalCode) fullAddress += address.postalCode + ", "
+  if (address.state) fullAddress += address.state + ", "
+  if (address.country) fullAddress += address.country
+
+  if (fullAddress.endsWith(", ")) fullAddress = fullAddress.slice(0, -2)
+
+  return fullAddress
 }
 
 export const toTitleCase = (str: string) => {

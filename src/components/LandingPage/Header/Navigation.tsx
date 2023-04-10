@@ -48,9 +48,9 @@ export const Navigation = ({ links, logo }: Props) => {
           <Typography
             noWrap
             variant="h5"
+            color="black"
             align="center"
             component="h2"
-            color="primary"
           >
             {logo}
           </Typography>
@@ -75,7 +75,7 @@ export const Navigation = ({ links, logo }: Props) => {
             </Link>
           ) : (
             <Link noWrap variant="body2" sx={styles.link} to={"/auth/login"}>
-              Login
+              Get Started
             </Link>
           )}
         </Box>

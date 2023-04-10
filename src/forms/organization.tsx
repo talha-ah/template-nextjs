@@ -22,9 +22,9 @@ export function UpdateOrganization() {
   const [phone, setPhone] = useState<string | undefined>("")
 
   useEffect(() => {
-    setName(state.auth.user.organization?.name || "")
-    setEmail(state.auth.user.organization?.email || "")
-    setPhone(state.auth.user.organization?.phone || "")
+    setName(state?.auth?.user?.organization?.name || "")
+    setEmail(state?.auth?.user?.organization?.email || "")
+    setPhone(state?.auth?.user?.organization?.phone || "")
   }, [state.auth.user?.organization])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,7 +58,7 @@ export function UpdateOrganization() {
           user: {
             ...state.auth.user,
             organization: {
-              ...state.auth.user.organization,
+              ...state?.auth?.user?.organization,
               name,
               email,
               phone,

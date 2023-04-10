@@ -1,17 +1,11 @@
 import React from "react"
-import { useEffect, useState } from "react"
 
-import { Box } from "@mui/material"
 import { Container } from "@mui/material"
-import { styled, Theme } from "@mui/material/styles"
+import { styled } from "@mui/material/styles"
 
-import { Button } from "@ui/Button"
-import { Logo } from "@ui/Logo"
-import { useAppContext } from "@contexts/index"
-import { UserMenu } from "@ui/UserMenu"
-import { LinkBehaviour } from "@ui/Link"
-import { useIsMobile } from "@hooks/useIsMobile"
-import { APP_BAR_HEIGHT } from "@utils/constants"
+import { Header } from "./Header"
+import { Width } from "@utils/types"
+import { ActionHeader } from "@ui/ActionHeader"
 
 const Main = styled("main")(({ theme }) => ({
   padding: 0,
@@ -27,9 +21,13 @@ const Main = styled("main")(({ theme }) => ({
   }),
 }))
 
-const Children = styled(Container)(() => ({
+const Content = styled("div")(({ theme }) => ({
   height: "100%",
   overflow: "auto",
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
   /* width */
   "&::-webkit-scrollbar": {
     width: 5,
@@ -54,96 +52,41 @@ const Children = styled(Container)(() => ({
   },
 }))
 
-export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isMobile } = useIsMobile()
+export const HeaderLayout = ({
+  title,
+  actions,
+  children,
+  withBackButton,
+}: {
+  title?: string
+  withBackButton?: boolean
+  actions?: React.ReactNode
+  children?: React.ReactNode
+}) => {
+  const maxWidth: Width = "xl"
 
   return (
     <Main>
-      <Header isMobile={isMobile} />
+      <Header maxWidth={maxWidth} />
 
-      <Children maxWidth="xl">{children}</Children>
-    </Main>
-  )
-}
-
-const Header = ({ isMobile }: { isMobile: boolean }) => {
-  const { state } = useAppContext()
-
-  const [open, setOpen] = useState(true)
-  const toggleDrawer = () => setOpen((s) => !s)
-
-  useEffect(() => {
-    if (isMobile) {
-      setOpen(false)
-    } else {
-      setOpen(true)
-    }
-  }, [isMobile])
-
-  return (
-    <Box
-      sx={(theme: Theme) => ({
-        py: 2,
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        height: `${APP_BAR_HEIGHT}px`,
-        justifyContent: "space-between",
-        borderBottom: `1px solid ${theme.palette.divider}`,
-      })}
-    >
-      <Container maxWidth="xl" component="main">
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
+      <Content>
+        <Container
+          maxWidth={maxWidth}
+          sx={(theme) => ({ height: "100%", padding: theme.spacing(2) })}
         >
-          <Logo />
-
-          <Box
-            sx={{
-              gap: 1,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            {state.auth.isAuth ? (
-              <UserMenu />
-            ) : (
-              <Box
-                sx={{
-                  gap: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}
-              >
-                <Button
-                  to="/auth/login"
-                  variant="outlined"
-                  component={LinkBehaviour}
-                >
-                  Login
-                </Button>
-                {!isMobile && (
-                  <Button
-                    to="/auth/register"
-                    variant="contained"
-                    component={LinkBehaviour}
-                  >
-                    Register
-                  </Button>
-                )}
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </Container>
-    </Box>
+          {/* Page Header */}
+          {title && (
+            <ActionHeader
+              title={title}
+              sx={{ borderBottom: "none" }}
+              withBackButton={withBackButton}
+            >
+              {actions}
+            </ActionHeader>
+          )}
+          {children}
+        </Container>
+      </Content>
+    </Main>
   )
 }

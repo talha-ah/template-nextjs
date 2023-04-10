@@ -1,13 +1,15 @@
 import React from "react"
 import Head from "next/head"
+import { NextPage } from "next"
 import { AppProps } from "next/app"
 
 import { SnackbarProvider } from "notistack"
 import { CacheProvider, EmotionCache } from "@emotion/react"
 
-import { AuthWrapper } from "@hooks/auth"
 import { APP_NAME } from "@utils/constants"
+import { AuthGuard } from "@auth/AuthGuard"
 import { AppProvider } from "@contexts/index"
+import { AuthProvider } from "@auth/AuthProvider"
 
 import emotionCache from "@utils/emotionCache"
 import ThemeCustomization from "@styles/themes/index"
@@ -16,6 +18,7 @@ const createEmotionCache = emotionCache()
 
 interface LocalAppProps extends AppProps {
   emotionCache?: EmotionCache
+  Component: NextPage & { requireAuth?: boolean }
 }
 
 export default function App(props: LocalAppProps) {
@@ -35,9 +38,17 @@ export default function App(props: LocalAppProps) {
         <CacheProvider value={emotionCache}>
           <ThemeCustomization>
             <SnackbarProvider maxSnack={3}>
-              <AuthWrapper>
-                <Component {...pageProps} />
-              </AuthWrapper>
+              <AuthProvider>
+                {/* if requireAuth property is present - protect the page */}
+                {Component.requireAuth ? (
+                  <AuthGuard>
+                    <Component {...pageProps} />
+                  </AuthGuard>
+                ) : (
+                  // public page
+                  <Component {...pageProps} />
+                )}
+              </AuthProvider>
             </SnackbarProvider>
           </ThemeCustomization>
         </CacheProvider>

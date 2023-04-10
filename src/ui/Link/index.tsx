@@ -1,7 +1,11 @@
 import * as React from "react"
 import NextLink, { LinkProps } from "next/link"
 
-import { Typography } from "@mui/material"
+import { styled } from "@mui/material/styles"
+import { Link as MuiLink } from "@mui/material"
+
+// Add support for the sx prop for consistency with the other branches.
+const Anchor = styled("a")({})
 
 interface NextLinkProps
   extends Omit<LinkProps, "href" | "as" | "onClick" | "onMouseEnter"> {
@@ -17,7 +21,6 @@ export const LinkBehaviour = React.forwardRef<HTMLAnchorElement, NextLinkProps>(
     return (
       <NextLink
         passHref
-        ref={ref}
         href={to}
         as={linkAs}
         scroll={scroll}
@@ -25,8 +28,9 @@ export const LinkBehaviour = React.forwardRef<HTMLAnchorElement, NextLinkProps>(
         replace={replace}
         shallow={shallow}
         prefetch={prefetch}
-        {...other}
-      />
+      >
+        <Anchor ref={ref} {...other} />
+      </NextLink>
     )
   }
 )
@@ -45,18 +49,24 @@ export const Link = ({
   [key: string]: any
 }) => {
   return to ? (
-    <Typography
-      sx={sx}
-      passHref
-      href={to}
-      color="inherit"
-      variant="body2"
-      component={NextLink}
-      style={{ textDecoration: underline ? "underline" : "none" }}
-      {...other}
-    >
-      {children}
-    </Typography>
+    <NextLink href={to} passHref>
+      <MuiLink
+        color="inherit"
+        variant="body2"
+        underline={underline ? "always" : "none"}
+        sx={{
+          "&:hover": {
+            transition: "0.3s",
+            color: "primary.main",
+            textDecoration: "none",
+          },
+          ...sx,
+        }}
+        {...other}
+      >
+        {children}
+      </MuiLink>
+    </NextLink>
   ) : (
     <>{children}</>
   )

@@ -84,12 +84,7 @@ const Section = ({ section }: { section: any }) => {
               justifyContent: "center",
             }}
           >
-            <Typography
-              gutterBottom
-              variant="h5"
-              color="text.primary"
-              sx={{ textDecoration: "none" }}
-            >
+            <Typography gutterBottom variant="h5" color="text.primary">
               {section.title}
             </Typography>
           </Box>

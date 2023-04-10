@@ -35,7 +35,7 @@ export const Timeline = ({
                   {option.value}
                 </Typography>
               </Tooltip>
-              {action && action(option)}
+              {/* {action && action(option)} */}
             </Box>
           </TimelineContent>
         </TimelineItem>
